@@ -6,3 +6,5 @@
 3.  [git常用命令备忘录](https://git.io/Jv6uY)
 4. https://www.jianshu.com/p/6ae4e1af34fb   这个里面写了一点在pycharm使用django 框架的一些基础操作
 （从hello world开始）比较友好，可以那这个入门一下
+5. [django 官方网站(中文版)](https://docs.djangoproject.com/zh-hans/3.0)
+
