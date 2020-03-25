@@ -1,3 +1,6 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def index(request):
+    """课程界面的首页"""
+    return render(request, 'course/index.html')
