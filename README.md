@@ -7,6 +7,10 @@
 - 具体的要求见[这里](./style.md)
 - 持续更新ing
 
+在线学习笔记：
+- 地址在[这里](https://shimo.im/docs/RCCVPjhjrWwxKhCx)
+- 持续更新ing
+
 ### 项目学习资料集合
 
 1. [python 教程2019版 6小时完全入门](https://www.bilibili.com/video/av75855831?from=search&seid=2452323901678866958)
