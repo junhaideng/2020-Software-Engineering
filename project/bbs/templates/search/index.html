@@ -1,4 +1,9 @@
-{% extends 'base.html' %}  {# 这里是搜索的主界面 #}
+<!--
+author: Edgar
+搜索的主界面
+-->
+{% extends 'base.html' %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,75 +12,38 @@
 </head>
 <body>
 {% block content %}
-    <div class="w-100 h-100" style="margin-top: 25%; margin-left: 25%;">
-        <form class="form-inline" method="GET" style=" height: 70px">
-            <div class="input-group w-50">
-                <input type="text" id="search" class="form-control" style="height: 50px" placeholder="输入查询内容" name="keyword"
-                       oninput="_search()">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-success" style="height: 50px" type="button">
-                        <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                  d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z"
-                                  clip-rule="evenodd"></path>
-                            <path fill-rule="evenodd"
-                                  d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
-                                  clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
+    <div class="container">
+        <div class=" h-100" style="margin-top: 25%; margin-left: 25%;">
+            <form class="form-inline" method="GET" style=" height: 70px">
+                <div class="input-group w-50">
+                    <label for="search"></label><input type="text" id="search" class="form-control" style="height: 50px"
+                                                       placeholder="输入查询内容" name="keyword"
+                                                       oninput="_search(this.value)">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-success"  style="height: 50px" type="submit">
+                            <svg class="bi bi-search" width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M10.442 10.442a1 1 0 011.415 0l3.85 3.85a1 1 0 01-1.414 1.415l-3.85-3.85a1 1 0 010-1.415z"
+                                      clip-rule="evenodd"></path>
+                                <path fill-rule="evenodd"
+                                      d="M6.5 12a5.5 5.5 0 100-11 5.5 5.5 0 000 11zM13 6.5a6.5 6.5 0 11-13 0 6.5 6.5 0 0113 0z"
+                                      clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
+
+            </form>
+            <div class="mt-1 w-50 shadow ">
+                <ul class="list-group" id="info">
+                </ul>
             </div>
-
-        </form>
-        <div class="mt-1 w-50 shadow ">
-            <ul class="list-group" id="info">
-            </ul>
+            {% csrf_token %}
         </div>
-    {% csrf_token %}
     </div>
+    <script src="{% static 'js/search/search_data.js' %}"></script>
 
-    <script>
-        <!--搜索框中输入文字自动触发,并返回对应的信息-->
-        function _search(value) {
-            let cookies = document.cookie.split(',');
-            let li = document.getElementById("info");
-            let search = document.getElementById("search");
-            let html = "";
-
-            let pattern = /csrftoken=(.*)/m;
-            let csrf;
-            for (let j = 0; j < cookies.length; j++) {
-                if (pattern.test(cookies[j])) {
-                    csrf = pattern.exec(cookies[j])[1];
-                }
-            }
-            li.hidden = !search.value;
-            $.ajax({
-                    type: "post",
-                    url: "/search/",
-                    dataType: "json",
-                    data: {csrfmiddlewaretoken: csrf, value: value},
-                    success: function (data) {
-                        if (data["data"].length!==0) {
-                            console.log(data['data'].length);
-                            for (let i = 0; i < data["data"].length; i++) {
-                                html += "<li class='list-group-item'><a href=" + data["data"][i] + ">"+data["data"][i] +"</a></li>";
-                            }
-                        } else {
-                            html = "<li class='list-group-item'>没有找到对应信息</li>";
-                        }
-                        li.innerHTML = html;
-
-                    },
-                    error: function () {
-                        console.log('error');
-
-                    }
-                }
-            );
-        }
-    </script>
 {% endblock %}
 </body>
 
