@@ -1,11 +1,48 @@
-{% extends 'base.html' %} {# 反馈的主界面 #}
+<!--
+author: Edgar
+反馈的主界面显示
+-->
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}反馈{% endblock %}</title>
+    <title>{% block title %}意见反馈{% endblock %}</title>
 </head>
 <body>
+{% block content %}
+    <div class="" style="margin-top: 14%">
+        <form class="m-auto w-100 mt-lg-5" action="." method="POST" style="max-width: 420px; margin-top: 20%">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="subject" id="subject" class="form-control" placeholder="主题" required
+                       autofocus>
+                <label for="subject"></label>
+            </div>
+            <div class="form-group  mb-0 pb-0">
+                <textarea id="text" class="form-control" style="min-height: 200px" placeholder="在这里输入您的意见" required
+                          name="content"></textarea>
+                <label for="text"></label>
+            </div>
+        <div class="radiolist mt-n3 mb-2 ">
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="suggestion" value="1" name="type" class="custom-control-input" checked>
+                <label class="custom-control-label" for="suggestion">建议</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="report" value="0" name="type" class="custom-control-input">
+                <label class="custom-control-label" for="report">举报</label>
+            </div>
+        </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-outline-primary">提交</button>
+            </div>
+            {% if message %}
+                <div class="alert-{{ message.tag }} alert text-center">{{ message.info }}</div>
+            {% endif %}
+        </form>
 
+    </div>
+{% endblock %}
 </body>
 </html>
