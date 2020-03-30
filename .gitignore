@@ -95,3 +95,4 @@ fabric.properties
 /**/.idea/
 project/**/venv/
 *.pyc
+**/migrations/
