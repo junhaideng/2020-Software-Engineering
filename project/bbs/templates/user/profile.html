@@ -1,0 +1,42 @@
+<!--
+author: Edgar
+个人中心界面
+TODO: 基本资料如何进行显示
+-->
+{% extends 'user/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}个人中心{% endblock %}</title>
+</head>
+<body>
+{% block detail %}
+    <div class="modal-header font-weight-bolder">个人资料</div>
+    <div class="m-5 row">
+    <div class="col-3">
+        {% if profile %}
+            <img class="rounded-circle" style="width: 60px;" src="{{ profile }}" alt="{{ request.user.username }}">
+        {% else %}
+            <svg class="bi bi-people-circle" width="2em" height="2em" viewBox="0 0 16 16"
+                 fill="currentColor"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 008 15a6.987 6.987 0 005.468-2.63z"></path>
+                <path fill-rule="evenodd" d="M8 9a3 3 0 100-6 3 3 0 000 6z"
+                      clip-rule="evenodd"></path>
+                <path fill-rule="evenodd"
+                      d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z"
+                      clip-rule="evenodd"></path>
+            </svg>
+        {% endif %}
+    <form action="." method="POST" class="mt-2">
+        <a class="card-link" href="javascript:void(0);" onclick="document.getElementById('profile').hidden=false;">修改头像</a>
+        <div class="" hidden id="profile">
+            <div class=""
+        </div>
+    </form>
+    </div>
+    </div>
+{% endblock %}
+</body>
+</html>
