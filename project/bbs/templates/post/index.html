@@ -1,4 +1,8 @@
-{% extends 'base.html' %}  {# 发帖的主界面 #}
+<!--
+author: Edgar
+发帖的主界面
+-->
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,6 +10,48 @@
     <title>{% block title %}发帖{% endblock %}</title>
 </head>
 <body>
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/editormd.min.css' %}"/>
+    <form action="." method="POST" class="mt-5 ml-5">
+        <label class="w-100">
+            <input class="form-control row w-100" name="topic" placeholder="请输入标题" required autofocus autocomplete="off">
+        </label>
+        <div id="test-editor">
+            <label>
+                <textarea style="display:none;"></textarea>
+            </label>
+        </div>
+    <button type="submit" class="btn btn-outline-primary">提交</button>
+</form>
 
+{% endblock %}
 </body>
+{% block back_dependencies %}
+
+    <script src="{% static "js/editormd.js" %}"></script>
+    <script type="text/javascript">
+        $(function () {
+            var editor = editormd("test-editor", {
+                width: "80%",
+                height: 640,
+
+                path: "{% static 'editormd/lib/' %}",
+                name: "content", // 表单的名称
+                watch: false,
+                toolbarIcons: function () {
+                    // Or return editormd.toolbarModes[name]; // full, simple, mini
+                    // Using "||" set icons align right.
+                    return ["undo", "redo", "|",
+                        "bold", "del", "italic", "quote", "|",
+                        "h1", "h2", "h3", "h4", "h5", "h6", "|",
+                        "list-ul", "list-ol", "hr", "|",
+                        "link", "datetime",]
+                },
+                placeholder:"在这里发表你的看法",
+            });
+        });
+    </script>
+
+{% endblock %}
 </html>
