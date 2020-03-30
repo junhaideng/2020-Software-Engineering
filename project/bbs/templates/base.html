@@ -1,26 +1,34 @@
-{# 每一个模板文件的基类， 每个模板都必须继承该文件 #}
+<!--
+author: Edgar
+每一个模板文件的基类， 每个模板都必须继承该文件
+TODO: footer显示 ？？
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
-    <link rel="icon" href="{% static 'imgs/favicon.ico' %}">
+    {# 在bootstrap之前引入能够清除对相同元素的样式的干扰，主要的样式还是bootstrap #}
+    <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <script></script>
+    {% block forward_dependecies %}{# 用来加载依赖文件 #}
+    {% endblock %}
 </head>
 <body>
 <div class="container">
     <nav class="navbar navbar-expand-sm navbar-light bg-light">
         <a class="navbar-brand mr-2" href="/">
-            <img class="rounded-circle mr-2" style="height: 35px" src="{% static 'imgs/sjtu.png' %}"
+            <img class="rounded-circle mr-2" style="height: 35px" src="{% static 'images/sjtu.png' %}"
                  alt="navbar-brand"/>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarsExample04">
+        <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     {% if request.path == '/' %}
@@ -45,9 +53,9 @@
                 </li>
                 <li class="nav-item">
                     {% if request.path == '/community/' %}
-                    <a class="nav-link active" style="color: #007fff;" href="{% url 'community:index' %}">社区</a>
+                        <a class="nav-link active" style="color: #007fff;" href="{% url 'community:index' %}">社区</a>
                     {% else %}
-                    <a class="nav-link" href="{% url 'community:index' %}">社区</a>
+                        <a class="nav-link" href="{% url 'community:index' %}">社区</a>
                     {% endif %}
                 </li>
                 <li class="nav-item">
@@ -73,8 +81,11 @@
                            data-toggle="dropdown"
                            aria-haspopup="true"
                            aria-expanded="false">
-                            {% if profile %}  {# 如果有自定义的头像 #}
-                                <img src="{{ profile }}" alt="profile" title="{{ request.user.username }}"/>
+                            {% load user_related %}
+                            {% if request.user.id|getProfileFromAuthId %}  {# 如果有自定义的头像 #}
+                                <img class="rounded-circle " style="width: 30px;"
+                                     src="{{ request.user.id|getProfileFromAuthId }}" alt="profile"
+                                     title="{{ request.user.username }}"/>
                             {% else %}  {# 否则使用默认的头像svg #}
                                 <svg class="bi bi-people-circle" width="2em" height="2em" viewBox="0 0 16 16"
                                      fill="currentColor"
@@ -89,16 +100,16 @@
                             {% endif %}
                         </a>
                         <div class="dropdown-menu ">
-                            <a class="dropdown-item" href="#">个人信息</a>
+                            <a class="dropdown-item" href="{% url 'user:profile' %}">个人中心</a>
                             <a class="dropdown-item" href="#">上传文件</a>
-                            <a class="dropdown-item" href="#">登出</a>
+                            <a class="dropdown-item" href="javascript:void(0);" onclick="logout()">登出</a>
                         </div>
                     </div>
                 </div>
 
             {% else %}
-                <a class="nav-link nav-item mr-0 p-0" href="{% url 'user:login' %}" target="_blank">登录</a>
-                <a class="nav-link nav-item mr-0 p-0" href="{% url 'user:signup' %}" target="_blank">注册</a>
+                <a class="nav-link nav-item mr-2 p-0" href="{% url 'user:login' %}">登录</a>
+                <a class="nav-link nav-item mr-2 p-0" href="{% url 'user:signup' %}">注册</a>
             {% endif %}
 
         </div>
@@ -107,21 +118,28 @@
     {% block content %} {#  用来存放其他的实质性内容 #}
     {% endblock %}
 
-    {#    <footer class="fixed-bottom text-center form-inline">#}
-    {#        <div class="">#}
-    {#            copyright &copy; <span id="date"></span>#}
-    {#        </div>#}
-    {#        <div class="text-info">#}
-    {#            联系我们: xxxx@xxxx#}
-    {#        </div>#}
-    {#    </footer>#}
 </div>
-</div>
+{#<footer class="fixed-bottom panel-footer" style="width: 100%;">#}
+{#    <div class="container">#}
+{#        <div class="info text-center">#}
+{#            <ul class="list-unstyled list-inline form-inline">#}
+{#                <li class="list-inline-item">友情链接:</li>#}
+{#                <li><a class="ml-2 list-inline-item bd-footer-links" href="http://jwc.sjtu.edu.cn/web/sjtu/198001.htm"#}
+{#                       target="_blank">教务处</a></li>#}
+{#                <li><a class="ml-2 list-inline-item bd-footer-links" href="https://i.sjtu.edu.cn/" target="_blank">教学信息服务网</a>#}
+{#                </li>#}
+{#                <li><a class="ml-2 list-inline-item bd-footer-links" href="http://www.lib.sjtu.edu.cn/" target="_blank">图书馆</a>#}
+{#                </li>#}
+{#            </ul>#}
+{#        </div>#}
+{#    </div>#}
+{#</footer>#}
+
 </body>
 
-<script>
-    {#document.getElementById("date").innerHTML = new Date().getFullYear().toString();#}
-</script>
+<script src="{% static 'js/user/logout.js' %}"></script>
 <script src="{% static 'js/jquery-3.3.1.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
+{% block back_dependencies %} {# 用来加载需要的依赖文件，比如css， js #}
+{% endblock %}
 </html>
