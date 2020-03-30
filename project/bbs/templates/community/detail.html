@@ -1,0 +1,134 @@
+<!--
+author: Edgar
+大体框架，帖子详情界面
+TODO: 如何显示， 美化显示
+-->
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ post.topic }}{% endblock %}</title>
+</head>
+<body>
+{% load user_related %}{# 加载和用户相关的过滤器 #}
+
+{% block content %}
+    <div class=" bg-light shadow p-0 mt-2 ">
+        <div class="row">
+            <div class="col-8">
+                <ul class="list-unstyled">
+                    <li class=" p-2">tag</li>
+                </ul>
+            </div>
+            <div class="col-4">
+                <div class="text">
+                    浏览次数: {{ post.counter }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-light border-bottom row ">
+        <div class="col card-title">
+            {{ post.topic }}
+        </div>
+        <div class="w-100 row"></div>
+        <div class="col">
+            {{ post.content }}
+        </div>
+        <div class="w-100"></div>
+        <div class="col mt-2">
+            <button class="btn btn-outline-primary">
+                <svg width="14" height="16"
+                     aria-hidden="true" style="height: 16px; width: 14px;"><title></title>
+                    <g>
+                        <path d="M.423 10.32L0 12l1.667-.474 1.55-.44-2.4-2.33-.394 1.564zM10.153.233c-.327-.318-.85-.31-1.17.018l-.793.817 2.49 2.414.792-.814c.318-.328.312-.852-.017-1.17l-1.3-1.263zM3.84 10.536L1.35 8.122l6.265-6.46 2.49 2.414-6.265 6.46z"
+                              fill-rule="evenodd"></path>
+                    </g>
+                </svg>
+                写回答
+            </button>
+        </div>
+    </div>
+    <div class="list_container mt-2">
+        {% if total != 0 %}
+            <div class="modal-header font-weight-bold" style="font-size: 20px">{{ total }} 个回答</div>
+        {% endif %}
+        <div class="list-group">
+            {% for one in data %}{# 对于每一条回复信息 #}
+                <div class="row m-2">
+                    <div class="col-1 mt-2 ml-0">
+                        {% if one.user.profile %} {# 首先展示用户的基本信息，比如头像，用户名以及学院信息 #}
+                            <img class="rounded-circle " width="40px" height="40px" src="{{ one.user.profile }}"
+                                 alt="{{ one.user.user.name }}">
+                        {% else %}
+                            <svg class="bi bi-people-circle" width="40px" height="40px" viewBox="0 0 16 16"
+                                 fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 008 15a6.987 6.987 0 005.468-2.63z"></path>
+                                <path fill-rule="evenodd" d="M8 9a3 3 0 100-6 3 3 0 000 6z"
+                                      clip-rule="evenodd"></path>
+                                <path fill-rule="evenodd"
+                                      d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z"
+                                      clip-rule="evenodd"></path>
+                            </svg>
+                        {% endif %}
+                    </div>
+                    <div class="col-8 p-0 m-0">
+                        {% if one.user.academy %}{# 学院不为空的话就显示学院，否则不显示 #}
+                            <div class="card-title mb-0"
+                                 style="font-size: 1.2rem; font-weight: 600"> {{ one.user.user.username }}</div>
+                            <div class="description mt-0 pt-0"> {{ one.user.academy }}</div>
+                        {% else %}
+                            <div class="card-title mt-1"
+                                 style="font-size: 1.2rem; font-weight: 600">{{ one.user.user.username }}</div>
+                        {% endif %}
+                    </div>
+
+                </div>
+                <div class="row m-2 ml-4">
+                    {{ one.reply.content }} {# 显示回复的主要内容 #}
+                </div>
+                <div class="text-success ml-4 small mb-2">发布于{{ one.reply.create_date }}</div>
+                <div class="row border-bottom ml-2 mr-2 text-center bg-light"></div>
+                <div class="ml-4">
+                    <div class="list-group">
+                        {% for comment in one.comments %}  {# 对于回复中的每一个评论 #}
+                            <div class="item mt-2">
+                                {% if comment.commenter_id|getProfileFromId %}
+                                    <img class="rounded-circle" width="20px" height="20px"
+                                         src="{{ comment.commenter_id|getProfileFromId }}"
+                                         alt="{{ comment.commenter_id|getNameFromId }}">
+                                {% else %}
+                                    <svg class="bi bi-people-circle" width="20px" height="20px" viewBox="0 0 16 16"
+                                         fill="currentColor"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 008 15a6.987 6.987 0 005.468-2.63z"></path>
+                                        <path fill-rule="evenodd" d="M8 9a3 3 0 100-6 3 3 0 000 6z"
+                                              clip-rule="evenodd"></path>
+                                        <path fill-rule="evenodd"
+                                              d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z"
+                                              clip-rule="evenodd"></path>
+                                    </svg>
+
+                                {% endif %}
+                                {% if comment.reply_user_id %}
+                                    {{ comment.commenter_id |getNameFromId }} 回复
+                                    {{ comment.reply_user_id |getNameFromId }}
+                                {% else %}
+                                    {{ comment.commenter_id|getNameFromId }}
+                                {% endif %}
+                                <div class="row ml-4">
+                                    {{ comment.content }}
+                                </div>
+                            </div>
+                            <div class="row border-bottom"></div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+</body>
+</html>
