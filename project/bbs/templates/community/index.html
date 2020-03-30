@@ -1,11 +1,65 @@
-{% extends 'base.html' %} {# 社区的主界面 #}
+<!--
+author: Edgar
+大体框架， 社区界面的显示
+TODO: 具体如何显示，美化显示方式
+-->
+
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head>    {% load static %}
+
     <meta charset="UTF-8">
+    {% block forward_dependecies %}
+
+    {% endblock %}
+
     <title>{% block title %}社区{% endblock %}</title>
+
 </head>
 <body>
+{% block content %}
+    <div class="container">
+        <div class="">
+            {% for post in posts %}
+                {{ post.date_created }}
+                <li class="list-group-item"><a class="card-link"
+                                               href="{% url 'community:detail' post.id %}">{{ post.topic }}</a></li>
 
+            {% endfor %}
+        </div>
+
+        <div class=" mt-2">
+
+            <div id="page"></div>
+        </div>
+
+    </div>
+
+
+{% endblock %}
 </body>
+{% block back_dependencies %}
+    <script src="{% static 'layui/layui.js' %}"></script>
+
+    <script>
+        layui.use(['laypage', 'layer'], function () {
+                var laypage = layui.laypage
+                    , layer = layui.layer;
+
+                //总页数低于页码总数
+                laypage.render({
+                    elem: 'page'
+                    , count:{{ total}} //数据总数
+                    , curr: {{ curr_page }}
+                    , jump: function (obj, first) {
+                        if (!first) {
+                            location.href = "?page=" + obj.curr;
+                        }
+                    }
+                })
+            }
+        );
+    </script>
+{% endblock %}
 </html>
