@@ -1,3 +1,8 @@
+<!--
+author: Edgar
+注册界面
+TODO: 用户友好性设计，进行提示？账号密码需要满足一定的条件， 大于6位数等等
+-->
 {% extends "base.html" %}
 <!DOCTYPE html>
 <html lang="en">
@@ -10,9 +15,9 @@
 <body>
 {% block content %}
     <div class="col-5 m-auto">
-        <form action="../../user/templates" method="post" style="margin-top: 40%">
+        <form action="{% url 'user:signup' %}" method="post" style="margin-top: 40%">
             {% csrf_token %}
-               <div class="form-group">
+            <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" class="form-control form-inline" autocomplete="off" id="username"
                        name="username"
@@ -36,9 +41,17 @@
                 <input type="password" class="form-control" id="confirm" autocomplete="off" oninput="check(this)"
                        name="confirm" required>
             </div>
+            <input type="hidden" value="{{ request.GET.next }}" name="next">
+
             <button type="submit" id="btn" class="btn btn-outline-primary text-center">Sign up
             </button>
         </form>
+
+        {% if message %}
+            <div class="mt-3 text-center alert alert-warning w-100">
+                {{ message }}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
 </body>
