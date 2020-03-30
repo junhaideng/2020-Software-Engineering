@@ -13,18 +13,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 import home.views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path("", include("home.urls"), name='home'),
-    path("api/", include("api.urls"), name='api'),
-    path("course/", include("course.urls"), name='course'),
-    path("search/", include("search.urls"), name='search'),
-    path("post/", include("post.urls"), name='post'),
-    path("user/", include("user.urls"), name='user'),
-    path("community/", include("community.urls"), name='community'),
-    path("feedback/", include("feedback.urls"), name='feedback'),
+    path('admin/', admin.site.urls),  # 管理路由
+    path("", include("home.urls")),  # 主页
+    path("course/", include("course.urls")),  # 课程路由
+    path("search/", include("search.urls")),  # 搜索路由
+    path("post/", include("post.urls")),  # 发帖路由
+    path("user/", include("user.urls")),  # 用户相关路由
+    path("community/", include("community.urls")),  # 社区相关路由
+    path("feedback/", include("feedback.urls")),  # 反馈路由
 ]
+
+# 添加media 文件夹
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
