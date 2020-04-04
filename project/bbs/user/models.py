@@ -14,6 +14,13 @@ GRADES = (('FR', '大一'),
           ("UN", "未知")
           )
 
+EXP_TYPE = (("PHYSICAL", "物理实验"),
+            ("CHEMICAL", "化学实验"),
+            ("CIRCUIT", "基电实验"),
+            ("ELECTRONIC", "电子技术实验"),
+            ("OTHERS", "其他实验")
+)
+
 
 class User(models.Model):
     """用户数据库"""
@@ -30,7 +37,7 @@ class User(models.Model):
 class ExpData(models.Model):
     """实验数据"""
     user_id = models.IntegerField()  # 上传文件的用户
-    course_id = models.IntegerField()  # 与之有关的课程id
+    exp_type = models.CharField(choices=EXP_TYPE, max_length=40)  # 与之有关的课程id
     date = models.DateTimeField(default=timezone.now)  # 上传文件的时间
     download_times = models.IntegerField()  # 下载次数
     path = models.CharField(max_length=100)  # 实验数据的路径, 路径下的文件名需要进行一下处理，以免冲突
