@@ -41,6 +41,21 @@ TODO: 用户友好性设计，进行提示？账号密码需要满足一定的�
                 <input type="password" class="form-control" id="confirm" autocomplete="off" oninput="check(this)"
                        name="confirm" required>
             </div>
+
+            <div class="form-group">
+                 <label for="passwordquestion">PasswordQuestion</label>
+                 <input type="text" class="form-control form-inline" autocomplete="off" id="passwordquestion"
+                        name="passwordquestion"
+                        autofocus required>
+            </div>
+
+            <div class="form-group">
+                 <label for="passwordanswer">PasswordAnswer</label>
+                 <input type="text" class="form-control form-inline" autocomplete="off" id="passwordanswer"
+                        name="passwordanswer"
+                        autofocus required>
+            </div>
+
             <input type="hidden" value="{{ request.GET.next }}" name="next">
 
             <button type="submit" id="btn" class="btn btn-outline-primary text-center">Sign up

@@ -29,7 +29,9 @@ class User(models.Model):
     profile = models.CharField(max_length=100, null=True, blank=True)  # 头像路径  可以为空
     academy = models.CharField(max_length=40, null=True, blank=True)  # 学院名  可以为空
     grade = models.CharField(choices=GRADES, max_length=30, default="UN", blank=True, null=True)  # 年级
-
+    #密保及对应答案  author 祁山青  ToDo:继续添加两个密保
+    question=models.CharField(max_length=200, default=" ")  # 密保问题  可以为空
+    answer = models.CharField(max_length=200, default=" ")  # 答案  可以为空
     def __str__(self):
         return self.user.username
 

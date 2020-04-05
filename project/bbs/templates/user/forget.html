@@ -1,0 +1,34 @@
+<!--
+author: 祁山青
+找回密码
+-->
+{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}找回密码{% endblock %}</title>
+
+</head>
+<body>
+{% block content %}
+
+        <div class="col-5 m-auto">
+            <form action="{% url 'user:forget' %}" method="post" style="margin-top: 40%">
+                {% csrf_token %}
+                 <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" autocomplete="off" autofocus
+                           required>
+                </div>
+
+            </form>
+
+        {% if message %}
+        <div class="w-100 mt-2 text-center alert-warning alert">{{ message }}</div>
+        {% endif %}
+        </div>
+
+{% endblock %}
+</body>
+</html>
