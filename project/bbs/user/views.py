@@ -50,6 +50,7 @@ def forgetdetail(request):
             #重置密码
             user1 = AuthUser.objects.get(username=username)
             user1.set_password('123456')
+            user1.save()
             message = "您的密码已经重置为:123456 请返回主页重新登陆"
             return render(request, 'user/forgetdetail.html', context={"message": message, "question": Question})
         else:
@@ -73,6 +74,7 @@ def login(request):
             user = authenticate(username=username, password=password)  # 进行账号密码验证
             if user:  # 登录成功
                 auth_login(request, user)
+                request.session['username']=username
                 if request.POST.get("next"):
                     return redirect(request.POST.get("next"))
                 return redirect("/")
@@ -141,3 +143,35 @@ def history(request):
 
 def file(request):
     return render(request, 'user/file.html')
+
+@login_required()
+@require_http_methods(["GET", "POST"])
+def resetpwd(request):
+    """修改密码
+    author 祁山青
+    """
+    if request.method == "POST":
+        username=request.session['username']
+        u = AuthUser.objects.get(username=username)
+        oldpwd=request.POST.get("oldpwd")
+        newpwd = request.POST.get("newpwd")
+        confirm=request.POST.get("confirm")
+        res = authenticate(username=username, password=oldpwd)  # 进行账号密码验证
+        if res:
+            if confirm!=newpwd:
+                message = "两次密码不正确"
+                # 重置密码
+            else:
+                u.set_password(newpwd)
+                u.save()
+                message = "您的密码已经修改"
+            return render(request, 'user/resetpwd.html', context={"message": message})
+        else:
+            message = "旧密码错误"
+            request.session['user_reset_message'] = message
+            return render(request, 'user/resetpwd.html', context={"message": message})
+    else:
+        message = None
+        if request.session.get('user_reset_message'):
+            message = request.session.pop('user_reset_message')
+        return render(request, 'user/resetpwd.html', context={"message": message})

@@ -9,5 +9,6 @@ urlpatterns = [
     path("logout/", logout, name='logout'),  # 负责用户的登出
     path("profile/", profile, name='profile'),  # 负责显示用户的个人资料
     path("history/", history, name="history"),  # 发帖记录
-    path("file/", file, name='file')  # 用户上传的文件
+    path("file/", file, name='file'),  # 用户上传的文件
+    path("resetpwd/", resetpwd, name='resetpwd')  # 修改密码
 ]

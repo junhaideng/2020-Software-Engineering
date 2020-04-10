@@ -44,6 +44,15 @@ TODO: 还需要其他的显示内容？ 如何美化？
                             {% endif %}
                         </li>
 
+                        <li class="nav-item pt-4">
+                            {% url 'user:resetpwd' as resetpwd %}
+                            {% if request.path ==  resetpwd %}
+                                <a class="nav-link" href="{% url 'user:resetpwd' %}">修改密码</a>
+                            {% else %}
+                                <a class="nav-link" href="{% url 'user:resetpwd' %}">修改密码</a>
+                            {% endif %}
+                        </li>
+
 
                     </ul>
                 </nav>
