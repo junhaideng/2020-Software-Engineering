@@ -32,6 +32,6 @@ def upload(request):
         ExpData.objects.create(user_id=request.user.id,
                                exp_type=exp_type,
                                download_times=0,
-                               path=path,
+                               path="/media/experiment_data/"+alias,
                                name=file.name).save()
         return JsonResponse({"status": "success"})
