@@ -2,6 +2,8 @@
 author: Edgar
 实现用户的相关操作
 """
+from math import ceil
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -161,13 +163,20 @@ def file(request):
     else:
         user_id = request.user.id
         files = ExpData.objects.filter(user_id=user_id)  # 获取该用户的所有文件
+        per_page_num = 10  # 每一页的帖子数
+        p = Paginator(files, per_page_num)  # 分页对象
+        total = ceil(files.count() / per_page_num) * 10  # 总共页数， *10 是为了适应在layui中的显示(count变量)
+        curr_page = 1  # 默认的时候指定的是第一页
         data = []
-        if files:
-            for file in files:
+        if request.GET.get("page"):  # 如果url中含有参数page，那么指定其页数 (?page=num)
+            curr_page = request.GET.get("page")
+        page = p.page(curr_page)  # 获取当前页面的信息
+        if page:
+            for file in page:
                 data.append(
                     {"name": file.name, "path": file.path, "downloads": file.download_times, "exp_type": file.exp_type,
                      "date": file.date, "id": file.id})
-        return render(request, 'user/file.html', context={"files": data})
+        return render(request, 'user/file.html', context={"files": data, "total":total, "curr_page":curr_page})
 
 
 @login_required()

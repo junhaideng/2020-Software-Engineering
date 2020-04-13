@@ -12,15 +12,17 @@ TODO: 如何显示，显示的具体内容
 </head>
 <body>
 {% block detail %}
-    <table class="layui-table ">
-    <colgroup>
-    <col width="200">
-    <col width="150">
-    <col width="100">
-    <col width="200">
-    <col width="100">
-    <col>
-  </colgroup>
+    <div style="min-height: 470px; max-height: 470px">
+    <table class="layui-table " >
+        <colgroup>
+            <col width="200">
+            <col width="150">
+            <col width="100">
+            <col width="200">
+            <col width="100">
+            <col>
+        </colgroup>
+        <thead>
         <tr style="text-align: center">
             <th>文件名</th>
             <th>文件类型</th>
@@ -28,6 +30,7 @@ TODO: 如何显示，显示的具体内容
             <th>上传时间</th>
             <th>操作</th>
         </tr>
+        </thead>
         <tbody>
         {% for file in files %}
             <tr>
@@ -37,11 +40,32 @@ TODO: 如何显示，显示的具体内容
                 <td>{{ file.date }}</td>
                 <td>
                     <div class="layui-row">
-                        <a href="{{ file.path }}" download="{{ file.name }}" class="layui-table-link layui-inline">
-                            <div class="layui-icon layui-icon-download-circle "></div>
-                        </a>  &nbsp;&nbsp;  <a href="javascript:void (0);" onclick="deleteFileById({{ file.id }})" class="layui-table-link layui-inline">
-                        <div class="layui-icon layui-icon-delete" style="color: red"></div>
-                    </a></div>
+                        <a style="text-decoration: none;" href="{{ file.path }}" download="{{ file.name }}"
+                           class="layui-table-link layui-inline">
+                            <svg class="bi bi-download" width="1.2em" height="1.2em" viewBox="0 0 16 16"
+                                 fill="currentColor"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M.5 8a.5.5 0 01.5.5V12a1 1 0 001 1h12a1 1 0 001-1V8.5a.5.5 0 011 0V12a2 2 0 01-2 2H2a2 2 0 01-2-2V8.5A.5.5 0 01.5 8z"
+                                      clip-rule="evenodd"></path>
+                                <path fill-rule="evenodd"
+                                      d="M5 7.5a.5.5 0 01.707 0L8 9.793 10.293 7.5a.5.5 0 11.707.707l-2.646 2.647a.5.5 0 01-.708 0L5 8.207A.5.5 0 015 7.5z"
+                                      clip-rule="evenodd"></path>
+                                <path fill-rule="evenodd" d="M8 1a.5.5 0 01.5.5v8a.5.5 0 01-1 0v-8A.5.5 0 018 1z"
+                                      clip-rule="evenodd"></path>
+                            </svg>
+                        </a> &nbsp;
+                        &nbsp;
+                        <a style="text-decoration: none;" href="javascript:void (0);"
+                           onclick="deleteFileById({{ file.id }})"
+                           class="layui-table-link layui-inline">
+                            <svg class="bi bi-trash-fill" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="red"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                      d="M2.5 1a1 1 0 00-1 1v1a1 1 0 001 1H3v9a2 2 0 002 2h6a2 2 0 002-2V4h.5a1 1 0 001-1V2a1 1 0 00-1-1H10a1 1 0 00-1-1H7a1 1 0 00-1 1H2.5zm3 4a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7a.5.5 0 01.5-.5zM8 5a.5.5 0 01.5.5v7a.5.5 0 01-1 0v-7A.5.5 0 018 5zm3 .5a.5.5 0 00-1 0v7a.5.5 0 001 0v-7z"
+                                      clip-rule="evenodd"></path>
+                            </svg>
+                        </a></div>
                 </td>
             </tr>
         {% endfor %}
@@ -49,6 +73,8 @@ TODO: 如何显示，显示的具体内容
         {% csrf_token %}
 
     </table>
+    </div>
+     <div id="page"  ></div>
 
 {% endblock %}
 </body>
@@ -60,12 +86,12 @@ TODO: 如何显示，显示的具体内容
 
                 layer.open({
                     type: 1,
-                    id:"delete",
+                    id: "delete",
                     area: ["250px", "150px"],
                     btn: ["删除", "取消"],
                     scrollbar: false,
                     content: "<div style='text-align: center; margin-top: 20px'>确定删除文件?</div>",
-                    isOutAnim:false,
+                    isOutAnim: false,
                     yes: function () {
                         let cookies = document.cookie.split(',');
                         let pattern = /csrftoken=(.*)/m;
@@ -95,7 +121,7 @@ TODO: 如何显示，显示的具体内容
                     btn2: function () {
                         layer.close(layer.open());
                     },
-                    cancel:function () {
+                    cancel: function () {
 
                     }
                 });
@@ -103,6 +129,26 @@ TODO: 如何显示，显示的具体内容
             });
         }
 
+    </script>
+
+    <script>
+        layui.use(['laypage', 'layer'], function () {
+                var laypage = layui.laypage
+                    , layer = layui.layer;
+
+                //总页数低于页码总数
+                laypage.render({
+                    elem: 'page'
+                    , count:{{ total }}//数据总数
+                    , curr: {{ curr_page }}
+                    , jump: function (obj, first) {
+                        if (!first) {
+                            location.href = "?page=" + obj.curr;
+                        }
+                    }
+                })
+            }
+        );
     </script>
 {% endblock %}
 </html>
