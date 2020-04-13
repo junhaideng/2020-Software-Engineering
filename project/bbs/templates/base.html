@@ -218,6 +218,7 @@ TODO: footer显示 ？？
             , done: function (res) {
                 document.getElementsByClassName("layui-layer-close")[0].click();
                 layer.msg("上传成功");
+                location.reload();
             }
             , error: function () {
                 layer.msg("上传失败，请重新上传")
