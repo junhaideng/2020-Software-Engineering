@@ -15,7 +15,7 @@
 
 <hr>
 
-附git commit 描述:
+附git commit 描述: :baby_chick:
 
 格式  `type: <description>`
 
@@ -30,4 +30,5 @@ type:
 - `chore`：构建过程或辅助工具的变动
 - `add`: 添加某个文件等
 - `change`: 对某个文件进行改变，但不改变原来的功能
+- `beatify`: 对界面进行美化
 
