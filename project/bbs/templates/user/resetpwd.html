@@ -2,16 +2,15 @@
 author: 祁山青
 修改密码
 -->
-{% extends 'base.html' %}
+{% extends 'user/base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}修改密码{% endblock %}</title>
-
+    <title>{% block title %}修改密码 {% endblock %}</title>
 </head>
 <body>
-{% block content %}
+{% block detail %}
 
         <div class="col-5 m-auto">
             <form action="{% url 'user:resetpwd' %}" method="post" style="margin-top: 40%">
