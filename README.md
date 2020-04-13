@@ -1,4 +1,7 @@
 # 2020-Software-Engineering
+
+#### :rainbow: 在pythonanywhere搭了个[演示网站](http://jhdeng.pythonanywhere.com/)，不定时同步
+
 问题讨论区:
 - 存在的问题可以在[这里](https://shimo.im/docs/k36KKWPVTQWghYWV)
 - 问题的提出和解答请遵循一定的规范
