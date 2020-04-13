@@ -9,55 +9,74 @@ TODO: 还需要其他的显示内容？ 如何美化？
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
+    {% block forward_dependecies %}
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    {% endblock %}
 </head>
 <body>
 {% block content %}
     <div class="container">
-        <div class="row mt-3 ">
+        <div class="row mt-3">
             <div class="col-2">
-                <nav class="nav navbar-left">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item pt-4">
-                            {% url 'user:profile' as profile_url %}
-                            {% if request.path == profile_url %}
-                                <a class="nav-link" href="{% url 'user:profile' %}">基本资料</a>
+                <ul role="menubar" class="el-menu-vertical-demo el-menu">
+                    {% url 'user:profile' as profile_url %}
+                    {% if request.path == profile_url %}
+                        <li class="el-menu-item is-active" style="padding-left: 20px;">
+                        <span style="font-size: 16px"><i class="el-icon-user"></i>
+                            <a class="card-link" href="{% url 'user:profile' %}">基本资料</a>
+                            </span>
                             {% else %}
-                                <a class="nav-link" href="{% url 'user:profile' %}">基本资料</a>
-                            {% endif %}
-                        </li>
+                        <li class="el-menu-item" style="padding-left: 20px;">
+                        <span style="font-size: 16px"><i class="el-icon-user"></i>
+                            <a class="card-link" style="color: #909399" href="{% url 'user:profile' %}">基本资料</a>
+                            </span>
+                    {% endif %}
 
-                        <li class="nav-item pt-4">
-                            {% url 'user:history' as history %}
-                            {% if request.path == history %}
-                                <a class="nav-link" href="{% url 'user:history' %}">发帖记录</a>
+
+                    </li>
+                    {% url 'user:history' as history %}
+                    {% if request.path == history %}
+                        <li class="el-menu-item is-active" style="padding-left: 20px;">
+                         <span style="font-size: 16px"> <i class="el-icon-menu"></i>
+                            <a class="card-link" href="{% url 'user:history' %}">发帖记录</a>
+                        </span>
                             {% else %}
-                                <a class="nav-link" href="{% url 'user:history' %}">发帖记录</a>
-                            {% endif %}
-                        </li>
+                        <li class="el-menu-item" style="padding-left: 20px;">
+                        <span style="font-size: 16px"> <i class="el-icon-menu"></i>
+                            <a class="card-link" style="color: #909399" href="{% url 'user:history' %}">发帖记录</a>
+                        </span>
+                    {% endif %}
 
-                        <li class="nav-item pt-4">
-                            {% url 'user:file' as file %}
-                            {% if request.path == file %}
-                                <a class="nav-link" href="{% url 'user:file' %}">我的文件</a>
+                    </li>
+                    {% url 'user:file' as file %}
+                    {% if request.path == file %}
+                        <li class="el-menu-item is-active" style="padding-left: 20px;">
+                         <span style="font-size: 16px">     <i class="el-icon-files"></i>
+                            <a class="card-link" href="{% url 'user:file' %}">我的文件</a>
+                        </span></li>
                             {% else %}
-                                <a class="nav-link" href="{% url 'user:file' %}">我的文件</a>
-                            {% endif %}
-                        </li>
+                        <li class="el-menu-item " style="padding-left: 20px;">
+                         <span style="font-size: 16px">     <i class="el-icon-files"></i>
+                            <a class="card-link" style="color: #909399" href="{% url 'user:file' %}">我的文件</a>
+                        </span></li>
+                    {% endif %}
 
-                        <li class="nav-item pt-4">
-                            {% url 'user:resetpwd' as resetpwd %}
-                            {% if request.path ==  resetpwd %}
-                                <a class="nav-link" href="{% url 'user:resetpwd' %}">修改密码</a>
+                    {% url 'user:resetpwd' as resetpwd %}
+                    {% if request.path ==  resetpwd %}
+                        <li class="el-menu-item is-active" style="padding-left: 20px;">
+                         <span style="font-size: 16px"> <i class="el-icon-setting"></i>
+                            <a class="card-link" href="{% url 'user:resetpwd' %}">修改密码</a>
+                       </span></li>
                             {% else %}
-                                <a class="nav-link" href="{% url 'user:resetpwd' %}">修改密码</a>
-                            {% endif %}
-                        </li>
+                        <li class="el-menu-item " style="padding-left: 20px;">
+                         <span style="font-size: 16px"> <i class="el-icon-setting"></i>
+                            <a class="card-link" style="color: #909399" href="{% url 'user:resetpwd' %}">修改密码</a>
+                       </span></li>
+                    {% endif %}
 
-
-                    </ul>
-                </nav>
+                </ul>
             </div>
-            <div class="col-10 border-left">
+            <div class="col-10">
                 {% block detail %}
                 {% endblock %}
             </div>
