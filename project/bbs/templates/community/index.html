@@ -20,19 +20,20 @@ TODO: 具体如何显示，美化显示方式
 <body>
 {% block content %}
     <div class="container">
-        <div class="">
+        <div style="max-height: 600px; min-height: 600px;">
             {% for post in posts %}
                 {{ post.date_created }}
                 <li class="list-group-item"><a class="card-link"
                                                href="{% url 'community:detail' post.id %}">{{ post.topic }}</a></li>
-
             {% endfor %}
         </div>
 
+    {% if total > 10 %}
         <div class=" mt-2">
 
             <div id="page"></div>
         </div>
+    {% endif %}
 
     </div>
 

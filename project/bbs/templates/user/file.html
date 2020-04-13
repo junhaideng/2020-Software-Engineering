@@ -74,7 +74,9 @@ TODO: 如何显示，显示的具体内容
 
     </table>
     </div>
-     <div id="page"  ></div>
+     {% if total > 10 %}
+    <div id="page"  ></div>
+    {% endif %}
 
 {% endblock %}
 </body>
