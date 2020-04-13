@@ -12,8 +12,7 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
 from .models import User, ExpData
 from django.contrib.auth.models import User as AuthUser
-import datetime
-import time
+from django.core.paginator import Paginator
 
 
 @require_http_methods(["GET", "POST"])
@@ -151,6 +150,7 @@ def history(request):
 def file(request):
     """用户上传的文件(实验数据)
     @author： Edgar
+    TODO: 分页显示
     """
     if request.method == "POST":  # POST 代表删除文件
         file_id = request.POST.get("id")  # 获取文件的id
