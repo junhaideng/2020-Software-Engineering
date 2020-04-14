@@ -1,0 +1,104 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>个人信息</title>
+    <style type="text/css">
+		h1{
+			font-size:30px;
+			color:#930;
+			text-align:center;
+				}
+		.center{
+			text-align: center;
+				}
+		 label {
+			display: inline-block;
+			width: 500px;
+			text-align: right;  
+				}
+		 input,textarea{
+			vertical-align: top;
+				}
+		
+    </style>
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" 
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" 
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" 
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</head>
+<body>
+ <form action="">
+	<div class="container">
+		<nav class="navbar navbar-expand-sm navbar-light bg-light">
+			<a class="navbar-brand mr-2" href="/">
+				<img class="rounded-circle mr-2" style="height: 35px" src="/static/images/sjtu.png"
+					 alt="navbar-brand"/>
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link active" style="color: #007fff;" href="/">主页</a>  
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/search/">搜索</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/course/">课程</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/community/">社区</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/post/">发帖</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/feedback/">反馈</a>
+					</li>
+				</ul>
+					<a class="nav-link nav-item mr-2 p-0" href="/user/login/">登录</a>
+					<a class="nav-link nav-item mr-2 p-0" href="/user/signup/">注册</a>
+			</div>
+		</nav>
+	</div>
+
+	<h1 style="margin-top:20px">个人信息</h1>	
+
+    <div class="wlfg-wrap clearfix" style="margin-top:60px;margin-left:180px;">
+        <label class="label-name" for="nick">昵 称：</label>
+        用户1
+		<p class="rlf-tip-wrap errorHint color-red"></p>
+    </div>
+            
+    <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:180px;">
+        <label class="label-name" for="sex" >性 别：</label>
+		保密
+		<p class="rlf-tip-wrap errorHint color-red"></p>
+    </div>
+
+    <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:180px;">
+        <label class="label-name" for="college" >学 院：</label>
+		电子信息与电气工程学院
+		<p class="rlf-tip-wrap errorHint color-red"></p>
+	</div>
+
+    <div class="block" style="margin-top:30px;margin-left:180px;">
+        <label class="label-name" for="grade" >年 级：</label>
+		大二
+		<p class="rlf-tip-wrap errorHint color-red"></p>
+	</div>
+
+    <div class="block center" style="margin-top:30px;">
+        <button type="button" class="btn btn-info">修改</button>
+    </div>
+	
+</form>
+</body>
+</html>
