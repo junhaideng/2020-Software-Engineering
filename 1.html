@@ -32,10 +32,45 @@
 </head>
 <body>
  <form action="">
+	<div class="container">
+		<nav class="navbar navbar-expand-sm navbar-light bg-light">
+			<a class="navbar-brand mr-2" href="/">
+				<img class="rounded-circle mr-2" style="height: 35px" src="/static/images/sjtu.png"
+					 alt="navbar-brand"/>
+			</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a class="nav-link active" style="color: #007fff;" href="/">主页</a>  
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/search/">搜索</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/course/">课程</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/community/">社区</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/post/">发帖</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="/feedback/">反馈</a>
+					</li>
+				</ul>
+					<a class="nav-link nav-item mr-2 p-0" href="/user/login/">登录</a>
+					<a class="nav-link nav-item mr-2 p-0" href="/user/signup/">注册</a>
+			</div>
+		</nav>
+	</div>
 
-	<h1 style="margin-top:50px">个人资料</h1>	
+	<h1 style="margin-top:30px">个人资料</h1>	
 
-    <div class="wlfg-wrap clearfix" style="margin-top:100px;margin-left:180px;">
+    <div class="wlfg-wrap clearfix" style="margin-top:80px;margin-left:180px;">
         <label class="label-name" for="nick">昵 称：</label>
         <input type="text" name="nickname" id="nick" autocomplete="off" data-validate="require-nick" class="moco-form-control" placeholder="请输入昵称"/>
 		<p class="rlf-tip-wrap errorHint color-red"></p>
