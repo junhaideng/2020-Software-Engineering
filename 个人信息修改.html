@@ -1,7 +1,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>个人资料修改</title>
+    <title>个人信息修改</title>
     <style type="text/css">
 		h1{
 			font-size:30px;
@@ -68,9 +68,9 @@
 		</nav>
 	</div>
 
-	<h1 style="margin-top:30px">个人资料</h1>	
+	<h1 style="margin-top:20px">个人信息修改</h1>	
 
-    <div class="wlfg-wrap clearfix" style="margin-top:80px;margin-left:180px;">
+    <div class="wlfg-wrap clearfix" style="margin-top:60px;margin-left:180px;">
         <label class="label-name" for="nick">昵 称：</label>
         <input type="text" name="nickname" id="nick" autocomplete="off" data-validate="require-nick" class="moco-form-control" placeholder="请输入昵称"/>
 		<p class="rlf-tip-wrap errorHint color-red"></p>
@@ -79,15 +79,11 @@
     <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:180px;">
         <label class="label-name" for="sex" >性 别：</label>
 		<div class="btn-group open">
-			<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				请选择性别
-			</button>
-			<ul class="dropdown-menu">
-				<li><a class="dropdown-item" href="#">男</a></li>
-				<li><a class="dropdown-item" href="#">女</a></li>
-				<div class="dropdown-divider"></div>
-				<li><a class="dropdown-item" href="#">保密</a></li>
-				</ul>
+			<select class="btn btn-secondary btn-sm " value='sex'>
+				<option class="dropdown-item">男</option>
+				<option class="dropdown-item">女</option>
+				<option class="dropdown-item">保密</option>
+			</select>
 		</div>
 		<p class="rlf-tip-wrap errorHint color-red"></p>
     </div>
@@ -95,37 +91,35 @@
     <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:180px;">
         <label class="label-name" for="college" >学 院：</label>
 		<div class="btn-group open">
-			<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				请选择学院
-			</button>
-		    <ul class="dropdown-menu">
-				<li><a class="dropdown-item" href="#">船舶海洋与建筑工程学院</a></li>
-				<li><a class="dropdown-item" href="#">机械与动力工程学院</a></li>
-				<li><a class="dropdown-item" href="#">电子信息与电气工程学院</a></li>
-				<li><a class="dropdown-item" href="#">材料科学与工程学院</a></li>
-				<li><a class="dropdown-item" href="#">数学科学学院</a></li>
-				<li><a class="dropdown-item" href="#">物理与天文学院</a></li>
-				<li><a class="dropdown-item" href="#">化学化工学院</a></li>
-				<li><a class="dropdown-item" href="#">生命科学科技学院</a></li>
-				<li><a class="dropdown-item" href="#">农业与生物学院</a></li>
-				<li><a class="dropdown-item" href="#">安泰经济与管理学院</a></li>
-				<li><a class="dropdown-item" href="#">致远学院</a></li>
-				<li><a class="dropdown-item" href="#">人文学院</a></li>
-				<li><a class="dropdown-item" href="#">马克思主义学院</a></li>
-				<li><a class="dropdown-item" href="#">药学院</a></li>
-				<li><a class="dropdown-item" href="#">外国语学院</a></li>
-				<li><a class="dropdown-item" href="#">凯原法学院</a></li>
-				<li><a class="dropdown-item" href="#">媒体与传播学院</a></li>
-				<li><a class="dropdown-item" href="#">巴黎高科卓越工程师学院</a></li>
-				<li><a class="dropdown-item" href="#">国际与公共事务学院</a></li>
-				<li><a class="dropdown-item" href="#">上海交大-南加州大学文化创意产业学院</a></li>
-				<li><a class="dropdown-item" href="#">中英国际低碳学院</a></li>
-				<li><a class="dropdown-item" href="#">设计学院</a></li>
-				<li><a class="dropdown-item" href="#">密西根学院</a></li>
-				<li><a class="dropdown-item" href="#">环境科学与工程学院</a></li>
-				<li><a class="dropdown-item" href="#">生物医学工程学院</a></li>
-				<li><a class="dropdown-item" href="#">其他</a></li>
-			</ul>
+			<select class="btn btn-secondary btn-sm " value='college'>
+				<option>船舶海洋与建筑工程学院</option>
+				<option>机械与动力工程学院 </option>
+				<option>电子信息与电气工程学院</option>
+				<option>材料科学与工程学院</option>
+				<option>数学科学学院</option>
+				<option>物理与天文学院</option>
+				<option>化学化工学院</option>
+				<option>生命科学科技学院</option>
+				<option>农业与生物学院</option>
+				<option>安泰经济与管理学院</option>
+				<option>致远学院</option>
+				<option>人文学院</option>
+				<option>马克思主义学院</option>
+				<option>药学院</option>
+				<option>外国语学院</option>
+				<option>航空航天学院</option>
+				<option>凯原法学院</option>
+				<option>媒体与传播学院</option>
+				<option>巴黎高科卓越工程师学院</option>
+				<option>国际与公共事务学院</option>
+				<option>上海交大-南加州大学文化创意产业学院</option>
+				<option>中英国际低碳学院</option>
+				<option>设计学院</option>
+				<option>密西根学院</option>
+				<option>环境科学与工程学院</option>
+				<option>生物医学工程学院</option>
+				<option>其他</option>
+			</select>
 		</div>
 		<p class="rlf-tip-wrap errorHint color-red"></p>
 	</div>
@@ -133,19 +127,16 @@
     <div class="block" style="margin-top:30px;margin-left:180px;">
         <label class="label-name" for="grade" >年 级：</label>
 		<div class="btn-group open">
-			<button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				请选择年级
-			</button>
-			<ul class="dropdown-menu">
-				<li><a class="dropdown-item" href="#">大一</a></li>
-				<li><a class="dropdown-item" href="#">大二</a></li>
-				<li><a class="dropdown-item" href="#">大三</a></li>
-				<li><a class="dropdown-item" href="#">大四</a></li>
-				<li><a class="dropdown-item" href="#">研一</a></li>
-				<li><a class="dropdown-item" href="#">研二</a></li>
-				<li><a class="dropdown-item" href="#">研三</a></li>
-				<li><a class="dropdown-item" href="#">其他</a></li>
-			</ul>
+			<select class="btn btn-secondary btn-sm " value='grade'>
+				<option>大一</option>
+				<option>大二 </option>
+				<option>大三</option>
+				<option>大四</option>
+				<option>研一</option>
+				<option>研二</option>
+				<option>研三</option>
+				<option>其他</option>
+			</select>
 		</div>
 		<p class="rlf-tip-wrap errorHint color-red"></p>
 	</div>
