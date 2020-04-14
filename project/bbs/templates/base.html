@@ -40,13 +40,7 @@ TODO: footer显示 ？？
                         <a class="nav-link" href="{% url 'home:index' %}">主页</a>
                     {% endif %}
                 </li>
-                <li class="nav-item">
-                    {% if request.path == '/search/' %}
-                        <a class="nav-link active" style="color: #007fff;" href="{% url 'search:search' %}">搜索</a>
-                    {% else %}
-                        <a class="nav-link" href="{% url 'search:search' %}">搜索</a>
-                    {% endif %}
-                </li>
+
                 <li class="nav-item">
                     {% if request.path == '/course/' %}
                         <a class="nav-link active" style="color: #007fff;" href="{% url 'course:index' %}">课程</a>
