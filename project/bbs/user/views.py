@@ -3,7 +3,7 @@ author: Edgar
 实现用户的相关操作
 """
 from math import ceil
-
+import os
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -15,6 +15,7 @@ from django.contrib.auth import authenticate
 from .models import User, ExpData
 from django.contrib.auth.models import User as AuthUser
 from django.core.paginator import Paginator
+from django.conf import settings
 
 
 @require_http_methods(["GET", "POST"])
@@ -70,7 +71,10 @@ def forgetdetail(request):
 
 @require_http_methods(["GET", "POST"])
 def login(request):
-    """登录处理"""
+    """
+    登录处理
+    @author: Edgar
+    """
     if request.method == "POST":
         username = request.POST.get("username")  # 获取表单中的账号密码
         password = request.POST.get("password")
@@ -98,7 +102,10 @@ def login(request):
 
 @require_http_methods(["GET", "POST"])
 def signup(request):
-    """注册处理"""
+    """
+    注册处理
+    @author: Edgar
+    """
     if request.method == "POST":
         username = request.POST.get("username")
         if not User.objects.filter(user__username=username):
@@ -129,7 +136,10 @@ def signup(request):
 @login_required()
 @require_http_methods(["GET"])
 def logout(request):
-    """用户的登出"""
+    """
+    用户的登出
+    @author: Edgar
+    """
     auth_logout(request)
     return redirect("/")
 
@@ -150,33 +160,42 @@ def history(request):
 @login_required()
 @require_http_methods(["GET", "POST"])
 def file(request):
-    """用户上传的文件(实验数据)
+    """
+    用户上传的文件(实验数据)
     @author： Edgar
-    TODO: 分页显示
     """
     if request.method == "POST":  # POST 代表删除文件
         file_id = request.POST.get("id")  # 获取文件的id
         if file_id:
-            ExpData.objects.get(id=file_id).delete()  # 删除文件
+            f = ExpData.objects.get(id=file_id)  # 先获取该文件
+            os.remove(settings.BASE_DIR + f.path)
+            f.delete()
+
             return JsonResponse({"status": "success"})  # 删除成功
-        return JsonResponse({"status": "failed"})   # 无此id
+        return JsonResponse({"status": "failed"})  # 无此id
     else:
         user_id = request.user.id
         files = ExpData.objects.filter(user_id=user_id)  # 获取该用户的所有文件
-        per_page_num = 10  # 每一页的帖子数
-        p = Paginator(files, per_page_num)  # 分页对象
-        total = ceil(files.count() / per_page_num) * 10  # 总共页数， *10 是为了适应在layui中的显示(count变量)
-        curr_page = 1  # 默认的时候指定的是第一页
-        data = []
-        if request.GET.get("page"):  # 如果url中含有参数page，那么指定其页数 (?page=num)
-            curr_page = request.GET.get("page")
-        page = p.page(curr_page)  # 获取当前页面的信息
-        if page:
-            for file in page:
-                data.append(
-                    {"name": file.name, "path": file.path, "downloads": file.download_times, "exp_type": file.exp_type,
-                     "date": file.date, "id": file.id})
-        return render(request, 'user/file.html', context={"files": data, "total":total, "curr_page":curr_page})
+        if files.exists():
+            per_page_num = 10  # 每一页的帖子数
+            p = Paginator(files, per_page_num)  # 分页对象
+            total = ceil(files.count() / per_page_num) * 10  # 总共页数， *10 是为了适应在layui中的显示(count变量)
+            curr_page = 1  # 默认的时候指定的是第一页
+            data = []
+            if request.GET.get("page"):  # 如果url中含有参数page，那么指定其页数 (?page=num)
+                curr_page = request.GET.get("page")
+            page = p.page(curr_page)  # 获取当前页面的信息
+            if page:
+                for file in page:
+                    data.append(
+                        {"name": file.name, "path": file.path, "downloads": file.download_times,
+                         "exp_type": file.exp_type,
+                         "date": file.date, "id": file.id})
+        else:
+            data = None
+            total = 0
+            curr_page = 1
+        return render(request, 'user/file.html', context={"files": data, "total": total, "curr_page": curr_page})
 
 
 @login_required()
