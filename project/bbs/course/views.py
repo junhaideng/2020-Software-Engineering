@@ -33,5 +33,5 @@ def upload(request):
                                exp_type=exp_type,
                                download_times=0,
                                path="/media/experiment_data/"+alias,
-                               name=file.name).save()
+                               name=os.path.splitext(file.name)[0]).save()
         return JsonResponse({"status": "success"})
