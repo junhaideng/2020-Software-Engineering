@@ -3,9 +3,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% load static %}
+    {% block forward_dependecies %}{# 用来加载依赖文件 #}
+
+    <script src="{% static 'js/jquery-3.4.1.slim.min.js'%}" type="text/javascript"></script>
+    <script>
+        var iNum1;
+        var iNum2;
+        var attribute= ['必修课','选修课','实验课'];
+        var academy =[['电子信息与电气工程学院','生物医学工程学院','机械与动力工程学院'],['人文学院','海洋学院','医学院'],['物理学院','设计学院','体育系']];
+        var course =[[['课程1','课程2'],['课程3','课程4'],['课程5','课程6']],[['课程7','课程8'],['课程9','课程10'],['课程11','课程12']],[['课程13','课程14'],['课程15','课程16'],['课程17','课程18']]];
+
+        $(function () {
+            for(var i=0;i<attribute.length;i++){
+                $('#selattribute').append('<option>'+attribute[i]+'</option>');
+            };
+            $('#selattribute').change(function () {
+                $('#selacademy').children().not(':eq(0)').remove();
+                $('#selcourse').children().not(':eq(0)').remove();
+                iNum1 = $(this).children('option:selected').index();
+                var aacademy = academy[iNum1-1];
+                for(var j=0;j<aacademy.length;j++){
+                    $('#selacademy').append('<option>'+aacademy[j]+'</option>');
+                }
+            });
+            $('#selacademy').change(function () {
+                $('#selcourse').children().not(':eq(0)').remove();
+                iNum2 = $(this).children('option:selected').index();
+                var acourse = course[iNum1-1][iNum2-1];
+                for(var k=0;k<acourse.length;k++){
+                    $('#selcourse').append('<option>'+acourse[k]+'</option>');
+                }
+            })
+        })
+    </script>
+
+    <style>
+
+        .select {
+        display: inline-block;
+        width: 300px;
+        position: relative;
+        vertical-align: middle;
+        padding: 0;
+        overflow: hidden;
+        background-color: #fff;
+        color: #555;
+        border: 1px solid #aaa;
+        text-shadow: none;
+        border-radius: 4px;
+        transition: box-shadow 0.25s ease;
+        z-index: 2;
+        }
+
+        .select:hover {
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        }
+        .select:before {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        border: 10px solid transparent;
+        border-top-color: #ccc;
+        top: 14px;
+        right: 10px;
+        cursor: pointer;
+        z-index: -2;
+        }
+        .select select {
+        cursor: pointer;
+        padding: 10px;
+        width: 100%;
+        border: none;}
+
+        .select select {
+        cursor: pointer;
+        padding: 10px;
+        width: 100%;
+        border: none;
+        background: transparent;
+        background-image: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        }
+
+        .select select:focus {
+        outline: none;
+        }
+        .cont {
+            width:300px;
+            height:200px;
+            position:absolute;
+            left:50%;
+            top:50%;
+            margin:-100px 0 0 -150px
+        }
+    </style>
+    <style>
+        .button {
+            background-color: #CD5C5C;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+    {% endblock %}
     <title>{% block title %}课程{% endblock %}</title>
 </head>
 <body>
-
+{% block content %}
+    <div class="cont">
+    <div class="select">
+        <select name="" id="selattribute" style="font-size:20px;">
+            <option value="">请选择课程类别</option>
+        </select>
+        <select name="" id="selacademy" style="font-size:20px;">
+            <option value="">请选择开设学院</option>
+        </select>
+        <select name="" id="selcourse" style="font-size:20px;">
+            <option value="">请选择课程名称</option>
+        </select>
+    </div>
+    <div style="text-align:center">
+        <br><button class="button">确认</button>
+    </div>
+    </div>
+{% endblock %}
 </body>
 </html>
