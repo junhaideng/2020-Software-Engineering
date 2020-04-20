@@ -28,7 +28,7 @@ class Course(models.Model):
 
 class TeacherOfCourse(models.Model):
     """课程的教师"""
-    course_id = models.IntegerField()  # 对应course的id
+    course_id = models.ForeignKey('Course',on_delete=models.CASCADE)  # 对应course的id
     name = models.CharField(max_length=40, null=True)  # 教师的姓名
 
     class Meta:
@@ -41,7 +41,7 @@ class TeacherOfCourse(models.Model):
 class CourseDes(models.Model):
     """相应老师的课程描述"""
     user_id = models.IntegerField(null=True, blank=True)  # 哪一个用户写的
-    teacher_id = models.IntegerField()  # 对应Course中自动生成的id
+    teacher_id = models.ForeignKey('TeacherOfCourse',on_delete=models.CASCADE)  # 对应Course中自动生成的id
     des = models.TextField(null=True, blank=True)  # 描述的信息
 
     def __str__(self):
