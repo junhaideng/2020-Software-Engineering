@@ -11,47 +11,113 @@ author: Edgar
 </head>
 <body>
 {% block content %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/editormd.min.css' %}"/>
-    <form action="." method="POST" class="mt-5 ml-5">
-        <label class="w-100">
-            <input class="form-control row w-100" name="topic" placeholder="请输入标题" required autofocus autocomplete="off">
-        </label>
-        <div id="test-editor">
-            <label>
-                <textarea style="display:none;"></textarea>
-            </label>
-        </div>
-    <button type="submit" class="btn btn-outline-primary">提交</button>
-</form>
+    <style>
+        form {
+            margin-top: 40px;
+        }
 
+        .layui-form-label {
+            width: 100px;
+        }
+    </style>
+    <form class="layui-form" action="" method="POST">
+        {% csrf_token %}
+
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="{width: 100px}">标题</label>
+            <div class="layui-input-block">
+                <input class="layui-input" name="topic" type="text" placeholder="请输入标题" required>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label "> 所属课程 </label>
+            <div class="layui-input-block">
+                <select name="course" lay-verify="required" class="layui-select" placeholder="请选择课程">
+                    <option value="" disabled selected>请选择相应课程</option>
+                    {% for c in data %}
+                        <option value="{{ c }}">{{ c }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <textarea id="content" placeholder="在这里输入你想要的内容" style="display: none;"></textarea>
+        <div class="layui-row">
+            <div class="layui-col-lg12" style="{margin-top: 20px; margin-bottom: 20px}">&nbsp;</div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" type="button" id="submit">发帖</button>
+                {% if msg %}
+                    <i class="layui-icon layui-icon-ok-circle" style="color: green">{{ msg }}</i>
+                {% endif %}
+            </div>
+        </div>
+    </form>
 {% endblock %}
 </body>
 {% block back_dependencies %}
 
-    <script src="{% static "js/editormd.js" %}"></script>
-    <script type="text/javascript">
-        $(function () {
-            var editor = editormd("test-editor", {
-                width: "80%",
-                height: 640,
+    <script>
 
-                path: "{% static 'editormd/lib/' %}",
-                name: "content", // 表单的名称
-                watch: false,
-                toolbarIcons: function () {
-                    // Or return editormd.toolbarModes[name]; // full, simple, mini
-                    // Using "||" set icons align right.
-                    return ["undo", "redo", "|",
-                        "bold", "del", "italic", "quote", "|",
-                        "h1", "h2", "h3", "h4", "h5", "h6", "|",
-                        "list-ul", "list-ol", "hr", "|",
-                        "link", "datetime",]
-                },
-                placeholder:"在这里发表你的看法",
-            });
+        layui.use('layedit', function () {
+
+            var layedit = layui.layedit;
+            var layer = layui.layer,
+
+                index = layedit.build('content', {
+                    tool: [
+                        'strong' //加粗
+                        , 'italic' //斜体
+                        , 'underline' //下划线
+                        , 'del' //删除线
+                        , '|' //分割线
+                        , 'left' //左对齐
+                        , 'center' //居中对齐
+                        , 'right' //右对齐
+                        , 'link' //超链接
+                        , 'unlink' //清除链接
+                        , 'face' //表情
+                    ]
+                }); //建立编辑器
+
+            let cookies = document.cookie.split(',');
+            let pattern = /csrftoken=(.*)/m;
+            let csrf;
+            for (let j = 0; j < cookies.length; j++) {
+                if (pattern.test(cookies[j])) {
+                    csrf = pattern.exec(cookies[j])[1];
+                }
+            }
+            $("#submit").click(function () {
+                let content = layedit.getContent(index);
+                let form_data = $("form").serializeArray();
+
+                form_data.push({"name": "content", value: content})
+                $.ajax({
+                    type: "post",
+                    url: "{% url 'post:index' %}",
+                    headers: {
+                        "X-CSRFToken": csrf
+                    },
+                    data: form_data,
+                    success: function (data) {
+                        if (data.code === 200) {
+                            window.location.href = "."
+
+                        } else {
+                            layer.msg(data.status)
+                        }
+                    },
+                    error: function () {
+                        layer.msg("发帖失败，请重试")
+                    }
+                })
+            })
         });
+
+
     </script>
+
 
 {% endblock %}
 </html>
