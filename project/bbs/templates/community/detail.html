@@ -34,7 +34,9 @@ TODO: 如何显示， 美化显示
         </div>
         <div class="w-100 row"></div>
         <div class="col">
-            {{ post.content }}
+            {% autoescape off %}
+            {{ post.content |safe  }}
+            {% endautoescape %}
         </div>
         <div class="w-100"></div>
         <div class="col mt-2">
