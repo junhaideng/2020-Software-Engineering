@@ -25,6 +25,8 @@ def upload(request):
         exp_type = request.POST.get("type")
         pre_path = os.path.join(os.path.join(settings.BASE_DIR, "media"), "experiment_data/")
         alias = time.strftime("%Y_%m_%d_%H_%M_%S_", time.localtime()) + file.name
+        if not os.path.exists(pre_path):
+            os.mkdir(pre_path)
         path = pre_path + alias
         with open(path, "wb") as f:
             for chuck in file.chunks():
