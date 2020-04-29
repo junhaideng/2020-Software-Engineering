@@ -3,28 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>个人中心</title>
-    <style type="text/css">
-        h1 {
-            font-size: 30px;
-            color: #930;
-            text-align: center;
-        }
 
-        .center {
-            text-align: center;
-        }
-
-        label {
-            display: inline-block;
-            width: 500px;
-            text-align: right;
-        }
-
-        input, textarea {
-            vertical-align: top;
-        }
-
-    </style>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
             integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
             crossorigin="anonymous"></script>
@@ -39,217 +18,48 @@
 
 </head>
 <body>
-<form action="">
-    <div class="container">
-        <nav class="navbar navbar-expand-sm navbar-light bg-light">
-            <a class="navbar-brand mr-2" href="/">
-                <img class="rounded-circle mr-2" style="height: 35px" src="/static/images/sjtu.png"
-                     alt="navbar-brand"/>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="/">主页</a>
-
-                    </li>
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="/search/">搜索</a>
-
-                    </li>
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="/course/">课程</a>
-
-                    </li>
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="/community/">社区</a>
-
-                    </li>
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="/post/">发帖</a>
-
-                    </li>
-                    <li class="nav-item">
-
-                        <a class="nav-link" href="/feedback/">反馈</a>
-
-                    </li>
-
-                </ul>
-
-                <div class="form-inline">
-                    <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle ml-0 p-0 m-0" href="javascript:void(0);"
-                           data-toggle="dropdown"
-                           aria-haspopup="true"
-                           aria-expanded="false">
-
-
-                            <svg class="bi bi-people-circle" width="2em" height="2em" viewBox="0 0 16 16"
-                                 fill="currentColor"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987
-                                0 008 15a6.987 6.987 0 005.468-2.63z"></path>
-                                <path fill-rule="evenodd" d="M8 9a3 3 0 100-6 3 3 0 000 6z"
-                                      clip-rule="evenodd"></path>
-                                <path fill-rule="evenodd"
-                                      d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z"
-                                      clip-rule="evenodd"></path>
-                            </svg>
-
-                        </a>
-                        <div class="dropdown-menu ">
-                            <a class="dropdown-item" href="/user/profile/">个人中心</a>
-                            <a class="dropdown-item" href="javascript:void(0)" onclick="uploadFile()">实验数据上传</a>
-                            <a class="dropdown-item" href="javascript:void(0);" onclick="logout()">登出</a>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-        </nav>
-
-
-        <div class="container">
-            <div class="row mt-3">
-                <div class="col-2">
-                    <ul role="menubar" class="el-menu-vertical-demo el-menu">
-
-
-                        <li class="el-menu-item is-active" style="padding-left: 20px;">
-                        <span style="font-size: 16px"><i class="el-icon-user"></i>
-                            <a class="card-link" href="/user/profile/">基本资料</a>
-                            </span>
-
-
-                        </li>
-
-
-                        <li class="el-menu-item" style="padding-left: 20px;">
-                        <span style="font-size: 16px"> <i class="el-icon-menu"></i>
-                            <a class="card-link" style="color: #909399" href="/user/history/">发帖记录</a>
-                        </span>
-
-
-                        </li>
-
-
-                        <li class="el-menu-item " style="padding-left: 20px;">
-                         <span style="font-size: 16px">     <i class="el-icon-files"></i>
-                            <a class="card-link" style="color: #909399" href="/user/file/">我的文件</a>
-                        </span></li>
-
-
-                        <li class="el-menu-item " style="padding-left: 20px;">
-                         <span style="font-size: 16px"> <i class="el-icon-setting"></i>
-                            <a class="card-link" style="color: #909399" href="/user/resetpwd/">修改密码</a>
-                       </span></li>
-
-
-                    </ul>
-                </div>
-                <div class="col-10">
-
-                    <div class="modal-header font-weight-bolder">个人资料</div>
-                    <div class="m-5 row">
-                        <div class="col-3">
-
-                            <svg class="bi bi-people-circle" width="2em" height="2em" viewBox="0 0 16 16"
-                                 fill="currentColor"
-                                 xmlns="http://www.w3.org/2000/svg">
-                                <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987
-                                0 008 15a6.987 6.987 0 005.468-2.63z"></path>
-                                <path fill-rule="evenodd" d="M8 9a3 3 0 100-6 3 3 0 000 6z"
-                                      clip-rule="evenodd"></path>
-                                <path fill-rule="evenodd"
-                                      d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z"
-                                      clip-rule="evenodd"></path>
-                            </svg>
-
-                            <form action="." method="POST" class="mt-2">
-                                <a class="card-link" href="javascript:void(0);"
+{% block detail %}
+    <div>
+         <form action="." method="POST" class="mt-2">
+           <a class="card-link" href="javascript:void(0);"
                                    onclick="document.getElementById('profile').hidden=false;">修改头像</a>
-                                <div class="" hidden id="profile"></div>
-                                <div class=""></div>
-                            </form>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+         <div class="" hidden id="profile"></div>
+         <div class=""></div>
+        </form>
 
 
-        <div class="wlfg-wrap clearfix" style="margin-top:-75px;margin-left:5px;">
+        <div class="wlfg-wrap clearfix" style="margin-top:30x;margin-left:120px;">
             <label class="label-name" for="nick">昵 称：</label>
             {{ username }}
             <p class="rlf-tip-wrap errorHint color-red"></p>
         </div>
 
-        <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:5px;">
+        <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:120px;">
             <label class="label-name" for="sex">性 别：</label>
             {{ sex }}
             <p class="rlf-tip-wrap errorHint color-red"></p>
         </div>
 
-        <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:5px;">
+        <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:120px;">
             <label class="label-name" for="college">学 院：</label>
             {{ academy }}
             <p class="rlf-tip-wrap errorHint color-red"></p>
         </div>
 
-        <div class="block" style="margin-top:30px;margin-left:5px;">
+        <div class="block" style="margin-top:30px;margin-left:120px;">
             <label class="label-name" for="grade">年 级：</label>
             {{ grade }}
             <p class="rlf-tip-wrap errorHint color-red"></p>
         </div>
 
-        <div class="block center" style="margin-top:30px;margin-left:-80px;">
+        <div class="block center" style="margin-top:30px;margin-left:120px;">
             <a href="/user/modify">
                 <button type="button" class="btn btn-info">修改</button>
             </a>
         </div>
 
-    </div>
+   </div>
 
-
-    <div id="file_upload_div" style="display: none" class="text-center">
-        <div class="layui-upload-drag" id="file_upload">
-            <i class="layui-icon"></i>
-            <p>点击上传，或将文件拖拽到此处</p>
-        </div>
-        <div class="mt-2 mb-2" id="file_name"></div>
-
-
-        <div class="layui-input-inline " style="width: 100%;">
-            <div class="layui-input-inline">
-                <label for="type" class="layui-form-label" style="width: 100px">实验类型: </label></div>
-            <input type="hidden" name="csrfmiddlewaretoken"
-                   value="1xjbb5zxhWrakOC55MAjHeByF49Wx39obIyzmtcQMGA56UsqjL3No5CK0sOKeoBD">
-            <select id="type" class="layui-select" name="type">
-                <option selected value="物理实验">物理实验</option>
-                <option value="化学实验">化学实验</option>
-                <option value="基电实验">基电实验</option>
-                <option value="电子技术实验">电子技术实验</option>
-                <option value="其他实验">其他实验</option>
-            </select>
-
-        </div>
-        <button type="submit" class="layui-btn mt-2" id="upload">上传文件</button>
-
-        <div class="row w-100"></div>
-    </div>
-
-
-</form>
+{% endblock %}
 </body>
 </html>
