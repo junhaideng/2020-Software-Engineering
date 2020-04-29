@@ -117,9 +117,8 @@ def signup(request):
                 auth.set_password(password)
                 auth.save()
                 user1 = User(user=auth)
-                user1.question = request.POST.get("passwordquestion")
-                user1.answer = request.POST.get("passwordanswer")
                 user1.save()
+                request.session['username'] = username
                 auth_login(request, auth)
                 if request.POST.get("next"):
                     return redirect(request.POST.get("next"))
@@ -205,7 +204,7 @@ def resetpwd(request):
     author 祁山青
     """
     if request.method == "POST":
-        username = request.session['username']
+        username = request.session.get('username')
         u = AuthUser.objects.get(username=username)
         oldpwd = request.POST.get("oldpwd")
         newpwd = request.POST.get("newpwd")
@@ -229,3 +228,51 @@ def resetpwd(request):
         if request.session.get('user_reset_message'):
             message = request.session.pop('user_reset_message')
         return render(request, 'user/resetpwd.html', context={"message": message})
+
+@login_required()
+@require_http_methods(["GET", "POST"])
+def setquestion(request):
+    """设置密保
+        author 祁山青
+        ToDo: 解决修改密保后如果直接登出 会出现错误界面的BUG
+        """
+    username = request.session.get('username')
+    U= User.objects.get(user__username=username)
+    if U.question!=None:  #原先有密保 则需要输入密码设置密保
+         flag=1
+    else : #原先无密保 则需要验证原先密保更改密保
+        flag=0
+    if request.method == "POST" and flag==0: #原先无密保
+        pwd = request.POST.get("pwd")
+        res = authenticate(username=username, password=pwd)  # 进行账号密码验证
+        if res:
+            question = request.POST.get("newQuestion")
+            answer = request.POST.get("newAnswer")
+            U.question = question
+            U.answer=answer
+            U.save()
+            message = "密保设置成功！"
+            return render(request, 'user/setquestion.html', {"message": message, "flag":flag})
+        else:
+            message = "密码错误"
+            request.session['user_setquestion_message'] = message
+            return render(request, 'user/setquestion.html', {"message": message,"flag":flag})
+    elif request.method == "POST" and flag==1: #有原来的密保
+        oldanswer=request.POST.get("oldAnswer")
+        newanswer=request.POST.get("newAnswer")
+        newquestion=request.POST.get("newQuestion")
+        if oldanswer==U.answer:
+            U.question=newquestion
+            U.answer=newanswer
+            U.save()
+            message = "密保设置成功！"
+            return render(request, 'user/setquestion.html', {"message": message,"flag":flag,"oldQuestion":U.question})
+        else:
+            message = "旧密保回答错误"
+            request.session['user_setquestion_message'] = message
+            return render(request, 'user/setquestion.html', {"message": message,"flag":flag,"oldQuestion":U.question})
+    else:
+        message = None
+        if request.session.get('user_setquestion_message'):
+            message = request.session.pop('user_setquestion_message')
+        return render(request, 'user/setquestion.html', {"message": message,"flag":flag,"oldQuestion":U.question})

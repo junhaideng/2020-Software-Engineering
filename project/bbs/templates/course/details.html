@@ -1,0 +1,52 @@
+<!--
+author: 祁山青
+搜索课程
+-->
+{% extends 'user/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}搜索课程 {% endblock %}</title>
+</head>
+<body>
+{% block detail %}
+
+        <div class="col-5 m-auto">
+            <form action="{% url 'course:details' %}" method="post" style="margin-top: 40%">
+                {% csrf_token %}
+                 <div class="form-group">
+                    <label for="type">type</label>
+                    <input type="text" class="form-control" id="type" name="type" autocomplete="off" autofocus
+                           required>
+                </div>
+                <button type="submit" id="btn" class="btn btn-outline-primary text-center">Submit
+            </button>
+            </form>
+            {% if message == '搜索结果如上' %}
+                <form action="{% url 'course:details' %}" method="post" style="margin-top: 40%">
+                {% csrf_token %}
+                 {% for course in List %}
+                    <div class="form-group">
+                        <label for="course">course：<br/>{{ course.name }}<br/>{{ course.major }} </label>
+                    </div>
+                     <div class="form-group">
+                        <label for="teacher">teacher：
+                            {% for teacher in course.teacher %}
+                            <br/> {{ teacher }}</label>
+                            {% endfor %}
+                    </div>
+
+                 {% endfor %}
+            </button>
+            </form>
+
+            {% endif %}
+        {% if message %}
+        <div class="w-100 mt-2 text-center alert-warning alert">{{ message }}</div>
+        {% endif %}
+        </div>
+
+{% endblock %}
+</body>
+</html>
