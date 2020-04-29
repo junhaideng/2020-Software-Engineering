@@ -16,6 +16,7 @@ from .models import User, ExpData
 from django.contrib.auth.models import User as AuthUser
 from django.core.paginator import Paginator
 from django.conf import settings
+import time
 
 
 @require_http_methods(["GET", "POST"])
@@ -274,3 +275,26 @@ def resetpwd(request):
         if request.session.get('user_reset_message'):
             message = request.session.pop('user_reset_message')
         return render(request, 'user/resetpwd.html', context={"message": message})
+
+
+@require_http_methods(["POST", "GET"])
+def upload(request):
+    if request.method == "POST":
+        file = request.FILES.get("file")
+        exp_type = request.POST.get("type")
+        pre_path = os.path.join(os.path.join(settings.BASE_DIR, "media"), "experiment_data/")
+        alias = time.strftime("%Y_%m_%d_%H_%M_%S_", time.localtime()) + file.name
+        if not os.path.exists(pre_path):
+            os.mkdir(pre_path)
+        path = pre_path + alias
+        with open(path, "wb") as f:
+            for chuck in file.chunks():
+                f.write(chuck)
+        ExpData.objects.create(user_id=request.user.id,
+                               exp_type=exp_type,
+                               download_times=0,
+                               path="/media/experiment_data/"+alias,
+                               name=os.path.splitext(file.name)[0]).save()
+        return JsonResponse({"status": "success"})
+    else:
+        return render(request, 'user/upload.html')

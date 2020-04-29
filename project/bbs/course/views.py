@@ -17,23 +17,3 @@ def index(request):
     """课程界面的首页"""
     return render(request, 'course/index.html')
 
-
-@require_http_methods(["POST"])
-def upload(request):
-    if request.method == "POST":
-        file = request.FILES.get("file")
-        exp_type = request.POST.get("type")
-        pre_path = os.path.join(os.path.join(settings.BASE_DIR, "media"), "experiment_data/")
-        alias = time.strftime("%Y_%m_%d_%H_%M_%S_", time.localtime()) + file.name
-        if not os.path.exists(pre_path):
-            os.mkdir(pre_path)
-        path = pre_path + alias
-        with open(path, "wb") as f:
-            for chuck in file.chunks():
-                f.write(chuck)
-        ExpData.objects.create(user_id=request.user.id,
-                               exp_type=exp_type,
-                               download_times=0,
-                               path="/media/experiment_data/"+alias,
-                               name=os.path.splitext(file.name)[0]).save()
-        return JsonResponse({"status": "success"})

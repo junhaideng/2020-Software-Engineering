@@ -98,7 +98,6 @@ TODO: footer显示 ？？
                         </a>
                         <div class="dropdown-menu ">
                             <a class="dropdown-item" href="{% url 'user:profile' %}">个人中心</a>
-                            <a class="dropdown-item" href="javascript:void(0)" onclick="uploadFile()">实验数据上传</a>
                             <a class="dropdown-item" href="javascript:void(0);" onclick="logout()">登出</a>
                         </div>
                     </div>
@@ -116,110 +115,13 @@ TODO: footer显示 ？？
     {% endblock %}
 
 </div>
-{#<footer class="fixed-bottom panel-footer" style="width: 100%;">#}
-{#    <div class="container">#}
-{#        <div class="info text-center">#}
-{#            <ul class="list-unstyled list-inline form-inline">#}
-{#                <li class="list-inline-item">友情链接:</li>#}
-{#                <li><a class="ml-2 list-inline-item bd-footer-links" href="http://jwc.sjtu.edu.cn/web/sjtu/198001.htm"#}
-{#                       target="_blank">教务处</a></li>#}
-{#                <li><a class="ml-2 list-inline-item bd-footer-links" href="https://i.sjtu.edu.cn/" target="_blank">教学信息服务网</a>#}
-{#                </li>#}
-{#                <li><a class="ml-2 list-inline-item bd-footer-links" href="http://www.lib.sjtu.edu.cn/" target="_blank">图书馆</a>#}
-{#                </li>#}
-{#            </ul>#}
-{#        </div>#}
-{#    </div>#}
-{#</footer>#}
-
-<div id="file_upload_div" style="display: none" class="text-center">
-    <div class="layui-upload-drag" id="file_upload">
-        <i class="layui-icon"></i>
-        <p>点击上传，或将文件拖拽到此处</p>
-    </div>
-    <div class="mt-2 mb-2" id="file_name"></div>
 
 
-    <div class="layui-input-inline " style="width: 100%;">
-        <div class="layui-input-inline">
-            <label for="type" class="layui-form-label" style="width: 100px">实验类型: </label></div>
-        {% csrf_token %}
-        <select id="type" class="layui-select" name="type">
-            <option selected value="物理实验">物理实验</option>
-            <option value="化学实验">化学实验</option>
-            <option value="基电实验">基电实验</option>
-            <option value="电子技术实验">电子技术实验</option>
-            <option value="其他实验">其他实验</option>
-        </select>
-
-    </div>
-    <button type="submit" class="layui-btn mt-2" id="upload">上传文件</button>
-
-    <div class="row w-100"></div>
-</div>
 </body>
 
 <script src="{% static 'js/user/logout.js' %}"></script>
 
 
-<script>
-    function uploadFile() {
-        layui.use('layer', function () {
-            var layer = layui.layer;
-
-            layer.open({
-                type: 1,
-                area: ["500px", "360px"],
-                title: "上传文件",
-                content: $("#file_upload_div"),
-                end: function () {
-                    document.getElementById("file_name").innerHTML = ""
-                }
-            })
-        });
-
-    }
-</script>
-<script>
-    layui.use('upload', function () {
-        var upload = layui.upload;
-        let cookies = document.cookie.split(',');
-        let pattern = /csrftoken=(.*)/m;
-        let csrf;
-        for (let j = 0; j < cookies.length; j++) {
-            if (pattern.test(cookies[j])) {
-                csrf = pattern.exec(cookies[j])[1];
-            }
-        }
-        //执行实例
-        var uploadInst = upload.render({
-            elem: '#file_upload' //绑定元素
-            , headers: {
-                "X-CSRFToken": csrf
-            }
-            , auto: false
-            , bindAction: "#upload"
-            , url: '{% url "course:upload" %}' //上传接口
-            , size: 100 * 1024 // 最大值
-            , accept: "file"
-
-            , data: {type: $('select[name="type"]').val()}
-            , choose: function (obj) {
-                obj.preview(function (index, file, result) {
-                    document.getElementById("file_name").innerHTML = file.name;
-                })
-            }
-            , done: function (res) {
-                document.getElementsByClassName("layui-layer-close")[0].click();
-                layer.msg("上传成功");
-                location.reload();
-            }
-            , error: function () {
-                layer.msg("上传失败，请重新上传")
-            }
-        });
-    });
-</script>
 
 {% block back_dependencies %} {# 用来加载需要的依赖文件，比如css， js #}
 {% endblock %}

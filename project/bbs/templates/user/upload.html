@@ -1,0 +1,84 @@
+{% extends 'user/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} 文件上传 {% endblock %}</title>
+</head>
+<body>
+{% block detail %}
+<div id="file_upload_div"  class="text-center">
+    <div class="layui-upload-drag" id="file_upload">
+        <i class="layui-icon"></i>
+        <p>点击上传，或将文件拖拽到此处</p>
+    </div>
+    <div class="mt-2 mb-2" id="file_name"></div>
+
+
+    <div class="layui-input-inline " style="width: 100%;">
+        <div class="layui-input-inline">
+            <label for="type" class="layui-form-label" style="width: 100px">实验类型: </label></div>
+        {% csrf_token %}
+        <select id="type" class="layui-select" name="type">
+            <option selected value="物理实验">物理实验</option>
+            <option value="化学实验">化学实验</option>
+            <option value="基电实验">基电实验</option>
+            <option value="电子技术实验">电子技术实验</option>
+            <option value="其他实验">其他实验</option>
+        </select>
+
+    </div>
+    <button type="submit" class="layui-btn mt-2  layui-btn-disabled" id="upload" disabled="disabled">上传文件</button>
+
+    <div class="row w-100"></div>
+</div>
+{% endblock %}
+</body>
+{% block back_dependencies %}
+
+
+<script>
+    layui.use('upload', function () {
+        var upload = layui.upload;
+        let cookies = document.cookie.split(',');
+        let pattern = /csrftoken=(.*)/m;
+        let csrf;
+        for (let j = 0; j < cookies.length; j++) {
+            if (pattern.test(cookies[j])) {
+                csrf = pattern.exec(cookies[j])[1];
+            }
+        }
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#file_upload' //绑定元素
+            , headers: {
+                "X-CSRFToken": csrf
+            }
+            , auto: false
+            , bindAction: "#upload"
+            , url: '{% url "user:upload" %}' //上传接口
+            , size: 100 * 1024 // 最大值
+            , accept: "file"
+
+            , data: {type: $('select[name="type"]').val()}
+            , choose: function (obj) {
+                obj.preview(function (index, file, result) {
+                    document.getElementById("file_name").innerHTML = file.name;
+                    document.getElementById("upload").className = "layui-btn mt-2";
+                    $("#upload").removeAttr("disabled")
+
+                })
+            }
+            , done: function (res) {
+
+                layer.msg("上传成功");
+                location.reload();
+            }
+            , error: function () {
+                layer.msg("上传失败，请重新上传")
+            }
+        });
+    });
+</script>
+{% endblock %}
+</html>
