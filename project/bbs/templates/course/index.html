@@ -6,112 +6,76 @@
     {% load static %}
     {% block forward_dependecies %}{# 用来加载依赖文件 #}
 
-    <script src="{% static 'js/jquery-3.4.1.slim.min.js'%}" type="text/javascript"></script>
-    <script>
-        var iNum1;
-        var iNum2;
-        var attribute= ['必修课','选修课','实验课'];
-        var academy =[['电子信息与电气工程学院','生物医学工程学院','机械与动力工程学院'],['人文学院','海洋学院','医学院'],['物理学院','设计学院','体育系']];
-        var course =[[['课程1','课程2'],['课程3','课程4'],['课程5','课程6']],[['课程7','课程8'],['课程9','课程10'],['课程11','课程12']],[['课程13','课程14'],['课程15','课程16'],['课程17','课程18']]];
-
-        $(function () {
-            for(var i=0;i<attribute.length;i++){
-                $('#selattribute').append('<option>'+attribute[i]+'</option>');
-            };
-            $('#selattribute').change(function () {
-                $('#selacademy').children().not(':eq(0)').remove();
-                $('#selcourse').children().not(':eq(0)').remove();
-                iNum1 = $(this).children('option:selected').index();
-                var aacademy = academy[iNum1-1];
-                for(var j=0;j<aacademy.length;j++){
-                    $('#selacademy').append('<option>'+aacademy[j]+'</option>');
-                }
-            });
-            $('#selacademy').change(function () {
-                $('#selcourse').children().not(':eq(0)').remove();
-                iNum2 = $(this).children('option:selected').index();
-                var acourse = course[iNum1-1][iNum2-1];
-                for(var k=0;k<acourse.length;k++){
-                    $('#selcourse').append('<option>'+acourse[k]+'</option>');
-                }
-            })
-        })
-    </script>
-
     <style>
-
-        .select {
-        display: inline-block;
-        width: 300px;
-        position: relative;
-        vertical-align: middle;
-        padding: 0;
-        overflow: hidden;
-        background-color: #fff;
-        color: #555;
-        border: 1px solid #aaa;
-        text-shadow: none;
-        border-radius: 4px;
-        transition: box-shadow 0.25s ease;
-        z-index: 2;
-        }
-
-        .select:hover {
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-        }
-        .select:before {
-        content: "";
-        position: absolute;
-        width: 0;
-        height: 0;
-        border: 10px solid transparent;
-        border-top-color: #ccc;
-        top: 14px;
-        right: 10px;
-        cursor: pointer;
-        z-index: -2;
-        }
-        .select select {
-        cursor: pointer;
-        padding: 10px;
-        width: 100%;
-        border: none;}
-
-        .select select {
-        cursor: pointer;
-        padding: 10px;
-        width: 100%;
-        border: none;
-        background: transparent;
-        background-image: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        }
-
-        .select select:focus {
-        outline: none;
-        }
-        .cont {
-            width:300px;
+        #box {
+            width: 850px;
             height:200px;
-            position:absolute;
-            left:50%;
-            top:50%;
-            margin:-100px 0 0 -150px
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px rgba(73,66,66,.1);
+            margin: 50px auto;
+            border: 1px solid #E5E5E5;
         }
-    </style>
-    <style>
-        .button {
-            background-color: #CD5C5C;
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
+
+        #box dl {
+            height: 50px;
+            line-height: 50px;
+            border-bottom: 1px dashed #dadada;
+            margin: 0 20px;
+        }
+
+        #box dt {
+            float: left;
+            color: #8a8a8a;
+        }
+
+        #box dd {
+            float: left;
+            color: #252525;
+            margin: 0 10px;
+            font-size: 14px;
             cursor: pointer;
+        }
+
+        #box dd.active {
+            color: #c4284d;
+            font-weight: bold;
+        }
+
+        #box dl.select {
+            margin: 0;
+            padding: 0 20px;
+        }
+
+        #box dl.select dd{
+            border: 1px solid #c4284d;
+            height: 25px;
+            line-height: 25px;
+            margin-top: 13px;
+            padding: 0 2px 0 10px;
+            border-radius: 3px;background-color: #fff;
+        }
+        #box dl.select dd span{
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            text-align: center;
+            line-height: 20px;
+            background: #B22222;
+            color: #fff;
+            margin-left: 10px;
+            cursor: pointer;border-radius: 5px;
+        }
+        #course{
+            height:220px;
+            width:220px;
+            float:left;
+            border-style: ridge;
+            border-color: #dadada;
+            box-shadow: 10px 10px 20px rgba(73,66,66,.1);
+            border-radius:10px;
+            font-size:14px;
+            text-align:center;
+
         }
     </style>
     {% endblock %}
@@ -119,22 +83,94 @@
 </head>
 <body>
 {% block content %}
-    <div class="cont">
-    <div class="select">
-        <select name="" id="selattribute" style="font-size:20px;">
-            <option value="">请选择课程类别</option>
-        </select>
-        <select name="" id="selacademy" style="font-size:20px;">
-            <option value="">请选择开设学院</option>
-        </select>
-        <select name="" id="selcourse" style="font-size:20px;">
-            <option value="">请选择课程名称</option>
-        </select>
+    <div id="box">
+        <dl>
+            <dt>课程类别：</dt>
+            <dd>必修课</dd>
+            <dd>选修课</dd>
+            <dd>实验课</dd>
+
+        </dl>
+        <dl style="border: none">
+            <dt>开设学院：</dt>
+            <dd>电子信息与电气工程学院</dd>
+            <dd>机械与动力工程学院</dd>
+            <dd>船舶海洋与建筑工程学院</dd>
+            <dd>生物医学工程学院</dd>
+            <dd>航空航天学院</dd>
+            <dd>数学科学院</dd>
+            <dd>物理与天文学院</dd>
+            <dd>化学化工学院</dd>
+            <dd>致远学院</dd>
+            <dd>医学院</dd>
+            <dd>安泰经济与管理学院</dd>
+            <dd>人文学院</dd>
+        </dl><!--排版还有点点问题-->
+        <dl class="select">
+            <dt>已选条件：</dt>
+        </dl>
     </div>
-    <div style="text-align:center">
-        <br><button class="button">确认</button>
+    <div id="course" >
+        <div style="border-bottom-style: dashed;border-color: #dadada;font-size:25px;">
+            <p>课程名称<br></p><!--这里需要改成超链接链接到对应的帖子-->
+        </div>
+        <p>开设学院：<br></p>
+        <p>任课老师：<br></p>
+        <p>课程号：<br></p>
     </div>
-    </div>
+<!--需要重复显示这个框框，但我暂时不大会操作-->
+{% block back_dependecies %}{# 用来加载依赖文件 #}
+    <script>
+        var dls = document.querySelectorAll('dl:not(.select)');
+        var selected=document.querySelector('.select');
+
+        for (var i = 0; i < dls.length; i++) {
+            dls[i].mark=false;
+            select(i);
+        }
+
+        function select(n) {
+            var dds = dls[n].querySelectorAll('dd');
+            var prev=null;
+            var dd=null;
+
+            for (var i = 0; i < dds.length; i++) {
+                dds[i].onclick = function () {
+
+                    if(prev){
+                        prev.className = ''
+                    }
+
+                    this.className = 'active';
+
+                    prev = this;
+
+                    var parent=this.parentNode;
+                    if(!parent.mark){
+                        dd=document.createElement('dd');
+                        dd.innerHTML=this.innerHTML;
+                        selected.appendChild(dd);
+
+                        parent.mark=true;
+
+                    }else{
+                        dd.innerHTML=this.innerHTML;
+                    }
+
+                    var span=document.createElement('span');
+                    var This=this;
+                    span.innerHTML='X';
+                    span.onclick=function(){
+                        selected.removeChild(dd);
+                        This.className='';
+                        parent.mark=false;
+                    };
+                    dd.appendChild(span);
+                };
+            }
+        }
+    </script>
+{% endblock %}
 {% endblock %}
 </body>
 </html>

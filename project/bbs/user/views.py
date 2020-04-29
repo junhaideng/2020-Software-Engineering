@@ -5,7 +5,7 @@ author: Edgar
 from math import ceil
 import os
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
@@ -145,10 +145,55 @@ def logout(request):
 
 @login_required()
 def profile(request):
+    """
+        个人资料显示
+        @author: Edgar，吴嘉锐
+        ToDo: 头像的显示
+    """
     if request.method == "GET":
         user = request.user
         profile = User.objects.get(user=user).profile
-        return render(request, 'user/profile.html', context={"profile": profile})
+        user_name = User.objects.get(user=user).user
+        sex = "女"  # 把sex性别转换成文字，不太会用高级语句。。
+        if User.objects.get(user=user).sex:
+            sex = '男'
+        elif User.objects.get(user=user).sex is None:
+            sex = '保密'
+        academy = User.objects.get(user=user).academy  # 把年级转换成中文，同样语句有点低级。。
+        grade_index = {'FR': '大一', 'SO': '大二', 'JR': '大三', 'SR': '大四', "OT": '其他', "UN": "未知"}
+        grade = grade_index[User.objects.get(user=user).grade]
+        return render(request, 'user/profile.html', context={"profile": profile, "username": user_name, "sex": sex,
+                                                             "academy": academy, "grade": grade})
+
+
+@login_required()
+@require_http_methods(["GET", "POST"])
+def modify(request):
+    """
+        个人资料的修改
+        @author: 吴嘉锐
+        ToDo: 头像的上传以及修改
+    """
+    user = request.user
+    if request.method == "POST":
+        sex_index = {'男': True, '女': False, '保密': None}  # 性别、年级的字典
+        grade_index = {'大一': 'FR', '大二': 'SO', '大三': 'JR', '大四': 'SR', "其他": 'OT', "未知": "UN"}
+
+        user_c = User.objects.get(user=user)  # 储存需要修改的数据
+
+        user_c.user.username = request.POST.get("nickname")  # 获得用户的修改值
+        if request.POST.get("college") != '不修改':
+            user_c.academy = request.POST.get("college")
+        if request.POST.get("sex") != '不修改':
+            user_c.sex = sex_index[request.POST.get("sex")]
+        if request.POST.get("grade") != '不修改':
+            user_c.grade = grade_index[request.POST.get("grade")]
+        user_c.user.save()
+        user_c.save()
+        return HttpResponseRedirect('/user/profile')
+    else:
+        user_name = User.objects.get(user=user).user
+        return render(request, 'user/modify.html', {'username': user_name})
 
 
 @login_required()
