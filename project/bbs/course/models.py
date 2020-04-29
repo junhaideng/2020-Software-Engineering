@@ -12,13 +12,28 @@ TYPES = (  # 课程的类型
     ("Ot", '其他')  # 其他
 )
 
+SCHOOLS=(   #   学院名称
+    ("1","电子信息与电气工程学院"),
+    ("2","机械与动力工程学院"),
+    ("3","船舶海洋与建筑工程学院"),
+    ("4","生物医学工程学院"),
+    ("5","航空航天学院"),
+    ("6","数学科学院"),
+    ("7","物理与天文学院"),
+    ("8","化学化工学院"),
+    ("9","致远学院"),
+    ("10","医学院"),
+    ("11","安泰经济与管理学院"),
+    ("12","人文学院"),
+)
+
 
 class Course(models.Model):
     """课程数据库"""
     name = models.CharField(max_length=100, unique=True)  # 课程的名字
     type = models.CharField(choices=TYPES, max_length=30)  # 课程类型
     major = models.CharField(max_length=40)  # 专业名
-
+    school= models.CharField(choices=SCHOOLS,max_length=40, default='')  #开设学院名
     class Meta:
         ordering = ("name", )  # 排序方式
 

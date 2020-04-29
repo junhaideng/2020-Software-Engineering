@@ -25,21 +25,20 @@ author: 祁山青
             </form>
             {% if message == '搜索结果如上' %}
                 <form action="{% url 'course:details' %}" method="post" style="margin-top: 40%">
-                {% csrf_token %}
-                 {% for course in List %}
-                    <div class="form-group">
-                        <label for="course">course：<br/>{{ course.name }}<br/>{{ course.major }} </label>
-                    </div>
-                     <div class="form-group">
-                        <label for="teacher">teacher：
-                            {% for teacher in course.teacher %}
-                            <br/> {{ teacher }}</label>
-                            {% endfor %}
-                    </div>
-
-                 {% endfor %}
-            </button>
-            </form>
+                    {% csrf_token %}
+                        {% for course in List %}
+                            <div class="form-group">
+                                <label for="course">course：<br/>{{ course.name }}<br/>{{ course.major }} </label>
+                            </div>
+                            <div class="form-group">
+                            <label for="teacher">teacher：
+                                {% for teacher in course.teacher %}
+                                    <br/> {{ teacher }}</label>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </button>
+                </form>
 
             {% endif %}
         {% if message %}

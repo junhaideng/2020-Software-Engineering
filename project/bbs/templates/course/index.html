@@ -84,31 +84,33 @@
 <body>
 {% block content %}
     <div id="box">
-        <dl>
-            <dt>课程类别：</dt>
-            <dd>必修课</dd>
-            <dd>选修课</dd>
-            <dd>实验课</dd>
+    <form action="{% url 'course:details' %}" method="post" style="margin-top: 40%">
+            <dl>
+                <dt>课程类别：</dt>
+                <dd>必修</dd>
+                <dd>选修</dd>
+                <dd>实验</dd>
 
-        </dl>
-        <dl style="border: none">
-            <dt>开设学院：</dt>
-            <dd>电子信息与电气工程学院</dd>
-            <dd>机械与动力工程学院</dd>
-            <dd>船舶海洋与建筑工程学院</dd>
-            <dd>生物医学工程学院</dd>
-            <dd>航空航天学院</dd>
-            <dd>数学科学院</dd>
-            <dd>物理与天文学院</dd>
-            <dd>化学化工学院</dd>
-            <dd>致远学院</dd>
-            <dd>医学院</dd>
-            <dd>安泰经济与管理学院</dd>
-            <dd>人文学院</dd>
-        </dl><!--排版还有点点问题-->
-        <dl class="select">
-            <dt>已选条件：</dt>
-        </dl>
+            </dl>
+            <dl style="border: none">
+                <dt>开设学院：</dt>
+                <dd>电子信息与电气工程学院</dd>
+                <dd>机械与动力工程学院</dd>
+                <dd>船舶海洋与建筑工程学院</dd>
+                <dd>生物医学工程学院</dd>
+                <dd>航空航天学院</dd>
+                <dd>数学科学院</dd>
+                <dd>物理与天文学院</dd>
+                <dd>化学化工学院</dd>
+                <dd>致远学院</dd>
+                <dd>医学院</dd>
+                <dd>安泰经济与管理学院</dd>
+                <dd>人文学院</dd>
+            </dl><!--排版还有点点问题-->
+            <dl class="select">
+                <dt>已选条件：</dt>
+            </dl>
+    </form>
     </div>
     <div id="course" >
         <div style="border-bottom-style: dashed;border-color: #dadada;font-size:25px;">

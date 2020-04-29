@@ -12,10 +12,66 @@ from user.models import ExpData
 import time
 import os
 
+TYPES = (  # 课程的类型
+    ("CO", "必修"),  # 必修
+    ("El", "选修"),  # 选修
+    ("Ex", '实验'),  # 实验
+    ("Ot", '其他')  # 其他
+)
 
+SCHOOLS=(   #   学院名称
+    ("1","电子信息与电气工程学院"),
+    ("2","机械与动力工程学院"),
+    ("3","船舶海洋与建筑工程学院"),
+    ("4","生物医学工程学院"),
+    ("5","航空航天学院"),
+    ("6","数学科学院"),
+    ("7","物理与天文学院"),
+    ("8","化学化工学院"),
+    ("9","致远学院"),
+    ("10","医学院"),
+    ("11","安泰经济与管理学院"),
+    ("12","人文学院"),
+)
+
+@require_http_methods(["POST"])
 def index(request):
     """课程界面的首页"""
-    return render(request, 'course/index.html')
+    class Newcourse:
+        def __init__(self):
+            self.name = 0  # 课程的名字
+            self.school =1  # 专业名
+            self.teacher= []
+
+    message = None
+    if request.method =="POST":
+        Type=request.POST.get("type")
+        School= request.POST.get("school")
+        for i in TYPES:
+            if i[1]==Type:
+                Type=i[0]
+                break
+        for i in SCHOOLS:
+            if i[1]==School:
+                School=i[0]
+                break
+        courselist=Course.objects.filter(type=Type,school=School)
+        List=[]
+        for course in courselist:
+            a=Newcourse()
+            a.name=course.name
+            a.school=course.school
+            if TeacherOfCourse.objects.filter(course_id=course.pk)==0:
+                a.teacher=['None']
+            else:
+                for b in TeacherOfCourse.objects.filter(course_id=course.pk):
+                    a.teacher.append(b.name)
+            List.append(a)
+        message = '搜索结果如上'
+        return render(request, 'course/index.html', {"message": message,"List":List})
+    else:
+        message='暂无搜索结果'
+        return render(request, 'course/index.html', {"message":message})
 
 
 @require_http_methods(["POST"])
