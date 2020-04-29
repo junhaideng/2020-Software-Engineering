@@ -61,6 +61,7 @@ TODO: 还需要其他的显示内容？ 如何美化？
                         </span></li>
                     {% endif %}
 
+
                     {% url 'user:setquestion' as setquestion %}
                         {% if request.path ==  setquestion %}
                         <li class="el-menu-item is-active" style="padding-left: 20px;">
@@ -72,6 +73,19 @@ TODO: 还需要其他的显示内容？ 如何美化？
                          <span style="font-size: 16px"> <i class="el-icon-setting"></i>
                             <a class="card-link" style="color: #909399" href="{% url 'user:setquestion' %}">设置密保</a>
                        </span></li>
+                    {% endif %}
+
+                {% url 'user:upload' as upload %}
+                    {% if request.path == upload %}
+                        <li class="el-menu-item is-active" style="padding-left: 20px;">
+                         <span style="font-size: 16px">     <i class="el-icon-upload"></i>
+                            <a class="card-link" href="{% url 'user:upload' %}">上传文件</a>
+                        </span></li>
+                            {% else %}
+                        <li class="el-menu-item " style="padding-left: 20px;">
+                         <span style="font-size: 16px">     <i class="el-icon-upload"></i>
+                            <a class="card-link" style="color: #909399" href="{% url 'user:upload' %}">上传文件</a>
+                        </span></li>
                     {% endif %}
 
                     {% url 'user:resetpwd' as resetpwd %}

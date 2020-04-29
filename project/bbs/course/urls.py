@@ -6,4 +6,5 @@ urlpatterns = [
     path("", index, name='index'),
     path("upload/", upload, name='upload'),
     path("details/",details,name='details'),
+
 ]
