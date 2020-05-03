@@ -13,48 +13,54 @@ TODO: 如何显示，显示的具体内容
 <body>
 {% block detail %}
 发帖记录
-    <div class="container" style="margin-top:30px; margin-left:-10px;">
-			    <div class="row" style="margin-bottom:20px;">
-					<div class="col-sm">帖子主题</div>
-					<div class="col-sm">发帖用户</div>
-					<div class="col-sm">我的回复</div>
-			    </div>
-				<div class="row">
-					<div class="col-sm">数据库原理</div>
-					<div class="col-sm">Alice</div>
-					<div class="col-sm">收获很大</div>
-				</div>
-				<div class="row">
-					<div class="col-sm">计算机组成与系统结构</div>
-					<div class="col-sm">Cindy</div>
-					<div class="col-sm">很难</div>
-				</div>
-				<div class="row">
-					<div class="col-sm">网络信息安全概论</div>
-					<div class="col-sm">Demo</div>
-					<div class="col-sm">概念很多</div>
-				</div>
-				<div class="row">
-					<div class="col-sm">模拟电子技术</div>
-					<div class="col-sm">Elf</div>
-					<div class="col-sm">很难</div>
-				</div>
-				<div class="row">
-					<div class="col-sm">信号与系统（A类）</div>
-					<div class="col-sm">Gloria</div>
-					<div class="col-sm">需要数理基础</div>
-				</div>
-				<div class="row">
-					<div class="col-sm">体育（5）</div>
-					<div class="col-sm">tom</div>
-					<div class="col-sm">很有趣</div>
-				</div>
-				<div class="row">
-					<div class="col-sm">信号与系统（B类）</div>
-					<div class="col-sm">Jeffery</div>
-					<div class="col-sm">很难</div>
-				</div>
-			</div>
+    <div>
+        <table class="layui-table">
+            <colgroup>
+                <col width="150">
+                <col width="200">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>帖子主题</th>
+                    <th>发帖用户</th>
+                    <th>我的回复</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>数据库原理</td>
+                    <td>Alice</td>
+                    <td>收获很大</td>
+                </tr>
+                <tr>
+                    <td>信号与系统（A类）</td>
+                    <td>Bob</td>
+                    <td>很难，需要一定的数理基础</td>
+                </tr>
+                <tr>
+                    <td>网络信息安全概论</td>
+                    <td>Cinderella</td>
+                    <td>概念过多，很繁琐</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <nav aria-label="Page navigation example" style="margin-top:100px;">
+		<ul class="pagination justify-content-end">
+			<li class="page-item disabled">
+			  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">上一页</a>
+			</li>
+			<li class="page-item"><a class="page-link" href="#">1</a></li>
+			<li class="page-item"><a class="page-link" href="#">2</a></li>
+			<li class="page-item"><a class="page-link" href="#">3</a></li>
+			<li class="page-item"><a class="page-link" href="#">...</a></li>
+			<li class="page-item">
+			  <a class="page-link" href="#">下一页</a>
+			</li>
+		</ul>
+	</nav>
 {% endblock %}
 
 
