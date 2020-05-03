@@ -1,4 +1,4 @@
-{% extends 'base.html' %}  {# 课程的主界面 #}
+{% extends 'base.html' %} {# 课程的主界面 #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,14 +81,15 @@
     {% endblock %}
     <title>{% block title %}课程{% endblock %}</title>
 </head>
-<body>
+<br>
+
 {% block content %}
     <div id="box">
         <dl>
             <dt data-type="1">课程类别：</dt>
-            <dd data-type="1">必修课</dd>
-            <dd data-type="1">选修课</dd>
-            <dd data-type="1">实验课</dd>
+            <dd data-type="1">必修</dd>
+            <dd data-type="1">选修</dd>
+            <dd data-type="1">实验</dd>
 
         </dl>
         <dl style="border: none">
@@ -110,20 +111,30 @@
             <dt>已选条件：</dt>
         </dl>
     </div>
-    <div id="course" >
-        <div style="border-bottom-style: dashed;border-color: #dadada;font-size:25px;">
-            <p>课程名称<br></p><!--这里需要改成超链接链接到对应的帖子-->
-        </div>
-        <p>开设学院：<br></p>
-        <p>任课老师：<br></p>
-        <p>课程号：<br></p>
-    </div>
+
+
 <!--需要重复显示这个框框，但我暂时不大会操作-->
+
 {% block back_dependecies %}{# 用来加载依赖文件 #}
     <script>
         var dls = document.querySelectorAll('dl:not(.select)');
         var selected=document.querySelector('.select');
-        var dic = {1:"", 2: ""}
+        var dic = {1:"0", 2: "0"}
+        var dic1= {"必修":"CO", "选修":"El", "实验":"Ex", "其他":"Ot","0":"0"};
+        var dic2={"电子信息与电气工程学院":"1",
+            "机械与动力工程学院":"2",
+            "船舶海洋与建筑工程学院":"3",
+            "生物医学工程学院":"4",
+            "航空航天学院":"5",
+            "数学科学院":"6",
+            "物理与天文学院":"7",
+            "化学化工学院":"8",
+            "致远学院":"9",
+            "医学院":"10",
+            "安泰经济与管理学院":"11",
+            "人文学院":"12",
+            "0":"0"
+        }
 
         for (var i = 0; i < dls.length; i++) {
             dls[i].mark=false;
@@ -131,9 +142,18 @@
         }
 
         function select(n) {
+
             var dds = dls[n].querySelectorAll('dd');
             var prev=null;
             var dd=null;
+            let pattern = /csrftoken=(.*)/m;
+            let cookies = document.cookie.split(',');
+            let csrf;
+            for (let j = 0; j < cookies.length; j++) {
+                 if (pattern.test(cookies[j])) {
+                    csrf = pattern.exec(cookies[j])[1];
+                    }
+            }
 
             for (var i = 0; i < dds.length; i++) {
                 dds[i].onclick = function () {
@@ -165,13 +185,22 @@
                             dic["2"] = this.innerHTML
                         }
                     }
-
+                    info={"TYpe":dic["1"],"School":dic["2"]}
                     // course 查询需要的数据，在该字典中
                     // 1 表示的是课程类别
                     // 2 表示开设学院
                     // 使用ajax将数据上传到后台即可
-                    console.log(dic)
-
+                     $.ajax({
+                    type: 'POST',
+                    url: "http://127.0.0.1:8000/course/",
+                    headers:{
+                    "X-CSRFToken": csrf
+                    },
+                    data: info,
+                    success:function(){
+                   console.log(info)
+                    },
+                    });
 
                     var span=document.createElement('span');
                     var This=this;
@@ -185,8 +214,16 @@
                 };
             }
         }
+        function jump1(){
+            url = "details/"+dic1[dic["1"]]+"/"+dic2[dic["2"]];//此处拼接内容
+            window.location.href = url;
+        }
     </script>
-{% endblock %}
+    {% endblock %}
+    <input type="button" onclick="jump1()" value="确认">
+
+         <!--这里显示下 无搜索结果-->
+
 {% endblock %}
 </body>
 </html>

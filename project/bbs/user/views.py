@@ -288,16 +288,17 @@ def setquestion(request):
     else : #原先无密保 则需要验证原先密保更改密保
         flag=0
     if request.method == "POST" and flag==0: #原先无密保
-        pwd = request.POST.get("pwd")
+        pwd = request.POST.get("pwd") #pwd是前端post传来的密码
         res = authenticate(username=username, password=pwd)  # 进行账号密码验证
         if res:
-            question = request.POST.get("newQuestion")
-            answer = request.POST.get("newAnswer")
-            U.question = question
+            question = request.POST.get("newQuestion")# 同 pwd
+            answer = request.POST.get("newAnswer")# 同 pwd
+            U.question = question# 修改用户的密保问题
             U.answer=answer
-            U.save()
+            U.save()#存储用户
             message = "密保设置成功！"
-            return render(request, 'user/setquestion.html', {"message": message, "flag":flag})
+            return render(request, 'user/setquestion.html', {"message": message, "flag":flag})#返回给user/setquestion.html
+        #"message" 是html里面id 为message的对象 "flag"同理，这里的具体传递方法为{“html中的Id”,值}
         else:
             message = "密码错误"
             request.session['user_setquestion_message'] = message

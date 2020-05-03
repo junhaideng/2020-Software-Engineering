@@ -1,50 +1,210 @@
-<!--
-author: 祁山青
-搜索课程
--->
-{% extends 'user/base.html' %}
+{% extends 'base.html' %} {# 课程的主界面 #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}搜索课程 {% endblock %}</title>
+    {% load static %}
+    {% block forward_dependecies %}{# 用来加载依赖文件 #}
+
+    <style>
+        #box {
+            width: 850px;
+            height:200px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px rgba(73,66,66,.1);
+            margin: 50px auto;
+            border: 1px solid #E5E5E5;
+        }
+
+        #box dl {
+            height: 50px;
+            line-height: 50px;
+            border-bottom: 1px dashed #dadada;
+            margin: 0 20px;
+        }
+
+        #box dt {
+            float: left;
+            color: #8a8a8a;
+        }
+
+        #box dd {
+            float: left;
+            color: #252525;
+            margin: 0 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        #box dd.active {
+            color: #c4284d;
+            font-weight: bold;
+        }
+
+        #box dl.select {
+            margin: 0;
+            padding: 0 20px;
+        }
+
+        #box dl.select dd{
+            border: 1px solid #c4284d;
+            height: 25px;
+            line-height: 25px;
+            margin-top: 13px;
+            padding: 0 2px 0 10px;
+            border-radius: 3px;background-color: #fff;
+        }
+        #box dl.select dd span{
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            text-align: center;
+            line-height: 20px;
+            background: #B22222;
+            color: #fff;
+            margin-left: 10px;
+            cursor: pointer;border-radius: 5px;
+        }
+        #course{
+            height:220px;
+            width:220px;
+            float:left;
+            border-style: ridge;
+            border-color: #dadada;
+            box-shadow: 10px 10px 20px rgba(73,66,66,.1);
+            border-radius:10px;
+            font-size:14px;
+            text-align:center;
+
+        }
+    </style>
+    {% endblock %}
+    <title>{% block title %}课程{% endblock %}</title>
 </head>
-<body>
-{% block detail %}
+<br>
 
-        <div class="col-5 m-auto">
-            <form action="{% url 'course:details' %}" method="post" style="margin-top: 40%">
-                {% csrf_token %}
-                 <div class="form-group">
-                    <label for="type">type</label>
-                    <input type="text" class="form-control" id="type" name="type" autocomplete="off" autofocus
-                           required>
+{% block content %}
+    {% csrf_token %}
+    <div id="box">
+        <dl>
+            <dt data-type="1">课程类别：</dt>
+            <dd data-type="1">必修</dd>
+            <dd data-type="1">选修</dd>
+            <dd data-type="1">实验</dd>
+
+        </dl>
+        <dl style="border: none">
+            <dt data-type="2">开设学院：</dt>
+            <dd data-type="2">电子信息与电气工程学院</dd>
+            <dd data-type="2">机械与动力工程学院</dd>
+            <dd data-type="2">船舶海洋与建筑工程学院</dd>
+            <dd data-type="2">生物医学工程学院</dd>
+            <dd data-type="2">航空航天学院</dd>
+            <dd data-type="2">数学科学院</dd>
+            <dd data-type="2">物理与天文学院</dd>
+            <dd data-type="2">化学化工学院</dd>
+            <dd data-type="2">致远学院</dd>
+            <dd data-type="2">医学院</dd>
+            <dd data-type="2">安泰经济与管理学院</dd>
+            <dd data-type="2">人文学院</dd>
+        </dl><!--排版还有点点问题-->
+        <dl class="select">
+            <dt>已选条件：</dt>
+        </dl>
+    </div>
+
+
+{% block back_dependecies %}{# 用来加载依赖文件 #}
+    <script>
+        var dls = document.querySelectorAll('dl:not(.select)');
+        var selected=document.querySelector('.select');
+        var dic = {1:"0", 2: "0"}
+
+        for (var i = 0; i < dls.length; i++) {
+            dls[i].mark=false;
+            select(i);
+        }
+
+        function select(n) {
+
+            var dds = dls[n].querySelectorAll('dd');
+            var prev=null;
+            var dd=null;
+            let pattern = /csrftoken=(.*)/m;
+            let cookies = document.cookie.split(',');
+            let csrf;
+            for (let j = 0; j < cookies.length; j++) {
+                 if (pattern.test(cookies[j])) {
+                    csrf = pattern.exec(cookies[j])[1];
+                    }
+            }
+
+            for (var i = 0; i < dds.length; i++) {
+                dds[i].onclick = function () {
+                    if(prev){
+                        prev.className = ''
+                    }
+
+                    this.className = 'active';
+
+                    prev = this;
+
+                    var parent=this.parentNode;
+                    if(!parent.mark){  // 如果这个元素没有被选中
+                        dd=document.createElement('dd');
+                        dd.innerHTML=this.innerHTML;
+                        selected.appendChild(dd);
+                        parent.mark=true;
+                        if (this.dataset.type === "1"){
+                            dic["1"] = this.innerHTML
+                        }else{
+                            dic["2"] = this.innerHTML
+                        }
+
+                    }else{
+                        dd.innerHTML=this.innerHTML;
+                         if (this.dataset.type === "1"){
+                            dic["1"] = this.innerHTML
+                        }else{
+                            dic["2"] = this.innerHTML
+                        }
+                    }
+
+                    var span=document.createElement('span');
+                    var This=this;
+                    span.innerHTML='X';
+                    span.onclick=function(){
+                        selected.removeChild(dd);
+                        This.className='';
+                        parent.mark=false;
+                    };
+                    dd.appendChild(span);
+                };
+            }
+        }
+        function jump2(){
+            url = "http://127.0.0.1:8000/course/";//此处拼接内容
+            window.location.href = url;
+        }
+    </script>
+    {% endblock %}
+
+    <!--美化这个框框-->
+    <input type="button" onclick="jump2()" value="重置">
+         <div class="col-5 m-auto">
+               {% for i in list %}
+                <div class="form-group">
+                    <label for="name">{{ i.name }}</label>
                 </div>
-                <button type="submit" id="btn" class="btn btn-outline-primary text-center">Submit
-            </button>
+                   <div class="form-group">
+                    <label for="name">{{ i.school }}</label>
+                </div>
+                   <div class="form-group">
+                    <label for="name">{{ i.teacher }}</label>
+                </div>
+                {% endfor %}
             </form>
-            {% if message == '搜索结果如上' %}
-                <form action="{% url 'course:details' %}" method="post" style="margin-top: 40%">
-                    {% csrf_token %}
-                        {% for course in List %}
-                            <div class="form-group">
-                                <label for="course">course：<br/>{{ course.name }}<br/>{{ course.major }} </label>
-                            </div>
-                            <div class="form-group">
-                            <label for="teacher">teacher：
-                                {% for teacher in course.teacher %}
-                                    <br/> {{ teacher }}</label>
-                                {% endfor %}
-                            </div>
-                        {% endfor %}
-                    </button>
-                </form>
-
-            {% endif %}
-        {% if message %}
-        <div class="w-100 mt-2 text-center alert-warning alert">{{ message }}</div>
-        {% endif %}
-        </div>
+    </div>
 
 {% endblock %}
 </body>
