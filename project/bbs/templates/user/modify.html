@@ -20,14 +20,8 @@
 <body>
 {% block detail %}
     <div>
-         <form action="." method="POST" class="mt-2">
-            <a class="card-link" href="javascript:void(0);"
-                                   onclick="document.getElementById('profile').hidden=false;">修改头像</a>
-             <div class="" hidden id="profile"></div>
-            <div class=""></div>
-         </form>
 
-        <form action="{% url 'user:modify' %}" method="post">{% csrf_token %}
+        <form action="{% url 'user:modify' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
 
             <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:120px;">
                 <label class="label-name" for="nick">昵 称：</label>
@@ -102,8 +96,14 @@
                 <p class="rlf-tip-wrap errorHint color-red"></p>
             </div>
 
+            <div class="block" style="margin-top:30px;margin-left:120px;">
+                <label class="label-name" for="nick">修改头像（支持jpg、png格式）：</label>
+                <input type="file" name="profile_c" accept=".jpg, .png" >
+                <p class="rlf-tip-wrap errorHint color-red"></p>
+            </div>
+
             <div class="block center" style="margin-top:30px;margin-left:120px;">
-                <button type="submit" class="btn btn-info">确认修改</button>
+                <button type="submit" class="btn btn-info" >确认修改</button>
             </div>
         </form>
     </div>

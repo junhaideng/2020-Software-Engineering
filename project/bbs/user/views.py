@@ -190,6 +190,15 @@ def modify(request):
             user_c.sex = sex_index[request.POST.get("sex")]
         if request.POST.get("grade") != '不修改':
             user_c.grade = grade_index[request.POST.get("grade")]
+
+        if request.FILES.get("profile_c") is not None:
+            img = request.FILES.get("profile_c")
+            with open('media/profile/'+request.POST.get("nickname")+'.jpg', 'wb') as save_img:
+                for part in img.chunks():
+                    save_img.write(part)
+                    save_img.flush()
+        user_c.profile = 'media/profile/'+request.POST.get("nickname")+'.jpg'
+
         user_c.user.save()
         user_c.save()
         return HttpResponseRedirect('/user/profile')
@@ -293,7 +302,7 @@ def upload(request):
         ExpData.objects.create(user_id=request.user.id,
                                exp_type=exp_type,
                                download_times=0,
-                               path="/media/experiment_data/"+alias,
+                               path="/media/experiment_data/" + alias,
                                name=os.path.splitext(file.name)[0]).save()
         return JsonResponse({"status": "success"})
     else:
