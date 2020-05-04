@@ -6,78 +6,117 @@
     {% load static %}
     {% block forward_dependecies %}{# 用来加载依赖文件 #}
 
-    <style>
-        #box {
-            width: 850px;
-            height:200px;
-            background: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 0 10px rgba(73,66,66,.1);
-            margin: 50px auto;
-            border: 1px solid #E5E5E5;
-        }
+        <style>
+            #box {
+                height:200px;
+                background: rgba(255, 255, 255, 0.8);
+                box-shadow: 0 0 10px rgba(73,66,66,.1);
+                margin: 50px auto;
+                border: 1px solid #E5E5E5;
+            }
 
-        #box dl {
-            height: 50px;
-            line-height: 50px;
-            border-bottom: 1px dashed #dadada;
-            margin: 0 20px;
-        }
+            #box dl {
+                height: 50px;
+                line-height: 50px;
+                border-bottom: 1px dashed #dadada;
+                margin: 0 20px;
+            }
 
-        #box dt {
-            float: left;
-            color: #8a8a8a;
-        }
+            #box dt {
+                float: left;
+                color: #8a8a8a;
+                font-size: 20px;
+            }
 
-        #box dd {
-            float: left;
-            color: #252525;
-            margin: 0 10px;
-            font-size: 14px;
-            cursor: pointer;
-        }
+            #box dd {
+                float: left;
+                color: rgba(129, 129, 126, 0.91);
+                margin: 0 10px;
+                font-size: 20px;
+                cursor: pointer;
+            }
 
-        #box dd.active {
-            color: #c4284d;
-            font-weight: bold;
-        }
+            #box dd.active {
+                color: #c4284d;
+                font-weight: bold;
+            }
 
-        #box dl.select {
-            margin: 0;
-            padding: 0 20px;
-        }
+            #box dl.select {
+                margin: 0;
+                padding: 0 20px;
+            }
 
-        #box dl.select dd{
-            border: 1px solid #c4284d;
-            height: 25px;
-            line-height: 25px;
-            margin-top: 13px;
-            padding: 0 2px 0 10px;
-            border-radius: 3px;background-color: #fff;
-        }
-        #box dl.select dd span{
-            width: 20px;
-            height: 20px;
-            display: inline-block;
-            text-align: center;
-            line-height: 20px;
-            background: #B22222;
-            color: #fff;
-            margin-left: 10px;
-            cursor: pointer;border-radius: 5px;
-        }
-        #course{
-            height:220px;
-            width:220px;
-            float:left;
-            border-style: ridge;
-            border-color: #dadada;
-            box-shadow: 10px 10px 20px rgba(73,66,66,.1);
-            border-radius:10px;
-            font-size:14px;
-            text-align:center;
+            #box dl.select dd{
+                border: 1px solid #c4284d;
+                height: 25px;
+                line-height: 25px;
+                margin-top: 13px;
+                padding: 0 2px 0 10px;
+                border-radius: 3px;background-color: #fff;
+            }
+            #box dl.select dd span{
+                width: 20px;
+                height: 20px;
+                display: inline-block;
+                text-align: center;
+                line-height: 20px;
+                background: #B22222;
+                color: #fff;
+                margin-left: 10px;
+                cursor: pointer;border-radius: 5px;
+            }
+            .button {
+                display: inline-block;
+                border-radius: 4px;
+                background-color: rgba(138, 138, 138, 0.67);;
+                border: none;
+                color: #FFFFFF;
+                text-align: center;
+                font-size: 20px;
+                padding: 20px;
+                width: 150px;
+                transition: all 0.5s;
+                cursor: pointer;
+                margin-left: 450px;
+            }
 
-        }
-    </style>
+            .button span {
+                cursor: pointer;
+                display: inline-block;
+                position: relative;
+                transition: 0.5s;
+            }
+
+            .button span:after {
+                content: '»';
+                position: absolute;
+                opacity: 0;
+                top: 0;
+                right: -20px;
+                transition: 0.5s;
+            }
+
+            .button:hover span {
+                padding-right: 25px;
+            }
+
+            .button:hover span:after {
+                opacity: 1;
+                right: 0;
+            }
+            /*#course{
+                height:220px;
+                width:220px;
+                float:left;
+                border-style: ridge;
+                border-color: #dadada;
+                box-shadow: 10px 10px 20px rgba(73,66,66,.1);
+                border-radius:10px;
+                font-size:14px;
+                text-align:center;
+
+            }*/
+        </style>
     {% endblock %}
     <title>{% block title %}课程{% endblock %}</title>
 </head>
@@ -85,14 +124,15 @@
 
 {% block content %}
     <div id="box">
-        <dl>
+        <dl style="border-bottom: 1px dashed #dadada;">
             <dt data-type="1">课程类别：</dt>
             <dd data-type="1">必修</dd>
             <dd data-type="1">选修</dd>
             <dd data-type="1">实验</dd>
+            <dd data-type="1">其他</dd>
 
         </dl>
-        <dl style="border: none">
+        <dl style="border-bottom: 1px dashed #dadada;">
             <dt data-type="2">开设学院：</dt>
             <dd data-type="2">电子信息与电气工程学院</dd>
             <dd data-type="2">机械与动力工程学院</dd>
@@ -112,8 +152,6 @@
         </dl>
     </div>
 
-
-<!--需要重复显示这个框框，但我暂时不大会操作-->
 
 {% block back_dependecies %}{# 用来加载依赖文件 #}
     <script>
@@ -220,9 +258,8 @@
         }
     </script>
     {% endblock %}
-    <input type="button" onclick="jump1()" value="确认">
+    <button type="button" onclick="jump1()" class="button" style="vertical-align:middle"><span>确认</span></button>
 
-         <!--这里显示下 无搜索结果-->
 
 {% endblock %}
 </body>
