@@ -196,7 +196,7 @@ def modify(request):
                 for part in img.chunks():
                     save_img.write(part)
                     save_img.flush()
-        user_c.profile = 'media/profile/'+request.POST.get("nickname")+'.jpg'
+            user_c.profile = 'media/profile/'+request.POST.get("nickname")+'.jpg'
 
         user_c.user.save()
         user_c.save()
