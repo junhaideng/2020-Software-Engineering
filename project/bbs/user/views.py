@@ -118,9 +118,8 @@ def signup(request):
                 auth.set_password(password)
                 auth.save()
                 user1 = User(user=auth)
-                user1.question = request.POST.get("passwordquestion")
-                user1.answer = request.POST.get("passwordanswer")
                 user1.save()
+                request.session['username'] = username
                 auth_login(request, auth)
                 if request.POST.get("next"):
                     return redirect(request.POST.get("next"))
@@ -190,6 +189,15 @@ def modify(request):
             user_c.sex = sex_index[request.POST.get("sex")]
         if request.POST.get("grade") != '不修改':
             user_c.grade = grade_index[request.POST.get("grade")]
+
+        if request.FILES.get("profile_c") is not None:
+            img = request.FILES.get("profile_c")
+            with open('media/profile/'+request.POST.get("nickname")+'.jpg', 'wb') as save_img:
+                for part in img.chunks():
+                    save_img.write(part)
+                    save_img.flush()
+        user_c.profile = 'media/profile/'+request.POST.get("nickname")+'.jpg'
+
         user_c.user.save()
         user_c.save()
         return HttpResponseRedirect('/user/profile')
@@ -251,7 +259,7 @@ def resetpwd(request):
     author 祁山青
     """
     if request.method == "POST":
-        username = request.session['username']
+        username = request.session.get('username')
         u = AuthUser.objects.get(username=username)
         oldpwd = request.POST.get("oldpwd")
         newpwd = request.POST.get("newpwd")
@@ -276,7 +284,55 @@ def resetpwd(request):
             message = request.session.pop('user_reset_message')
         return render(request, 'user/resetpwd.html', context={"message": message})
 
+@login_required()
+@require_http_methods(["GET", "POST"])
+def setquestion(request):
+    """设置密保
+        author 祁山青
+        """
+    username = request.session.get('username')
+    U= User.objects.get(user__username=username)
+    if U.question!=None:  #原先有密保 则需要输入密码设置密保
+         flag=1
+    else : #原先无密保 则需要验证原先密保更改密保
+        flag=0
+    if request.method == "POST" and flag==0: #原先无密保
+        pwd = request.POST.get("pwd") #pwd是前端post传来的密码
+        res = authenticate(username=username, password=pwd)  # 进行账号密码验证
+        if res:
+            question = request.POST.get("newQuestion")# 同 pwd
+            answer = request.POST.get("newAnswer")# 同 pwd
+            U.question = question# 修改用户的密保问题
+            U.answer=answer
+            U.save()#存储用户
+            message = "密保设置成功！"
+            return render(request, 'user/setquestion.html', {"message": message, "flag":flag})#返回给user/setquestion.html
+        #"message" 是html里面id 为message的对象 "flag"同理，这里的具体传递方法为{“html中的Id”,值}
+        else:
+            message = "密码错误"
+            request.session['user_setquestion_message'] = message
+            return render(request, 'user/setquestion.html', {"message": message,"flag":flag})
+    elif request.method == "POST" and flag==1: #有原来的密保
+        oldanswer=request.POST.get("oldAnswer")
+        newanswer=request.POST.get("newAnswer")
+        newquestion=request.POST.get("newQuestion")
+        if oldanswer==U.answer:
+            U.question=newquestion
+            U.answer=newanswer
+            U.save()
+            message = "密保设置成功！"
+            return render(request, 'user/setquestion.html', {"message": message,"flag":flag,"oldQuestion":U.question})
+        else:
+            message = "旧密保回答错误"
+            request.session['user_setquestion_message'] = message
+            return render(request, 'user/setquestion.html', {"message": message,"flag":flag,"oldQuestion":U.question})
+    else:
+        message = None
+        if request.session.get('user_setquestion_message'):
+            message = request.session.pop('user_setquestion_message')
+        return render(request, 'user/setquestion.html', {"message": message,"flag":flag,"oldQuestion":U.question})
 
+@login_required()
 @require_http_methods(["POST", "GET"])
 def upload(request):
     if request.method == "POST":
@@ -293,7 +349,7 @@ def upload(request):
         ExpData.objects.create(user_id=request.user.id,
                                exp_type=exp_type,
                                download_times=0,
-                               path="/media/experiment_data/"+alias,
+                               path="/media/experiment_data/" + alias,
                                name=os.path.splitext(file.name)[0]).save()
         return JsonResponse({"status": "success"})
     else:

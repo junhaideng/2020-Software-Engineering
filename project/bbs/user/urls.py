@@ -13,5 +13,7 @@ urlpatterns = [
     path("history/", history, name="history"),  # 发帖记录
     path("file/", file, name='file'),  # 用户上传的文件
     path("resetpwd/", resetpwd, name='resetpwd'),  # 修改密码
+    path("setquestion/", setquestion, name='setquestion'),  # 设置密保
+    path("resetpwd/", resetpwd, name='resetpwd'),  # 修改密码
     path("upload/", upload, name="upload")
 ]

@@ -7,7 +7,7 @@ from .models import *
 
 
 class AdminCourse(admin.ModelAdmin):
-    list_display = ("name", "type", "major")   # 显示的内容
+    list_display = ("name", "type", "major","school")   # 显示的内容
     list_per_page = 30  # 每页的数据量
     ordering = ("name",)  # 排序方式
     search_fields = ("name",)  # 搜索框可以到哪些field进行搜索

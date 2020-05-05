@@ -17,7 +17,7 @@ ToDo:验证三个密保
             <form action="{% url 'user:forgetdetail' %}" method="post" style="margin-top: 40%">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="answer">Question：<br/>{{ question }} </label>
+                    <label for="question">Question：<br/>{{ question }} </label>
                 </div>
                 <div class="form-group">
                     <label for="answer">Answer</label>

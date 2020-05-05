@@ -1,4 +1,4 @@
-{% extends 'base.html' %}  {# 课程的主界面 #}
+{% extends 'base.html' %} {# 课程的主界面 #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,92 +6,133 @@
     {% load static %}
     {% block forward_dependecies %}{# 用来加载依赖文件 #}
 
-    <style>
-        #box {
-            width: 850px;
-            height:200px;
-            background: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 0 10px rgba(73,66,66,.1);
-            margin: 50px auto;
-            border: 1px solid #E5E5E5;
-        }
+        <style>
+            #box {
+                height:200px;
+                background: rgba(255, 255, 255, 0.8);
+                box-shadow: 0 0 10px rgba(73,66,66,.1);
+                margin: 50px auto;
+                border: 1px solid #E5E5E5;
+            }
 
-        #box dl {
-            height: 50px;
-            line-height: 50px;
-            border-bottom: 1px dashed #dadada;
-            margin: 0 20px;
-        }
+            #box dl {
+                height: 50px;
+                line-height: 50px;
+                border-bottom: 1px dashed #dadada;
+                margin: 0 20px;
+            }
 
-        #box dt {
-            float: left;
-            color: #8a8a8a;
-        }
+            #box dt {
+                float: left;
+                color: #8a8a8a;
+                font-size: 20px;
+            }
 
-        #box dd {
-            float: left;
-            color: #252525;
-            margin: 0 10px;
-            font-size: 14px;
-            cursor: pointer;
-        }
+            #box dd {
+                float: left;
+                color: rgba(129, 129, 126, 0.91);
+                margin: 0 10px;
+                font-size: 20px;
+                cursor: pointer;
+            }
 
-        #box dd.active {
-            color: #c4284d;
-            font-weight: bold;
-        }
+            #box dd.active {
+                color: #c4284d;
+                font-weight: bold;
+            }
 
-        #box dl.select {
-            margin: 0;
-            padding: 0 20px;
-        }
+            #box dl.select {
+                margin: 0;
+                padding: 0 20px;
+            }
 
-        #box dl.select dd{
-            border: 1px solid #c4284d;
-            height: 25px;
-            line-height: 25px;
-            margin-top: 13px;
-            padding: 0 2px 0 10px;
-            border-radius: 3px;background-color: #fff;
-        }
-        #box dl.select dd span{
-            width: 20px;
-            height: 20px;
-            display: inline-block;
-            text-align: center;
-            line-height: 20px;
-            background: #B22222;
-            color: #fff;
-            margin-left: 10px;
-            cursor: pointer;border-radius: 5px;
-        }
-        #course{
-            height:220px;
-            width:220px;
-            float:left;
-            border-style: ridge;
-            border-color: #dadada;
-            box-shadow: 10px 10px 20px rgba(73,66,66,.1);
-            border-radius:10px;
-            font-size:14px;
-            text-align:center;
+            #box dl.select dd{
+                border: 1px solid #c4284d;
+                height: 25px;
+                line-height: 25px;
+                margin-top: 13px;
+                padding: 0 2px 0 10px;
+                border-radius: 3px;background-color: #fff;
+            }
+            #box dl.select dd span{
+                width: 20px;
+                height: 20px;
+                display: inline-block;
+                text-align: center;
+                line-height: 20px;
+                background: #B22222;
+                color: #fff;
+                margin-left: 10px;
+                cursor: pointer;border-radius: 5px;
+            }
+            .button {
+                display: inline-block;
+                border-radius: 4px;
+                background-color: rgba(138, 138, 138, 0.67);;
+                border: none;
+                color: #FFFFFF;
+                text-align: center;
+                font-size: 20px;
+                padding: 20px;
+                width: 150px;
+                transition: all 0.5s;
+                cursor: pointer;
+                margin-left: 450px;
+            }
 
-        }
-    </style>
+            .button span {
+                cursor: pointer;
+                display: inline-block;
+                position: relative;
+                transition: 0.5s;
+            }
+
+            .button span:after {
+                content: '»';
+                position: absolute;
+                opacity: 0;
+                top: 0;
+                right: -20px;
+                transition: 0.5s;
+            }
+
+            .button:hover span {
+                padding-right: 25px;
+            }
+
+            .button:hover span:after {
+                opacity: 1;
+                right: 0;
+            }
+            /*#course{
+                height:220px;
+                width:220px;
+                float:left;
+                border-style: ridge;
+                border-color: #dadada;
+                box-shadow: 10px 10px 20px rgba(73,66,66,.1);
+                border-radius:10px;
+                font-size:14px;
+                text-align:center;
+
+            }*/
+        </style>
     {% endblock %}
     <title>{% block title %}课程{% endblock %}</title>
 </head>
-<body>
+<br>
+
 {% block content %}
     <div id="box">
-        <dl>
+        <dl style="border-bottom: 1px dashed #dadada;">
             <dt data-type="1">课程类别：</dt>
-            <dd data-type="1">必修课</dd>
-            <dd data-type="1">选修课</dd>
-            <dd data-type="1">实验课</dd>
+            <dd data-type="1">必修</dd>
+            <dd data-type="1">选修</dd>
+            <dd data-type="1">实验</dd>
+            <dd data-type="1">其他</dd>
 
         </dl>
-        <dl style="border: none">
+        <dl style="border-bottom: 1px dashed #dadada;">
             <dt data-type="2">开设学院：</dt>
             <dd data-type="2">电子信息与电气工程学院</dd>
             <dd data-type="2">机械与动力工程学院</dd>
@@ -110,20 +151,28 @@
             <dt>已选条件：</dt>
         </dl>
     </div>
-    <div id="course" >
-        <div style="border-bottom-style: dashed;border-color: #dadada;font-size:25px;">
-            <p>课程名称<br></p><!--这里需要改成超链接链接到对应的帖子-->
-        </div>
-        <p>开设学院：<br></p>
-        <p>任课老师：<br></p>
-        <p>课程号：<br></p>
-    </div>
-<!--需要重复显示这个框框，但我暂时不大会操作-->
+
+
 {% block back_dependecies %}{# 用来加载依赖文件 #}
     <script>
         var dls = document.querySelectorAll('dl:not(.select)');
         var selected=document.querySelector('.select');
-        var dic = {1:"", 2: ""}
+        var dic = {1:"0", 2: "0"}
+        var dic1= {"必修":"CO", "选修":"El", "实验":"Ex", "其他":"Ot","0":"0"};
+        var dic2={"电子信息与电气工程学院":"1",
+            "机械与动力工程学院":"2",
+            "船舶海洋与建筑工程学院":"3",
+            "生物医学工程学院":"4",
+            "航空航天学院":"5",
+            "数学科学院":"6",
+            "物理与天文学院":"7",
+            "化学化工学院":"8",
+            "致远学院":"9",
+            "医学院":"10",
+            "安泰经济与管理学院":"11",
+            "人文学院":"12",
+            "0":"0"
+        }
 
         for (var i = 0; i < dls.length; i++) {
             dls[i].mark=false;
@@ -131,9 +180,18 @@
         }
 
         function select(n) {
+
             var dds = dls[n].querySelectorAll('dd');
             var prev=null;
             var dd=null;
+            let pattern = /csrftoken=(.*)/m;
+            let cookies = document.cookie.split(',');
+            let csrf;
+            for (let j = 0; j < cookies.length; j++) {
+                 if (pattern.test(cookies[j])) {
+                    csrf = pattern.exec(cookies[j])[1];
+                    }
+            }
 
             for (var i = 0; i < dds.length; i++) {
                 dds[i].onclick = function () {
@@ -165,13 +223,22 @@
                             dic["2"] = this.innerHTML
                         }
                     }
-
+                    info={"TYpe":dic["1"],"School":dic["2"]}
                     // course 查询需要的数据，在该字典中
                     // 1 表示的是课程类别
                     // 2 表示开设学院
                     // 使用ajax将数据上传到后台即可
-                    console.log(dic)
-
+                     $.ajax({
+                    type: 'POST',
+                    url: "http://127.0.0.1:8000/course/",
+                    headers:{
+                    "X-CSRFToken": csrf
+                    },
+                    data: info,
+                    success:function(){
+                   console.log(info)
+                    },
+                    });
 
                     var span=document.createElement('span');
                     var This=this;
@@ -185,8 +252,15 @@
                 };
             }
         }
+        function jump1(){
+            url = "details/"+dic1[dic["1"]]+"/"+dic2[dic["2"]];//此处拼接内容
+            window.location.href = url;
+        }
     </script>
-{% endblock %}
+    {% endblock %}
+    <button type="button" onclick="jump1()" class="button" style="vertical-align:middle"><span>确认</span></button>
+
+
 {% endblock %}
 </body>
 </html>
