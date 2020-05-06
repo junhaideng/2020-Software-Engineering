@@ -240,7 +240,11 @@
                        <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;开设学院：&nbsp;</p><label for="name"style="margin-top: 10px;"style="margin-top: 10px;">{{ i.school }}</label>
                        <!--</div>
                        <div class="form-inline">-->
-                       <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;任课老师:&nbsp;</p><label for="name"style="margin-top: 10px;">{{ i.teacher }}</label>
+                       <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;任课老师:&nbsp;</p><label for="name"style="margin-top: 10px;">
+                       {% for a in i.teacher %}
+                       {{ a }}
+                        {% endfor %}
+                   </label>
                    </div>
                    </div>
                 {% endfor %}
