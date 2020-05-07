@@ -56,14 +56,18 @@ class TeacherOfCourse(models.Model):
 class CourseDes(models.Model):
     """相应老师的课程描述"""
     user_id = models.IntegerField(null=True, blank=True)  # 哪一个用户写的
-    teacher_id = models.ForeignKey('TeacherOfCourse',on_delete=models.CASCADE)  # 对应Course中自动生成的id
-    des = models.TextField(null=True, blank=True)  # 描述的信息
+    course_id = models.ForeignKey('Course',on_delete=models.CASCADE)  # 对应Course中自动生成的id
+    des = models.TextField(default="暂无描述")  # 描述的信息course
+
+    class Meta:
+        ordering = ("des", )
 
     def __str__(self):
         return self.des
 
 
 class Major(models.Model):
+
     """专业对应的信息"""
     name = models.CharField(max_length=40)  # 专业名
     academy = models.CharField(max_length=40)  # 所属的学院

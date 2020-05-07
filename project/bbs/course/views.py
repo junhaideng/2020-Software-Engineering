@@ -87,12 +87,26 @@ def details(request,type,school):
             a=Newcourse()
             a.name=course.name
             a.pk=course.pk
-            print(a.pk)
             a.school=SCHOOLS[int(course.school)-1][1]
-            if TeacherOfCourse.objects.filter(course_id=course.pk)==0:
+            info=TeacherOfCourse.objects.filter(course_id=course.pk)
+            if info.count()==0:
                 a.teacher=['None']
             else:
                 for b in TeacherOfCourse.objects.filter(course_id=course.pk):
                     a.teacher.append(b.name)
             List.append(a)
         return render(request, 'course/details.html', {"list": List})
+
+@require_http_methods(["GET","POST"])
+def coursedes(request,pk):
+    course=Course.objects.get(pk=pk)
+    teachers=TeacherOfCourse.objects.filter(course_id=course.pk)
+    flag=1
+    if teachers.count()==0:
+        flag=0
+    des = CourseDes.objects.get(course_id=course.pk)
+    for i in TYPES:
+        if i[0]==course.type:
+            type=i[1]
+    school=SCHOOLS[int(course.school)-1][1]
+    return render(request,'course/coursedes.html',{"course":course,"teacherList":teachers,"des":des,"school":school,"type":type,"flag":flag})

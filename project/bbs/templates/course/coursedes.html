@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>课程信息</title>
+</head>
+<body>
+    {{ course.name }}
+    <br>{{ course.major }}
+    <br>{{ school }}
+    <br>{{ type }}
+    <br>{{ des }}
+    {% if flag == 0 %}
+    <br> 暂无老师
+    {% else %}
+    <br>{% for t in teacherList %}
+        <br>{{ t.name }}
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
