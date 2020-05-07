@@ -23,72 +23,18 @@ TODO: 如何显示，显示的具体内容
             <thead>
                 <tr>
                     <th>帖子主题</th>
-                    <th>发帖用户</th>
-                    <th>我的回复</th>
+                    <th>发帖时间</th>
+                    <th>帖子内容</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>数据库原理</td>
-                    <td>Alice</td>
-                    <td>收获很大</td>
-                </tr>
-                <tr>
-                    <td>信号与系统（A类）</td>
-                    <td>Bob</td>
-                    <td>很难，需要一定的数理基础</td>
-                </tr>
-                <tr>
-                    <td>网络信息安全概论</td>
-                    <td>Cinderella</td>
-                    <td>概念过多，很繁琐</td>
-                </tr>
-
-                <tr>
-                    <td>数据库原理</td>
-                    <td>Alice</td>
-                    <td>收获很大</td>
-                </tr>
-                <tr>
-                    <td>信号与系统（A类）</td>
-                    <td>Bob</td>
-                    <td>很难，需要一定的数理基础</td>
-                </tr>
-                <tr>
-                    <td>网络信息安全概论</td>
-                    <td>Cinderella</td>
-                    <td>概念过多，很繁琐</td>
-                </tr>
-                <tr>
-                    <td>数据库原理</td>
-                    <td>Alice</td>
-                    <td>收获很大</td>
-                </tr>
-                <tr>
-                    <td>信号与系统（A类）</td>
-                    <td>Bob</td>
-                    <td>很难，需要一定的数理基础</td>
-                </tr>
-                <tr>
-                    <td>网络信息安全概论</td>
-                    <td>Cinderella</td>
-                    <td>概念过多，很繁琐</td>
-                </tr>
-                <tr>
-                    <td>数据库原理</td>
-                    <td>Alice</td>
-                    <td>收获很大</td>
-                </tr>
-                <tr>
-                    <td>信号与系统（A类）</td>
-                    <td>Bob</td>
-                    <td>很难，需要一定的数理基础</td>
-                </tr>
-                <tr>
-                    <td>网络信息安全概论</td>
-                    <td>Cinderella</td>
-                    <td>概念过多，很繁琐</td>
-                </tr>
+                {% for post in post_histories %}
+                    <tr>
+                        <td>{{ post.topic }}</td>
+                        <td>{{ post.created_time }}</td>
+                        <td>{{ post.content }}</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
