@@ -14,7 +14,7 @@ class AdminCourse(admin.ModelAdmin):
 
 
 class AdminCourseDes(admin.ModelAdmin):
-    list_display = ("user_id", "teacher_id", "des")
+    list_display = ("user_id", "course_id","des")
     list_per_page = 30
     ordering = ("user_id",)
     search_fields = ("des",)

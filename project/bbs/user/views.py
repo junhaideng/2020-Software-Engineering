@@ -17,6 +17,7 @@ from django.contrib.auth.models import User as AuthUser
 from django.core.paginator import Paginator
 from django.conf import settings
 import time
+from post.models import Post, PostReply, PostComment
 
 
 @require_http_methods(["GET", "POST"])
@@ -196,7 +197,7 @@ def modify(request):
                 for part in img.chunks():
                     save_img.write(part)
                     save_img.flush()
-        user_c.profile = 'media/profile/'+request.POST.get("nickname")+'.jpg'
+            user_c.profile = 'media/profile/'+request.POST.get("nickname")+'.jpg'
 
         user_c.user.save()
         user_c.save()
@@ -208,7 +209,12 @@ def modify(request):
 
 @login_required()
 def history(request):
-    return render(request, 'user/history.html')
+    """
+            发帖记录
+            @author: 吴嘉锐
+    """
+    post_histories = Post.objects.filter(author_user_id=request.user.id)  # 发帖的记录
+    return render(request, 'user/history.html', {"post_histories": post_histories})
 
 
 @login_required()

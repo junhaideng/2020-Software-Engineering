@@ -6,5 +6,5 @@ urlpatterns = [
     path("", index, name='index'),
     path("upload/", upload, name='upload'),
     path("details/<str:type>/<str:school>",details,name='details'),
-
+    path("coursedes/<int:pk>", coursedes, name='coursedes')
 ]

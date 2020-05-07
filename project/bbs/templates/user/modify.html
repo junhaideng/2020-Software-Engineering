@@ -21,7 +21,7 @@
 {% block detail %}
     <div>
 
-        <form class="layui-form" action="{% url 'user:modify' %}" method="post">{% csrf_token %}
+        <form class="layui-form" action="{% url 'user:modify' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
 
             <div class="layui-input-item" style="margin-top:30px;margin-left:120px;">
                 <label class="label-name" for="nick">昵称：</label>

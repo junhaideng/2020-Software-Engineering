@@ -1,5 +1,5 @@
 <!--
-author: Edgar
+author: Eilliot
 搜索的主界面
 -->
 {% extends 'base.html' %}
@@ -14,10 +14,14 @@ author: Edgar
         {% endblock %}
     </title>
 </head>
-<>
+<body>
 {% block content %}
+    <img src="https://github.com/Cyberist-Edgar/2020-Software-Engineering/raw/master/project/img/biaoti.png" width="472"
+         height="80" style=" margin-top: 0%;margin-left: 23%;">
+    <img src="https://github.com/Cyberist-Edgar/2020-Software-Engineering/raw/master/project/img/xiaohui.png"
+         width="233" height="233" style=" margin-top: 0%;margin-left: 32%;">
     <div class="container">
-        <div class=" h-100" style="margin-top: 25%; margin-left: 25%;">
+        <div class=" h-100" style="margin-top: 3%; margin-left: 25%;">
             <form class="form-inline" method="GET" style=" height: 70px" action="/search">
                 <div class="input-group w-50">
                     <label for="search"></label><input type="text" id="search" class="form-control" style="height: 50px"
@@ -47,7 +51,20 @@ author: Edgar
         </div>
     </div>
     <script src="{% static 'js/search/search_data.js' %}"></script>
+    <div class="container mt-3">
+        <form action="search" method="leibie">
+            <input type="radio" name="leibie" value="课程" style="margin-top: 3%; margin-left: 25%;"> 课程
+            <input type="radio" name="leibie" value="用户" checked="checked" style="margin-top: 3%; margin-left: 4%;"> 用户
+            <input type="radio" name="leibie" value="帖子" checked="checked" style="margin-top: 3%; margin-left: 4%;"> 帖子
+        </form>
+        <a href="https://www.baidu.com" style="margin-top: 15%; margin-left: 25%;">需要帮助？</a>
+        <div class="container" style="margin-top: 3%; margin-left: 23%;">
+            <a href="https://i.sjtu.edu.cn">教学信息服务网</a>
+            <a href="https://www.sjtu.edu.cn" style="margin-top: 3%; margin-left: 4%;">交大门户网站</a>
+            <a href="https://www.cnmooc.org" style="margin-top: 3%; margin-left: 4%;">好大学在线</a>
+        </div>
 
+    </div>
 {% endblock %}
 </body>
 

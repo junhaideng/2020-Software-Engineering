@@ -69,14 +69,13 @@ def details(request,type,school):
     """课程界面的首页"""
     class Newcourse(): #建立一个新的类
         def __init__(self):
+            self.pk= None #课程主键
             self.name = '无'  # 课程的名字
             self.school ='无'  # 专业名
             self.teacher= [] #老师 可能有多个
     if 1:
         Type=type
-        print(Type)#验证信息 来debug时候用了一下
         School= school
-        print(School)#验证信息 来debug时候用了一下
         if Type=="0":#我将没有选择的时候设置为了0
             courselist=Course.objects.filter(school=School)
         elif School=="0":
@@ -87,14 +86,27 @@ def details(request,type,school):
         for course in courselist:#将教师和课程 组合在一个列表中
             a=Newcourse()
             a.name=course.name
+            a.pk=course.pk
             a.school=SCHOOLS[int(course.school)-1][1]
-            if TeacherOfCourse.objects.filter(course_id=course.pk)==0:
+            info=TeacherOfCourse.objects.filter(course_id=course.pk)
+            if info.count()==0:
                 a.teacher=['None']
             else:
                 for b in TeacherOfCourse.objects.filter(course_id=course.pk):
                     a.teacher.append(b.name)
             List.append(a)
-        for course1 in List:#验证信息 来debug时候用了一下 可正常运行
-            print (course1.name)
-            print (course1.school)
         return render(request, 'course/details.html', {"list": List})
+
+@require_http_methods(["GET","POST"])
+def coursedes(request,pk):
+    course=Course.objects.get(pk=pk)
+    teachers=TeacherOfCourse.objects.filter(course_id=course.pk)
+    flag=1
+    if teachers.count()==0:
+        flag=0
+    des = CourseDes.objects.get(course_id=course.pk)
+    for i in TYPES:
+        if i[0]==course.type:
+            type=i[1]
+    school=SCHOOLS[int(course.school)-1][1]
+    return render(request,'course/coursedes.html',{"course":course,"teacherList":teachers,"des":des,"school":school,"type":type,"flag":flag})
