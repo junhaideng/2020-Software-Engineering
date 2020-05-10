@@ -1,21 +1,46 @@
+{% extends 'base.html' %} {# 课程的主界面 #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>课程信息</title>
+    {% load static %}
+    {% block forward_dependecies %}
+        <style>
+            div.imgcard{
+                width: 650px;
+                box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+                text-align: center;
+                position: absolute;
+                margin: 50px 0 0 250px;
+            }
+
+            div.container{
+                padding: 10px;
+            }
+        </style>
+    {% endblock %}
+    <title>{% block title %}课程信息{% endblock %}</title>
 </head>
 <body>
-    {{ course.name }}
-    <br>{{ course.major }}
-    <br>{{ school }}
-    <br>{{ type }}
-    <br>{{ des }}
-    {% if flag == 0 %}
-    <br> 暂无老师
-    {% else %}
-    <br>{% for t in teacherList %}
-        <br>{{ t.name }}
-        {% endfor %}
-    {% endif %}
+{% block content %}
+    <div class="imgcard">
+
+        <img src="{% static 'images/cardbackground.jpg' %}" style="width:650px"/>
+        <div class="container">
+            课程名称：{{ course.name }}
+            <br>相关专业：{{ course.major }}<!--这是什么属性我疑惑-->
+            <br>开设学院：{{ school }}
+            <br>课程类型：{{ type }}
+            <br>课程评价：{{ des }}
+            {% if flag == 0 %}
+                <br> 暂无老师
+            {% else %}
+                <br>任课老师：{% for t in teacherList %}
+                <br>{{ t.name }}
+            {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
 </body>
 </html>
