@@ -104,6 +104,32 @@
                 opacity: 1;
                 right: 0;
             }
+
+            .anotherbutton {
+                background-color: #4CAF50; /* Green */
+                border: none;
+                color: white;
+                padding: 16px 32px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                -webkit-transition-duration: 0.4s; /* Safari */
+                transition-duration: 0.4s;
+                cursor: pointer;
+            }
+            .anotherbutton1 {
+                background-color: white;
+                color: black;
+                border: 2px solid #e7e7e7;
+                position:absolute;
+                left: 200px;
+            }
+
+            .anotherbutton1:hover {background-color: #e7e7e7;}
+
+
             .course{
                 margin-top: 25px;
                 height:80px;
@@ -225,6 +251,7 @@
             url = "http://127.0.0.1:8000/course/";//此处拼接内容
             window.location.href = url;
         }
+
     </script>
     {% endblock %}
 
@@ -234,7 +261,7 @@
                {% for i in list %}
                    <div class="course">
                    <div class="form-inline">
-                       <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;课程名:&nbsp;</p><label for="name" style="margin-top: 10px;">{{ i.name }}</label>
+                       <a style="margin-top: 10px" href="http://127.0.0.1:8000/course/coursedes/{{ i.pk }}">&nbsp;&nbsp;&nbsp;&nbsp;课程名:&nbsp;</a><label for="name" style="margin-top: 10px;">{{ i.name }}</label>
                        <!--</div>
                        <div class="form-inline">-->
                        <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;开设学院：&nbsp;</p><label for="name"style="margin-top: 10px;"style="margin-top: 10px;">{{ i.school }}</label>
