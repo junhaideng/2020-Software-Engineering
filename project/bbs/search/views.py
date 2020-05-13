@@ -42,11 +42,18 @@ def search_course(request):
     data = []
     for course in courses:
         TeacherOfCourse.objects.filter(course_id=course.id)
-        data.append({"name": course.name, "id": course.id, "teacher": TeacherOfCourse.objects.get(course_id=course.id).name})
+        data.append(
+            {"name": course.name, "id": course.id, "teacher": TeacherOfCourse.objects.get(course_id=course.id).name})
     return render(request, 'search/search.html', context={"keyword": keyword, "data": data})
 
 
 def search_post(request):
     keyword = request.GET.get("keyword")
-
-    return render(request, 'search/search.html', context={"keyword": keyword})
+    posts = Post.objects.filter(topic__contains=keyword)
+    data = []
+    for post in posts:
+        content = post.content
+        if len(content) > 20:
+            content = content[:20] + "..."
+        data.append({"topic": post.topic, "content": content, "id": post.id, "time": post.created_time})
+    return render(request, 'search/search_post.html', context={"keyword": keyword, "data": data})
