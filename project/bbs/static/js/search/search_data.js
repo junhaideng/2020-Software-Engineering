@@ -16,11 +16,11 @@ function _search(value) {
     $.ajax({
             type: "post",
             url: "/search/",
-            dataType:"json",
+            // dataType:"application/json;charset=utf-8",  不需要否则获取不到数据
             headers:{
                 "X-CSRFToken": csrf
             },
-            data: "value="+encodeURIComponent(value.trim()),
+            data: {value:value.trim(), type: $("input[name='type']:checked").val()},
 
             success: function (data) {
                 if (data["data"].length !== 0) {
@@ -33,6 +33,9 @@ function _search(value) {
                 li.innerHTML = html;
 
             },
+        err: function (err) {
+            console.log(err)
+        }
         }
     );
 }

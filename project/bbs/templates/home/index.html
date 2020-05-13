@@ -16,12 +16,23 @@ author: Eilliot
 </head>
 <body>
 {% block content %}
-    <img src="https://github.com/Cyberist-Edgar/2020-Software-Engineering/raw/master/project/img/biaoti.png" width="472"
+    <img src="{% static 'images/title.png' %}" width="472"
          height="80" style=" margin-top: 0%;margin-left: 23%;">
-    <img src="https://github.com/Cyberist-Edgar/2020-Software-Engineering/raw/master/project/img/xiaohui.png"
+    <img src="{% static 'images/sjtu.png' %}"
          width="233" height="233" style=" margin-top: 0%;margin-left: 32%;">
     <div class="container">
         <div class=" h-100" style="margin-top: 3%; margin-left: 25%;">
+             <div class="custom-control-inline">
+                 查询类别:
+             </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="type1" name="type" checked class="custom-control-input" value="course">
+                <label class="custom-control-label" for="type1">课程</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="type2" name="type" class="custom-control-input" value="post">
+                <label class="custom-control-label" for="type2">帖子</label>
+            </div>
             <form class="form-inline" method="GET" style=" height: 70px" action="/search">
                 <div class="input-group w-50">
                     <label for="search"></label><input type="text" id="search" class="form-control" style="height: 50px"
@@ -47,17 +58,13 @@ author: Eilliot
                 <ul class="list-group" id="info">
                 </ul>
             </div>
+
             {% csrf_token %}
         </div>
     </div>
     <script src="{% static 'js/search/search_data.js' %}"></script>
     <div class="container mt-3">
-        <form action="search" method="leibie">
-            <input type="radio" name="leibie" value="课程" style="margin-top: 3%; margin-left: 25%;"> 课程
-            <input type="radio" name="leibie" value="用户" checked="checked" style="margin-top: 3%; margin-left: 4%;"> 用户
-            <input type="radio" name="leibie" value="帖子" checked="checked" style="margin-top: 3%; margin-left: 4%;"> 帖子
-        </form>
-        <a href="https://www.baidu.com" style="margin-top: 15%; margin-left: 25%;">需要帮助？</a>
+
         <div class="container" style="margin-top: 3%; margin-left: 23%;">
             <a href="https://i.sjtu.edu.cn">教学信息服务网</a>
             <a href="https://www.sjtu.edu.cn" style="margin-top: 3%; margin-left: 4%;">交大门户网站</a>
