@@ -10,6 +10,7 @@ from django.urls import reverse
 from course.models import Course
 
 from post.models import Post
+from course.models import TeacherOfCourse
 
 
 def search(request):
@@ -33,3 +34,19 @@ def search(request):
             data = None
             return render(request, 'search/search.html', context={"keyword": keyword, "data": data})
         return redirect(reverse("home:index"))  # 否则只是简单的访问该网页
+
+
+def search_course(request):
+    keyword = request.GET.get("keyword")
+    courses = Course.objects.filter(name__contains=keyword)  # 查询
+    data = []
+    for course in courses:
+        TeacherOfCourse.objects.filter(course_id=course.id)
+        data.append({"name": course.name, "id": course.id, "teacher": TeacherOfCourse.objects.get(course_id=course.id).name})
+    return render(request, 'search/search.html', context={"keyword": keyword, "data": data})
+
+
+def search_post(request):
+    keyword = request.GET.get("keyword")
+
+    return render(request, 'search/search.html', context={"keyword": keyword})

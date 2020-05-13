@@ -4,45 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{{ keyword }}{% endblock %}</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-            crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-            crossorigin="anonymous"></script>
 </head>
 <body>
 {% block content %}
     <div>
-        <div class="layui-card" style="margin-top:10px;margin-bottom: 10px;background-color: #fff3f3">
-            <!--课程名-->课程：高等数学
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="float:right;">详情>></button>
-            <hr>
-            <!--教师名-->教师：何铭
-            <hr>
-            帖子：上课要求xxx，考核要求xxx，老师性格xxx，给分xxx
-        </div>
-        <blockquote class="layui-elem-quote layui-quote-nm">
-            <!--课程名-->课程：高等数学
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="float:right;background-color: #f0f6ff">详情>></button>
-            <hr>
-            <!--教师名-->教师：何铭
-            <hr>
-            帖子：上课要求xxx，考核要求xxx，老师性格xxx，给分xxx
-        </blockquote>
-        <blockquote class="layui-elem-quote layui-quote-nm">
-            <!--课程名-->课程：高等数学
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" style="float:right;">详情>></button>
-            <hr>
-            <!--教师名-->教师：陈春丽
-            <hr>
-            帖子：上课要求xxx，考核要求xxx，老师性格xxx，给分xxx
-        </blockquote>
+        {% for data in data %}
+            <blockquote class="layui-elem-quote layui-quote-nm">
+                <!--课程名-->课程：{{ data.name }}
+                <a href="/course/coursedes/{{ data.id }}" target="_blank">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                            style="float:right;background-color: #f0f6ff">详情>>
+                    </button>
+                </a>
+                <hr>
+                <!--教师名-->教师：{{ data.teacher }}
+                <hr>
+                帖子：上课要求xxx，考核要求xxx，老师性格xxx，给分xxx
+            </blockquote>
+
+        {% endfor %}
+
     </div>
 {% endblock %}
 
