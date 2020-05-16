@@ -8,7 +8,7 @@
 
         <style>
             #box {
-                height:200px;
+                height:180px;
                 background: rgba(255, 255, 255, 0.8);
                 box-shadow: 0 0 10px rgba(73,66,66,.1);
                 margin: 50px auto;
@@ -16,23 +16,20 @@
             }
 
             #box dl {
-                height: 50px;
-                line-height: 50px;
-                border-bottom: 1px dashed #dadada;
-                margin: 0 20px;
+                margin: 10px 20px;
             }
 
             #box dt {
                 float: left;
                 color: #8a8a8a;
-                font-size: 20px;
+                font-size: 17px;
             }
 
             #box dd {
                 float: left;
                 color: rgba(129, 129, 126, 0.91);
                 margin: 0 10px;
-                font-size: 20px;
+                font-size: 17px;
                 cursor: pointer;
             }
 
@@ -42,15 +39,13 @@
             }
 
             #box dl.select {
-                margin: 0;
-                padding: 0 20px;
+                margin:10px 20px;
             }
 
             #box dl.select dd{
                 border: 1px solid #c4284d;
                 height: 25px;
-                line-height: 25px;
-                margin-top: 13px;
+                margin-top: 6px;
                 padding: 0 2px 0 10px;
                 border-radius: 3px;background-color: #fff;
             }
@@ -72,7 +67,7 @@
                 border: none;
                 color: #FFFFFF;
                 text-align: center;
-                font-size: 20px;
+                font-size: 17px;
                 padding: 20px;
                 width: 150px;
                 transition: all 0.5s;
@@ -104,18 +99,7 @@
                 opacity: 1;
                 right: 0;
             }
-            /*#course{
-                height:220px;
-                width:220px;
-                float:left;
-                border-style: ridge;
-                border-color: #dadada;
-                box-shadow: 10px 10px 20px rgba(73,66,66,.1);
-                border-radius:10px;
-                font-size:14px;
-                text-align:center;
 
-            }*/
         </style>
     {% endblock %}
     <title>{% block title %}课程{% endblock %}</title>
@@ -124,7 +108,7 @@
 
 {% block content %}
     <div id="box">
-        <dl style="border-bottom: 1px dashed #dadada;">
+        <dl class="row">
             <dt data-type="1">课程类别：</dt>
             <dd data-type="1">必修</dd>
             <dd data-type="1">选修</dd>
@@ -132,7 +116,7 @@
             <dd data-type="1">其他</dd>
 
         </dl>
-        <dl style="border-bottom: 1px dashed #dadada;">
+        <dl class="row">
             <dt data-type="2">开设学院：</dt>
             <dd data-type="2">电子信息与电气工程学院</dd>
             <dd data-type="2">机械与动力工程学院</dd>
@@ -146,8 +130,19 @@
             <dd data-type="2">医学院</dd>
             <dd data-type="2">安泰经济与管理学院</dd>
             <dd data-type="2">人文学院</dd>
+            <dd data-type="2">材料科学与工程学院</dd>
+            <dd data-type="2">海洋学院</dd>
+            <dd data-type="2">药学院</dd>
+            <dd data-type="2">生命科学技术学院</dd>
+            <dd data-type="2">农业与生物学院</dd>
+            <dd data-type="2">凯原法学院</dd>
+            <dd data-type="2">外国语学院</dd>
+            <dd data-type="2">体育系</dd>
+            <dd data-type="2">马克思主义学院</dd>
+            <dd data-type="2">国际与公共事务学院</dd>
+            <dd data-type="2">上海高级金融学院</dd>
         </dl><!--排版还有点点问题-->
-        <dl class="select">
+        <dl class="select row">
             <dt>已选条件：</dt>
         </dl>
     </div>
@@ -171,6 +166,17 @@
             "医学院":"10",
             "安泰经济与管理学院":"11",
             "人文学院":"12",
+            "材料科学与工程学院":"13",
+            "海洋学院":"14",
+            "药学院":"15",
+            "生命科学技术学院":"16",
+            "农业与生物学院":"17",
+            "凯原法学院":"18",
+            "外国语学院":"19",
+            "体育系":"20",
+            "马克思主义学院":"21",
+            "国际与公共事务学院":"22",
+            "上海高级金融学院":"23",
             "0":"0"
         }
 
