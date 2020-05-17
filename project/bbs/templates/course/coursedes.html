@@ -48,7 +48,7 @@
                 margin:auto;
                 padding:28px;
                 height:200px;
-                display:none; /* 默认文本框隐藏 */
+                /*display:none;  默认文本框隐藏 */
             }
             .box.show
             {display:block;}
@@ -128,7 +128,8 @@
             </div>
         </div>
     </div>
-    <input type="button" onClick="commentdisplay(1)" value="我要评价" style="float:right;margin-top: 10px;">
+    <input type="button"  value="我要评价" style="float:right;margin-top: 10px;">
+    {% if userflag == 1 %}
     <div id='inputbox' class="box">
         <!--<form action="" method="post" style="margin-top:10%">-->
         <div class="layui-input-block">
@@ -136,21 +137,14 @@
             </textarea>
         </div>
         <button type="button" class="button" style="vertical-align:middle"><span>发表</span></button>
+        {% else %}
+        <div class="layui-input-block">
+        <a href="http://127.0.0.1:8000/user/login/" style="font-size: 18px;margin-left: 35%">请先点击此处登录</a>
+        </div>
+        {% endif %}
         <!--</form>-->
-    <!--我之前戳了组长他还没有回复我，我其实没大明白要提交到那个页面...-->
+    <!--To Do:表单url-->
     </div>
-    {% block back_dependecies %}{# 用来加载依赖文件 #}
-        <script>
-            function commentdisplay(n){
-                //if(userflag==1){
-               document.getElementById('inputbox').style.display=n?'block':'none';
-               // }
-               // else{
-                  //url = "/user/login/";
-                 //   window.location.href = url;}
-                }//我这里还没有userflag，应该也许是用if.else实现吧
-        </script>
-    {% endblock %}
 {% endblock %}
 </body>
 </html>
