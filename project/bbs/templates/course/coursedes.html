@@ -11,23 +11,55 @@
     {% block forward_dependecies %}{# 用来加载依赖文件 #}
 
         <style>
-            .button {
-                display: inline-block;
-                border-radius: 4px;
-                background-color: rgba(138, 138, 138, 0.67);;
-                border: none;
-                color: #FFFFFF;
-                text-align: center;
-                font-size: 17px;
-                padding: 10px;
-                width: 120px;
-                transition: all 0.5s;
-                cursor: pointer;
-                margin-left:450px;
-                margin-top: 10px;
+            .comment {
+                width:auto;
+                border-top: 1px solid  rgba(233, 233, 233, 0.79);
+                border-bottom: 1px solid  rgba(233, 233, 233, 0.79);
+                margin-top:10px;
             }
+            .comment_content {
+                clear:both;
+                margin:5px 50px;
+                font-size:16px;
+            }
+            .imgdiv{
+                width:80px;
+                height:70px;
+                float:left;
+            }
+            .imgcss {
+                width:60px;
+                height:60px;
+                border-radius: 50%;
+            }
+            .comment_name {
+                margin-left:10px;
+                color:#3D9EEA;
+                font-size:17px;
+            }
+            .comment_time {
+                margin-left:800px;
+                float:right;
+                color: #061019;
+                font-size:16px;
+            }
+            .box{
+                margin-top:10%;
+                margin:auto;
+                padding:28px;
+                height:200px;
+                display:none; /* 默认文本框隐藏 */
+            }
+            .box.show
+            {display:block;}
+            .box input {
+                width:1000px;
+                height:100px;
+                font-size:17px;
+                margin-top:18px;}
         </style>
     {% endblock %}
+
     <title>{% block title %}课程信息{% endblock %}</title>
 </head>
 <body>
@@ -65,6 +97,10 @@
             <td>{{ type }}</td>
         </tr>
         <tr>
+            <td>课程信息</td>
+            <td>{{ des }}</td>
+        </tr>
+        <tr>
             <td>任课老师</td>
             {% if flag == 0 %}
                 <td>暂无老师</td>
@@ -77,21 +113,44 @@
         </tbody>
     </table>
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>学生评价</legend>
+        <legend>评价列表</legend>
     </fieldset>
-    <blockquote class="layui-elem-quote layui-quote-nm">
-        {{des}}
-    </blockquote>
-    <!--TO DO:多条评价显示/带头像显示/参考一下其他页面-->
-    <div class="layui-form-item layui-form-text">
-        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-            <legend>我的评价</legend>
-        </fieldset>
-        <div class="layui-input-block">
-            <textarea class="layui-textarea" placeholder="请输入内容" style="margin-left:-100px;width:1100px;"></textarea>
+    <div class="comment">
+        <div class="imgdiv">
+        <img class="imgcss"  src="user.jpg">
+        </div><!--还是显示一下用户头像吧！-->
+        <div class="conmment_details">
+            <div style="float:left;">
+                <span class="comment_name">这里是用户名</span>
+                <span class="comment_time">这里是时间</span>
+            </div>
+            <div class="comment_content" >这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价这是一段评价
+            </div>
         </div>
-        <button type="button" class="button" style="vertical-align:middle"><span>提交</span></button>
     </div>
+    <input type="button" onClick="commentdisplay(1)" value="我要评价" style="float:right;margin-top: 10px;">
+    <div id='inputbox' class="box">
+        <!--<form action="" method="post" style="margin-top:10%">-->
+        <div class="layui-input-block">
+            <textarea class="layui-textarea" placeholder="请输入内容" style="margin-left:-120px;width:1100px;" id="comment" name="comment">
+            </textarea>
+        </div>
+        <button type="button" class="button" style="vertical-align:middle"><span>发表</span></button>
+        <!--</form>-->
+    <!--我之前戳了组长他还没有回复我，我其实没大明白要提交到那个页面...-->
+    </div>
+    {% block back_dependecies %}{# 用来加载依赖文件 #}
+        <script>
+            function commentdisplay(n){
+                //if(userflag==1){
+               document.getElementById('inputbox').style.display=n?'block':'none';
+               // }
+               // else{
+                  //url = "/user/login/";
+                 //   window.location.href = url;}
+                }//我这里还没有userflag，应该也许是用if.else实现吧
+        </script>
+    {% endblock %}
 {% endblock %}
 </body>
 </html>
