@@ -17,17 +17,16 @@
                     </button>
                 </a>
                 <hr>
-                <!--教师名-->教师：{{ data.teacher }}
+                <!--开设学院名-->开设学院：1234
                 <hr>
-                帖子：上课要求xxx，考核要求xxx，老师性格xxx，给分xxx
+                <!--教师名-->授课教师：{{ data.teacher }}
             </blockquote>
 
         {% endfor %}
 
-
     </div>
 
-    <div id="test1" class="grid-demo grid-demo-bg1>
+    <div id="test1" class="grid-demo grid-demo-bg1" style="float:right">
 
         <script src="/static/build/layui.js"></script>
         <script>
@@ -36,8 +35,9 @@
 
           //执行一个laypage实例
              laypage.render({
-              elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
-             ,count: 50 //数据总数，从服务端得到
+              elem: 'test1',//注意，这里的 test1 是 ID，不用加 # 号
+              count: 50 ,//数据总数，从服务端得到
+              limit:5
              });
          });
         </script>
