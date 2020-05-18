@@ -211,10 +211,32 @@ def modify(request):
 def history(request):
     """
             发帖记录
-            @author: 吴嘉锐
+            @author: 吴嘉锐  搬运了Edgar的分页语句
     """
     post_histories = Post.objects.filter(author_user_id=request.user.id)  # 发帖的记录
-    return render(request, 'user/history.html', {"post_histories": post_histories})
+    if post_histories.exists():
+        per_page_num = 10  # 每一页的记录数
+        p = Paginator(post_histories, per_page_num)  # 分页对象
+        total = ceil(post_histories.count() / per_page_num) * 10  # 总共页数， *10 是为了适应在layui中的显示(count变量)
+        curr_page = 1  # 默认的时候指定的是第一页
+        data = []
+        if request.GET.get("page"):  # 如果url中含有参数page，那么指定其页数 (?page=num)
+            curr_page = request.GET.get("page")
+        page = p.page(curr_page)  # 获取当前页面的信息
+        if page:
+            for post in page:
+                data.append(
+                    {"topic": post.topic, "created_time": post.created_time, "content": post.content })
+        else:
+            data = None
+            total = 0
+            curr_page = 1
+    else:
+        data = None
+        total = 0
+        curr_page = 1
+    return render(request, 'user/history.html',
+                  context={"post_histories": data, "total": total, "curr_page": curr_page})
 
 
 @login_required()
