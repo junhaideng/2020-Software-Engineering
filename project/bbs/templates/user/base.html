@@ -100,6 +100,19 @@ TODO: 还需要其他的显示内容？ 如何美化？
                             <a class="card-link" style="color: #909399" href="{% url 'user:resetpwd' %}">修改密码</a>
                        </span></li>
                     {% endif %}
+
+                    {% url 'user:notice' as notice %}
+                    {% if request.path ==  notice %}
+                        <li class="el-menu-item is-active" style="padding-left: 20px;">
+                         <span style="font-size: 16px"> <i class="el-icon-bell"></i>
+                            <a class="card-link" href="{% url 'user:notice' %}">消息通知</a>
+                       </span></li>
+                            {% else %}
+                        <li class="el-menu-item " style="padding-left: 20px;">
+                         <span style="font-size: 16px"> <i class="el-icon-bell"></i>
+                            <a class="card-link" style="color: #909399" href="{% url 'user:notice' %}">消息通知</a>
+                       </span></li>
+                    {% endif %}
                 </ul>
             </div>
             <div class="col-10">

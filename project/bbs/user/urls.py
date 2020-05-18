@@ -15,5 +15,6 @@ urlpatterns = [
     path("resetpwd/", resetpwd, name='resetpwd'),  # 修改密码
     path("setquestion/", setquestion, name='setquestion'),  # 设置密保
     path("resetpwd/", resetpwd, name='resetpwd'),  # 修改密码
-    path("upload/", upload, name="upload")
+    path("upload/", upload, name="upload"),
+    path("notice/", notice, name='notice')  # 消息通知
 ]
