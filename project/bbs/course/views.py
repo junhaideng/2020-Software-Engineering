@@ -79,7 +79,7 @@ def upload(request):
 
 
 @require_http_methods(["GET","POST"])
-def details(request,type,school):
+def details(request,type,school,page_num):
     """课程界面的首页"""
     class Newcourse(): #建立一个新的类
         def __init__(self):
@@ -109,10 +109,15 @@ def details(request,type,school):
                 for b in TeacherOfCourse.objects.filter(course_id=course.pk):
                     a.teacher.append(b.name)
             List.append(a)
-        p = Paginator(List, 5)
-        page_num=p.num_pages #页数
-        page=p.page(1) #第一页的列表 到时候返回Page
-        return render(request, 'course/details.html', {"list": List})
+        p = Paginator(List, 2)
+        total_num=p.num_pages #页数
+        pagesNum=[]#页码列表
+        i=1
+        while i <= total_num:
+            pagesNum.append(i)
+            i = i + 1
+        page=p.page(page_num) #对应分页
+        return render(request, 'course/details.html', {"list": page,"pagesNum":pagesNum})
 
 @require_http_methods(["GET","POST"])
 def coursedes(request,pk):

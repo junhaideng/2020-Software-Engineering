@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %} {# 课程的主界面 #}
 <!DOCTYPE html>
 <html lang="en">
@@ -72,7 +73,7 @@
                 width: 150px;
                 transition: all 0.5s;
                 cursor: pointer;
-                margin-left: 450px;
+                margin-left: 500px;
             }
 
             .button span {
@@ -114,6 +115,30 @@
             .course:hover {
                 background:rgba(73,66,66,.1);
             }
+            ul.pagination {
+                display: inline-block;
+                padding: 0;
+                margin-top:10%;
+                margin-left: 450px;
+            }
+
+            ul.pagination li {display: inline;}
+
+            ul.pagination li a {
+                color: black;
+                padding: 8px 16px;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+
+            ul.pagination li a.active {
+                background-color: #4CAF50;
+                color: white;
+                border-radius: 5px;
+            }
+
+            ul.pagination li a:hover:not(.active)
+            {background-color: #ddd;}
         </style>
     {% endblock %}
     <title>{% block title %}课程{% endblock %}</title>
@@ -261,6 +286,16 @@
                 {% endfor %}
             </form>
          <!--</div>-->
+    <ul class="pagination">
+        <li><a href="#">«</a></li>
+        {% for i in pagesNum %}
+        <li><a href="{{i}}">{{i}}</a></li>
+        {% endfor %}
+        <li><a href="#">»</a></li>
+
+    </ul>
+
+
 
 {% endblock %}
 </body>
