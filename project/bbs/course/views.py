@@ -79,7 +79,7 @@ def upload(request):
 
 
 @require_http_methods(["GET","POST"])
-def details(request,type,school):
+def details(request,type,school,page_num):
     """课程界面的首页"""
     class Newcourse(): #建立一个新的类
         def __init__(self):
@@ -87,32 +87,44 @@ def details(request,type,school):
             self.name = '无'  # 课程的名字
             self.school ='无'  # 专业名
             self.teacher= [] #老师 可能有多个
-    if 1:
-        Type=type
-        School= school
-        if Type=="0":#我将没有选择的时候设置为了0
-            courselist=Course.objects.filter(school=School)
-        elif School=="0":
-            courselist = Course.objects.filter(type=Type)
+    page_now=page_num#当前页码
+    Type=type
+    School= school
+    if Type=="0":#我将没有选择的时候设置为了0
+        courselist=Course.objects.filter(school=School)
+    elif School=="0":
+        courselist = Course.objects.filter(type=Type)
+    else:
+        courselist = Course.objects.filter(school=School,type=Type)
+    List=[]
+    for course in courselist:#将教师和课程 组合在一个列表中
+        a=Newcourse()
+        a.name=course.name
+        a.pk=course.pk
+        a.school=SCHOOLS[int(course.school)-1][1]
+        info=TeacherOfCourse.objects.filter(course_id=course.pk)
+        if info.count()==0:
+            a.teacher=['None']
         else:
-            courselist = Course.objects.filter(school=School,type=Type)
-        List=[]
-        for course in courselist:#将教师和课程 组合在一个列表中
-            a=Newcourse()
-            a.name=course.name
-            a.pk=course.pk
-            a.school=SCHOOLS[int(course.school)-1][1]
-            info=TeacherOfCourse.objects.filter(course_id=course.pk)
-            if info.count()==0:
-                a.teacher=['None']
-            else:
-                for b in TeacherOfCourse.objects.filter(course_id=course.pk):
-                    a.teacher.append(b.name)
-            List.append(a)
-        p = Paginator(List, 5)
-        page_num=p.num_pages #页数
-        page=p.page(1) #第一页的列表 到时候返回Page
-        return render(request, 'course/details.html', {"list": List})
+            for b in TeacherOfCourse.objects.filter(course_id=course.pk):
+                a.teacher.append(b.name)
+        List.append(a)
+    p = Paginator(List, 2)
+    total_num=p.num_pages #页数
+    pagesNum=[]#页码列表
+    i=1
+    while i <= total_num:
+        pagesNum.append(i)
+        i = i + 1
+    page=p.page(page_num) #对应分页
+    pre_page=page_now-1
+    if pre_page==0:
+        pre_page=1
+    next_page=page_now+1
+    if next_page==total_num+1:
+        next_page=page_now
+    return render(request, 'course/details.html', {"list": page,"pagesNum":pagesNum,"total_num":total_num,
+                                               "now_page":page_now,"pre_page":pre_page,"next_page":next_page})
 
 @require_http_methods(["GET","POST"])
 def coursedes(request,pk):

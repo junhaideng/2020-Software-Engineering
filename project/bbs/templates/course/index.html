@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %} {# 课程的主界面 #}
 <!DOCTYPE html>
 <html lang="en">
@@ -72,7 +73,7 @@
                 width: 150px;
                 transition: all 0.5s;
                 cursor: pointer;
-                margin-left: 450px;
+                margin-left: 500px;
             }
 
             .button span {
@@ -259,7 +260,7 @@
             }
         }
         function jump1(){
-            url = "details/"+dic1[dic["1"]]+"/"+dic2[dic["2"]];//此处拼接内容 还要加上页数，默认第一页
+            url = "details/"+dic1[dic["1"]]+"/"+dic2[dic["2"]]+"/"+"1";//跳转到第一页
             window.location.href = url;
         }
     </script>
