@@ -117,7 +117,14 @@ def details(request,type,school,page_num):
         pagesNum.append(i)
         i = i + 1
     page=p.page(page_num) #对应分页
-    return render(request, 'course/details.html', {"list": page,"pagesNum":pagesNum,"total_num":total_num,"now_page":page_now})
+    pre_page=page_now-1
+    if pre_page==0:
+        pre_page=1
+    next_page=page_now+1
+    if next_page==total_num+1:
+        next_page=page_now
+    return render(request, 'course/details.html', {"list": page,"pagesNum":pagesNum,"total_num":total_num,
+                                               "now_page":page_now,"pre_page":pre_page,"next_page":next_page})
 
 @require_http_methods(["GET","POST"])
 def coursedes(request,pk):
