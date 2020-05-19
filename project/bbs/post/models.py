@@ -27,6 +27,7 @@ class PostReply(models.Model):
     post_user_id = models.IntegerField()  # 对应回复用户的id，相当于一个新的回复
     content = models.TextField()  # 回复的内容
     created_date = models.DateTimeField(default=timezone.now)  # 回复的时间
+    if_read = models.BooleanField(default=False)  # 是否已读
 
     class Meta:
         ordering = ("-created_date",)  # 按照时间的降序排
@@ -41,6 +42,7 @@ class PostComment(models.Model):
     reply_user_id = models.IntegerField(blank=True, null=True)  # 给谁回复的
     content = models.TextField()  # 回复的内容
     created_date = models.DateTimeField(default=timezone.now)  # 时间
+    if_read = models.BooleanField(default=False)  # 是否已读
 
     class Meta:
         ordering = ("-created_date", )

@@ -24,8 +24,9 @@ function _search(value) {
 
             success: function (data) {
                 if (data["data"].length !== 0) {
+                    console.log(data.data)
                     for (let i = 0; i < data["data"].length; i++) {
-                        html += "<li class='list-group-item'><a href=/course/"+ data["data"][i]["id"] + ">" + data["data"][i]["name"] + "</a></li>";
+                        html += "<li class='list-group-item'><a href=/course/coursedes/"+ data["data"][i]["id"] + ">" + data["data"][i]["name"] + "</a></li>";
                     }
                 } else {
                     html = "<li class='list-group-item'>没有找到对应信息</li>";

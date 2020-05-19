@@ -18,6 +18,7 @@ from django.core.paginator import Paginator
 from django.conf import settings
 import time
 from post.models import Post, PostReply, PostComment
+import operator
 
 
 @require_http_methods(["GET", "POST"])
@@ -193,11 +194,11 @@ def modify(request):
 
         if request.FILES.get("profile_c") is not None:
             img = request.FILES.get("profile_c")
-            with open('media/profile/'+request.POST.get("nickname")+'.jpg', 'wb') as save_img:
+            with open('media/profile/' + request.POST.get("nickname") + '.jpg', 'wb') as save_img:
                 for part in img.chunks():
                     save_img.write(part)
                     save_img.flush()
-            user_c.profile = 'media/profile/'+request.POST.get("nickname")+'.jpg'
+            user_c.profile = 'media/profile/' + request.POST.get("nickname") + '.jpg'
 
         user_c.user.save()
         user_c.save()
@@ -211,10 +212,32 @@ def modify(request):
 def history(request):
     """
             发帖记录
-            @author: 吴嘉锐
+            @author: 吴嘉锐  搬运了Edgar的分页语句
     """
     post_histories = Post.objects.filter(author_user_id=request.user.id)  # 发帖的记录
-    return render(request, 'user/history.html', {"post_histories": post_histories})
+    if post_histories.exists():
+        per_page_num = 10  # 每一页的记录数
+        p = Paginator(post_histories, per_page_num)  # 分页对象
+        total = ceil(post_histories.count() / per_page_num) * 10  # 总共页数， *10 是为了适应在layui中的显示(count变量)
+        curr_page = 1  # 默认的时候指定的是第一页
+        data = []
+        if request.GET.get("page"):  # 如果url中含有参数page，那么指定其页数 (?page=num)
+            curr_page = request.GET.get("page")
+        page = p.page(curr_page)  # 获取当前页面的信息
+        if page:
+            for post in page:
+                data.append(
+                    {"topic": post.topic, "created_time": post.created_time, "content": post.content})
+        else:
+            data = None
+            total = 0
+            curr_page = 1
+    else:
+        data = None
+        total = 0
+        curr_page = 1
+    return render(request, 'user/history.html',
+                  context={"post_histories": data, "total": total, "curr_page": curr_page})
 
 
 @login_required()
@@ -290,6 +313,7 @@ def resetpwd(request):
             message = request.session.pop('user_reset_message')
         return render(request, 'user/resetpwd.html', context={"message": message})
 
+
 @login_required()
 @require_http_methods(["GET", "POST"])
 def setquestion(request):
@@ -297,46 +321,50 @@ def setquestion(request):
         author 祁山青
         """
     username = request.session.get('username')
-    U= User.objects.get(user__username=username)
-    if U.question!=None:  #原先有密保 则需要输入密码设置密保
-         flag=1
-    else : #原先无密保 则需要验证原先密保更改密保
-        flag=0
-    if request.method == "POST" and flag==0: #原先无密保
-        pwd = request.POST.get("pwd") #pwd是前端post传来的密码
+    U = User.objects.get(user__username=username)
+    if U.question != None:  # 原先有密保 则需要输入密码设置密保
+        flag = 1
+    else:  # 原先无密保 则需要验证原先密保更改密保
+        flag = 0
+    if request.method == "POST" and flag == 0:  # 原先无密保
+        pwd = request.POST.get("pwd")  # pwd是前端post传来的密码
         res = authenticate(username=username, password=pwd)  # 进行账号密码验证
         if res:
-            question = request.POST.get("newQuestion")# 同 pwd
-            answer = request.POST.get("newAnswer")# 同 pwd
-            U.question = question# 修改用户的密保问题
-            U.answer=answer
-            U.save()#存储用户
+            question = request.POST.get("newQuestion")  # 同 pwd
+            answer = request.POST.get("newAnswer")  # 同 pwd
+            U.question = question  # 修改用户的密保问题
+            U.answer = answer
+            U.save()  # 存储用户
             message = "密保设置成功！"
-            return render(request, 'user/setquestion.html', {"message": message, "flag":flag})#返回给user/setquestion.html
-        #"message" 是html里面id 为message的对象 "flag"同理，这里的具体传递方法为{“html中的Id”,值}
+            return render(request, 'user/setquestion.html',
+                          {"message": message, "flag": flag})  # 返回给user/setquestion.html
+        # "message" 是html里面id 为message的对象 "flag"同理，这里的具体传递方法为{“html中的Id”,值}
         else:
             message = "密码错误"
             request.session['user_setquestion_message'] = message
-            return render(request, 'user/setquestion.html', {"message": message,"flag":flag})
-    elif request.method == "POST" and flag==1: #有原来的密保
-        oldanswer=request.POST.get("oldAnswer")
-        newanswer=request.POST.get("newAnswer")
-        newquestion=request.POST.get("newQuestion")
-        if oldanswer==U.answer:
-            U.question=newquestion
-            U.answer=newanswer
+            return render(request, 'user/setquestion.html', {"message": message, "flag": flag})
+    elif request.method == "POST" and flag == 1:  # 有原来的密保
+        oldanswer = request.POST.get("oldAnswer")
+        newanswer = request.POST.get("newAnswer")
+        newquestion = request.POST.get("newQuestion")
+        if oldanswer == U.answer:
+            U.question = newquestion
+            U.answer = newanswer
             U.save()
             message = "密保设置成功！"
-            return render(request, 'user/setquestion.html', {"message": message,"flag":flag,"oldQuestion":U.question})
+            return render(request, 'user/setquestion.html',
+                          {"message": message, "flag": flag, "oldQuestion": U.question})
         else:
             message = "旧密保回答错误"
             request.session['user_setquestion_message'] = message
-            return render(request, 'user/setquestion.html', {"message": message,"flag":flag,"oldQuestion":U.question})
+            return render(request, 'user/setquestion.html',
+                          {"message": message, "flag": flag, "oldQuestion": U.question})
     else:
         message = None
         if request.session.get('user_setquestion_message'):
             message = request.session.pop('user_setquestion_message')
-        return render(request, 'user/setquestion.html', {"message": message,"flag":flag,"oldQuestion":U.question})
+        return render(request, 'user/setquestion.html', {"message": message, "flag": flag, "oldQuestion": U.question})
+
 
 @login_required()
 @require_http_methods(["POST", "GET"])
@@ -360,3 +388,58 @@ def upload(request):
         return JsonResponse({"status": "success"})
     else:
         return render(request, 'user/upload.html')
+
+
+@login_required()
+@require_http_methods(["GET"])
+def notice(request):
+    """
+        回复通知
+        author 吴嘉锐
+    """
+    my_post = Post.objects.filter(author_user_id=request.user.id)  # 用户发的贴子
+    my_reply = PostReply.objects.filter(post_user_id=request.user.id)  # 用户的回复
+    notice_unread = []  # 未读消息
+    notice_read = []  # 已读消息
+
+    received_reply = []  # 获得用户收到的回复
+    for post in my_post:
+        reply_to_post = PostReply.objects.filter(post_id=post.id)
+        for each_reply in reply_to_post:
+            received_reply.append(each_reply)
+            if not each_reply.if_read:
+                each_reply.if_read = True
+                notice_unread.append(
+                    {"user": User.objects.get(id=each_reply.post_user_id).user.username, "content": each_reply.content,
+                     "mytext": post.topic, "time": each_reply.created_date}
+                )
+            else:
+                notice_read.append(
+                    {"user": User.objects.get(id=each_reply.post_user_id).user.username, "content": each_reply.content,
+                     "mytext": post.topic, "time": each_reply.created_date}
+                )
+
+    received_comment = []  # 获得用户收到的评论
+    for reply in my_reply:
+        comment_to_reply = PostComment.objects.filter(post_id=reply.id)
+        for each_comment in comment_to_reply:
+            received_comment.append(each_comment)
+            if not each_comment.if_read:
+                each_comment.if_read = True
+                notice_unread.append(
+                    {"user": User.objects.get(id=each_comment.commenter_id).user.username,
+                     "content": each_comment.content, "mytext": reply.content, "time": each_comment.created_date}
+                )
+            else:
+                notice_read.append(
+                    {"user": User.objects.get(id=each_comment.commenter_id).user.username,
+                     "content": each_comment.content, "mytext": reply.content, "time": each_comment.created_date}
+                )
+
+    PostReply.save()  # 将回复标为已读
+    PostComment.save()
+
+    notice_unread = sorted(notice_unread, key=operator.itemgetter("time"), reverse=True)  # 对时间进行排序
+    notice_read = sorted(notice_read, key=operator.itemgetter("time"), reverse=True)
+
+    return render(request, 'user/notice.html', context={"notice_unread": notice_unread, "notice_read": notice_read})

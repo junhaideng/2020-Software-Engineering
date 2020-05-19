@@ -18,25 +18,35 @@
                     </button>
                 </a>
                     <hr>
-                帖子：{{ data.content }}  <!--帖子内容-->
+                所属课程：！@#￥%&<!--发帖时选择的所属课程-->
+                    <hr>
+                帖子内容：{{ data.content }}  <!--帖子内容-->
+                    <hr>
+                发布时间：-/*+ <!--帖子发布时间-->
+                    <hr>
+                最新回复：回复回复回复 <!--最新回复内容-->
+            <div style="float:right">时间：1990-9-1<!--最新回复时间--></div>
             </blockquote>
 
     {% endfor %}
 
-    <nav aria-label="Page navigation example" style="margin-top:100px;">
-		<ul class="pagination justify-content-end">
-			<li class="page-item disabled">
-			  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">上一页</a>
-			</li>
-			<li class="page-item"><a class="page-link" href="#">1</a></li>
-			<li class="page-item"><a class="page-link" href="#">2</a></li>
-			<li class="page-item"><a class="page-link" href="#">3</a></li>
-			<li class="page-item"><a class="page-link" href="#">...</a></li>
-			<li class="page-item">
-			  <a class="page-link" href="#">下一页</a>
-			</li>
-		</ul>
-	</nav>
+    </div>
+
+    <div id="test1" class="grid-demo grid-demo-bg1" style="float:right">
+
+        <script src="/static/build/layui.js"></script>
+        <script>
+        layui.use('laypage', function(){
+            var laypage = layui.laypage;
+
+          //执行一个laypage实例
+             laypage.render({
+             elem: 'test1', //注意，这里的 test1 是 ID，不用加 # 号
+             count: 6 ,//数据总数，从服务端得到
+             limit: 2
+             });
+         });
+        </script>
 
     </div>
 {% endblock %}

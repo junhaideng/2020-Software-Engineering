@@ -58,6 +58,12 @@
                 font-size:17px;
                 margin-top:18px;}
         </style>
+        <script>
+        function jump(){
+        url = "http://127.0.0.1:8000/user/login/";//此处拼接内容
+        window.location.href = url;
+        }
+        </script>
     {% endblock %}
 
     <title>{% block title %}课程信息{% endblock %}</title>
@@ -115,6 +121,7 @@
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
         <legend>评价列表</legend>
     </fieldset>
+
     {% for i in comments %}
     <div class="comment">
         <div class="imgdiv">
@@ -144,9 +151,6 @@
     {% else %}
         <a href="http://127.0.0.1:8000/user/login/">点击此处登录</a>
     {% endif %}
-        <!--</form>-->
-    <!--我之前戳了组长他还没有回复我，我其实没大明白要提交到那个页面...-->
-    </div>
 {% endblock %}
 </body>
 </html>
