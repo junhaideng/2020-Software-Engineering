@@ -4,6 +4,7 @@ author: Edgar
 """
 
 from django.db import models
+from django.utils import timezone
 
 TYPES = (  # 课程的类型
     ("CO", "必修"),  # 必修
@@ -25,6 +26,17 @@ SCHOOLS=(   #   学院名称
     ("10","医学院"),
     ("11","安泰经济与管理学院"),
     ("12","人文学院"),
+    ("13","材料科学与工程学院"),
+    ("14","海洋学院"),
+    ("15","药学院"),
+    ("16","生命科学技术学院"),
+    ("17","农业与生物学院"),
+    ("18","凯原法学院"),
+    ("19","外国语学院"),
+    ("20","体育系"),
+    ("21","马克思主义学院"),
+    ("22","国际公共与事务学院"),
+    ("23","上海高级金融学院")
 )
 
 
@@ -65,17 +77,25 @@ class CourseDes(models.Model):
     def __str__(self):
         return self.des
 
+class CourseCom(models.Model):
+    """课程评价信息"""
+    courseid = models.ForeignKey('Course', on_delete=models.CASCADE)  # 对应Course中自动生成的id
+    user_name = models.CharField(max_length=100,default='匿名用户')  # 评论用户名
+    com = models.TextField()  # 回复的内容
+    createddate = models.DateTimeField(default=timezone.now)  # 回复的时间
+
+    class Meta:
+        ordering = ("-createddate",)  # 按照时间的降序排
 
 class Major(models.Model):
 
     """专业对应的信息"""
     name = models.CharField(max_length=40)  # 专业名
-    academy = models.CharField(max_length=40)  # 所属的学院
+    academy = models.CharField(choices=SCHOOLS,max_length=40, default='')  # 所属的学院
 
     class Meta:
         ordering = ("name", )
 
     def __str__(self):
         return self.name
-
 

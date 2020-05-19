@@ -33,7 +33,13 @@ class AdminMajor(admin.ModelAdmin):
     ordering = ("name", "academy")
     search_fields = ("name", )
 
+class AdminComment(admin.ModelAdmin):
+    list_display = ("courseid", "user_name","com","createddate")
+    list_per_page = 30
+    ordering = ("courseid",)
+    search_fields = ("courseid",)
 
+admin.site.register(CourseCom, AdminComment)
 admin.site.register(Course, AdminCourse)
 admin.site.register(CourseDes, AdminCourseDes)
 admin.site.register(Major, AdminMajor)

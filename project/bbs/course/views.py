@@ -6,12 +6,15 @@ TODO: 如何显示课程，怎么样显示
 from django.conf import settings
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
-from .models import Course,TeacherOfCourse,CourseDes,Major
+from .models import Course,TeacherOfCourse,CourseDes,Major,CourseCom
 from user.models import ExpData
+from user.models import User
 import time
 import os
+from django.contrib.auth.models import User as AuthUser
 import json
 
 TYPES = (  # 课程的类型
@@ -34,6 +37,17 @@ SCHOOLS=(   #   学院名称
     ("10","医学院"),
     ("11","安泰经济与管理学院"),
     ("12","人文学院"),
+    ("13","材料科学与工程学院"),
+    ("14","海洋学院"),
+    ("15","药学院"),
+    ("16","生命科学技术学院"),
+    ("17","农业与生物学院"),
+    ("18","凯原法学院"),
+    ("19","外国语学院"),
+    ("20","体育系"),
+    ("21","马克思主义学院"),
+    ("22","国际公共与事务学院"),
+    ("23","上海高级金融学院")
 )
 
 @require_http_methods(["GET","POST"])
@@ -95,6 +109,9 @@ def details(request,type,school):
                 for b in TeacherOfCourse.objects.filter(course_id=course.pk):
                     a.teacher.append(b.name)
             List.append(a)
+        p = Paginator(List, 5)
+        page_num=p.num_pages #页数
+        page=p.page(1) #第一页的列表 到时候返回Page
         return render(request, 'course/details.html', {"list": List})
 
 @require_http_methods(["GET","POST"])
@@ -104,9 +121,33 @@ def coursedes(request,pk):
     flag=1
     if teachers.count()==0:
         flag=0
-    des = CourseDes.objects.get(course_id=course.pk)
+    if (CourseDes.objects.filter(course_id=course.pk)).count() == 0:
+        des='暂无描述'
+    else:
+        des = CourseDes.objects.get(course_id=course.pk)
     for i in TYPES:
         if i[0]==course.type:
             type=i[1]
     school=SCHOOLS[int(course.school)-1][1]
-    return render(request,'course/coursedes.html',{"course":course,"teacherList":teachers,"des":des,"school":school,"type":type,"flag":flag})
+    #返回用户评论
+    comments=CourseCom.objects.filter(courseid=course.pk)
+    uerloginflag = 0
+    commentflag = 0
+    if 'username' in request.session :
+        uerloginflag=1
+    if ('username' in request.session)and request.method == "POST":
+        comment=request.POST.get("comment")
+        username=request.session['username']
+        u = User.objects.get(user__username=username)
+        newcomment=CourseCom()
+        newcomment.courseid=course
+        newcomment.com=comment
+        newcomment.user_name=username
+        newcomment.save()
+        commentflag=1
+    print(uerloginflag)
+    return render(request,'course/coursedes.html',{"course":course,"teacherList":teachers,"des":des,"school":school,
+                                                   "type":type,"flag":flag,"userflag":uerloginflag,
+                                                   "commentflag":commentflag,"comments":comments})
+
+
