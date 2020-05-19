@@ -111,6 +111,7 @@
                 font-size:17px;
                 color: rgba(129, 129, 126, 0.91);
                 text-align:center;
+                cursor: pointer;
             }
             .course:hover {
                 background:rgba(73,66,66,.1);
@@ -119,7 +120,8 @@
                 display: inline-block;
                 padding: 0;
                 margin-top:10%;
-                margin-left: 450px;
+                margin-left: 490px;
+
             }
 
             ul.pagination li {display: inline;}
@@ -132,7 +134,7 @@
             }
 
             ul.pagination li a.active {
-                background-color: #4CAF50;
+                background-color: rgba(129, 129, 126, 0.91);
                 color: white;
                 border-radius: 5px;
             }
@@ -288,11 +290,15 @@
          <!--</div>-->
     <!-- "total_num":总页码数,"now_page"：当前页码-->
     <ul class="pagination">
-        <li><a href="#">«</a></li>
+        <li><a href="{{ pre_page }}">«</a></li>
         {% for i in pagesNum %}
-        <li><a href="{{i}}">{{i}}</a></li>
+            {% if i == now_page %}
+            <li><a href="{{i}}" class="active" >{{i}}</a></li>
+            {% else %}
+            <li><a href="{{i}}"  >{{i}}</a></li>
+            {% endif %}
         {% endfor %}
-        <li><a href="#">»</a></li>
+        <li><a href="{{ next_page }}">»</a></li>
 
     </ul>
 
