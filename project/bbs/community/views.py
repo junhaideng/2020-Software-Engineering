@@ -1,15 +1,17 @@
 """
 author: Edgar
 对社区界面的处理，包括社区界面的主页，分页，以及跳转到相对应的帖子详情页
-TODO: 显示内容设计
 """
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.views.decorators.http import require_http_methods
+
 from post.models import Post, PostComment, PostReply
 from user.models import User
 from django.core.paginator import Paginator
 from math import ceil
+from django.http.response import JsonResponse
 
 
 def index(request):
@@ -28,14 +30,51 @@ def index(request):
 def detail(request, id):
     """帖子详情"""
     post = Post.objects.get(id=id)  # 获取对应的帖子，为 Post 数据库模型
+    post.counter += 1   # 阅读次数加一
+    post.save()
     if post:
         reply = PostReply.objects.filter(post_id=id)  # 主回复内容  为PostReply 数据库模型  中间包含对于该帖子所有的第一层上的回复信息
         data = []  # 返回页面的信息
         for i in reply:
+            """
+            reply -> 该条回答
+            user -> 写回答的用户
+            comment -> 回复的信息
+            """
             data.append({"user": User.objects.get(user_id=i.post_user_id), "reply": i,
-                         "comments": PostComment.objects.filter(post_id=id, detail_id=i.id).order_by("date")})
-
+                         "comments": PostComment.objects.filter(reply_id=i.id).order_by("created_date")})
         return render(request, 'community/detail.html',
                       context={"post": post, "data": data, "total": reply.count()})
     else:
         return HttpResponse("404")
+
+
+@require_http_methods(["POST"])  # 仅允许 POST方法
+def reply(request):
+    """对帖子进行回答"""
+    user_id = request.user.id
+    post_id = request.POST.get("id")  # 帖子对应的id
+    content = request.POST.get("content")
+    try:
+        reply = PostReply(post_user_id=user_id, post_id=post_id, content=content)
+        reply.save()
+    except Exception as e:
+        print(e)
+        return JsonResponse({"status": 400, "message": "回答失败，请重新尝试"})
+    else:
+        return JsonResponse({"status": 200, "message": "回答成功"})
+
+
+@require_http_methods(["POST"])  # 仅允许 POST方法
+def comment(request):
+    """对回答进行回复"""
+    content = request.POST.get("content")
+    id = request.POST.get("id")  # reply的id
+    try:
+        comment = PostComment(reply_id=id, commenter_id=request.user.id, content=content)  # 创建回复
+        comment.save()
+    except Exception as e:
+        print(e)
+        return JsonResponse({"status": 400, "message": "评论失败，请重新尝试"})
+    else:
+        return JsonResponse({"status": 200, "message": "评论成功"})
