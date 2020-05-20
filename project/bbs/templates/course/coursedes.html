@@ -126,11 +126,11 @@
     <div class="comment">
         <div class="imgdiv">
         <img class="imgcss"  src="user.jpg">
-        </div><!--还是显示一下用户头像吧！-->
+        </div><!--还是显示一下用户头像吧！使用 i.image_path获取路径 注意：若没有上传头像 则image_path=0-->
         <div class="conmment_details">
             <div style="float:left;">
                 <span class="comment_name">{{ i.user_name }}</span>
-                <span class="comment_time">{{ i.createddate }}</span>
+                <span class="comment_time">{{ i.date }}</span>
             </div>
             <div class="comment_content" >{{ i.com }}
             </div>
@@ -151,6 +151,8 @@
     {% else %}
         <button type="button" onclick="jump()" style="float:right"><span>点击此处登录后评价</span></button>
     {% endif %}
+</form>
+</div>
 {% endblock %}
 </body>
 </html>
