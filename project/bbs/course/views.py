@@ -119,7 +119,6 @@ def details(request, type, school, page_num):
     while i <= total_num:
         pagesNum.append(i)
         i = i + 1
-<<<<<<< HEAD
     page = p.page(page_num)  # 对应分页
     pre_page = page_now - 1
     if pre_page == 0:
@@ -129,18 +128,6 @@ def details(request, type, school, page_num):
         next_page = page_now
     return render(request, 'course/details.html', {"list": page, "pagesNum": pagesNum, "total_num": total_num,
                                                    "now_page": page_now, "pre_page": pre_page, "next_page": next_page})
-=======
-    page=p.page(page_num) #对应分页
-    pre_page=page_now-1
-    if pre_page==0:
-        pre_page=1
-    next_page=page_now+1
-    if next_page==total_num+1:
-        next_page=page_now
-    return render(request, 'course/details.html', {"list": page,"pagesNum":pagesNum,"total_num":total_num,
-                                               "now_page":page_now,"pre_page":pre_page,"next_page":next_page
-                                                   ,"Type":Type,"School":School})
->>>>>>> b77934744088e3300ce7f31e324cac898c9c84ad
 
 
 @require_http_methods(["GET", "POST"])
