@@ -124,7 +124,8 @@ def details(request,type,school,page_num):
     if next_page==total_num+1:
         next_page=page_now
     return render(request, 'course/details.html', {"list": page,"pagesNum":pagesNum,"total_num":total_num,
-                                               "now_page":page_now,"pre_page":pre_page,"next_page":next_page})
+                                               "now_page":page_now,"pre_page":pre_page,"next_page":next_page
+                                                   ,"Type":Type,"School":School})
 
 
 @require_http_methods(["GET","POST"])
