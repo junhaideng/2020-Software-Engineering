@@ -9,9 +9,9 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
+from user.models import User
 from .models import Course,TeacherOfCourse,CourseDes,Major,CourseCom
 from user.models import ExpData
-from user.models import User
 import time
 import os
 from django.contrib.auth.models import User as AuthUser
@@ -121,10 +121,11 @@ def details(request,type,school,page_num):
     if pre_page==0:
         pre_page=1
     next_page=page_now+1
-    if next_page==total_num:
-        next_page=1
+    if next_page==total_num+1:
+        next_page=page_now
     return render(request, 'course/details.html', {"list": page,"pagesNum":pagesNum,"total_num":total_num,
-                                                   "now_page":page_now,"pre_page":pre_page,"next_page":next_page})
+                                               "now_page":page_now,"pre_page":pre_page,"next_page":next_page})
+
 
 @require_http_methods(["GET","POST"])
 def coursedes(request,pk):

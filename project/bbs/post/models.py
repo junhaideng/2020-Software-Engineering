@@ -13,6 +13,7 @@ class Post(models.Model):
     author_user_id = models.IntegerField()  # 发贴用户的id
     content = models.TextField()  # 帖子的内容
     created_time = models.DateTimeField(default=timezone.now)  # 发表的时间
+    course = models.CharField(max_length=100)  # 所属课程
 
     class Meta:
         ordering = ("-created_time", )
@@ -35,11 +36,8 @@ class PostReply(models.Model):
 
 class PostComment(models.Model):
     """comment 是第二层的回复信息"""
-    post_id = models.IntegerField(unique=False)  # 归属于一个 PostDetail id
-    detail_id = models.IntegerField()  # 回复的id
-    # 上面的两个属性确定一个Post 下的一条评论
+    reply_id = models.IntegerField()  # reply 的 id  reply id 即可确定是哪一个 reply
     commenter_id = models.IntegerField()  # 谁回复的
-    reply_user_id = models.IntegerField(blank=True, null=True)  # 给谁回复的
     content = models.TextField()  # 回复的内容
     created_date = models.DateTimeField(default=timezone.now)  # 时间
     if_read = models.BooleanField(default=False)  # 是否已读

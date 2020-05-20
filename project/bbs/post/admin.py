@@ -16,3 +16,5 @@ class AdminPost(admin.ModelAdmin):
 
 
 admin.site.register(Post, AdminPost)  # 进行注册
+admin.site.register(PostComment)
+admin.site.register(PostReply)

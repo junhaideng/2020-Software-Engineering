@@ -36,7 +36,7 @@
                 <label class="label-name" for="sex">性别：</label>
                 <div class="btn-group open">
                     <select class="btn btn-secondary btn-sm " value='sex' name="sex">
-                        <option class="dropdown-item" selected>不修改</option>
+                        <option class="dropdown-item" selected><!--之前已选中的选项--></option>
                         <option class="dropdown-item">男</option>
                         <option class="dropdown-item">女</option>
                         <option class="dropdown-item">保密</option>
@@ -49,7 +49,7 @@
                 <label class="label-name" for="college">学院：</label>
                 <div class="btn-group open">
                     <select class="btn btn-secondary btn-sm " value='college' name="college">
-                        <option selected>不修改</option>
+                        <option selected><!--之前已选中的选项--></option>
                         <option>船舶海洋与建筑工程学院</option>
                         <option>机械与动力工程学院</option>
                         <option>电子信息与电气工程学院</option>
@@ -87,7 +87,7 @@
                 <label class="label-name" for="grade">年级：</label>
                 <div class="btn-group open">
                     <select class="btn btn-secondary btn-sm " value='grade' name="grade">
-                        <option selected>不修改</option>
+                        <option selected><!--之前已选中的选项--></option>
                         <option>大一</option>
                         <option>大二</option>
                         <option>大三</option>
@@ -106,7 +106,15 @@
 
             <div class="block center" style="margin-top:30px;margin-left:120px;">
 
-                <button type="submit" class="layui-btn layui-btn-radius layui-btn-primary">确认修改</button>
+                <button type="submit" class="layui-btn layui-btn-primary">确认修改</button>
+
+                <!--取消修改-->
+                <button type="submit" class="layui-btn layui-btn-primary">取消修改</button>
+
+            </div>
+
+
+
 
             </div>
         </form>

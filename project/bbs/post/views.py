@@ -22,7 +22,7 @@ def index(request):
         print(request.POST)
 
         if topic and course and content:
-            post = Post(topic=topic, counter=0, author_user_id=request.user.id, content=content)  # 数据库插入
+            post = Post(topic=topic, course=course, counter=0, author_user_id=request.user.id, content=content)  # 数据库插入
             post.save()
             request.session["status"] = "提交成功"
             return JsonResponse({"status": "提交成功", "code": 200})

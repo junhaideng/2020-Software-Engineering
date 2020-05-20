@@ -80,7 +80,7 @@ TODO: footer显示 ？？
                            aria-expanded="false">
                             {% load user_related %}
                             {% if request.user.id|getProfileFromAuthId %}  {# 如果有自定义的头像 #}
-                                <img class="rounded-circle " style="width: 30px;"
+                                <img class="rounded-circle " style="width: 30px;height:30px"
                                      src="{{ request.user.id|getProfileFromAuthId }}" alt="profile"
                                      title="{{ request.user.username }}"/>
                             {% else %}  {# 否则使用默认的头像svg #}
@@ -118,7 +118,11 @@ TODO: footer显示 ？？
 
 
 </body>
-
+<style>
+    body .container{
+        min-width: 1140px;
+    }
+</style>
 <script src="{% static 'js/user/logout.js' %}"></script>
 
 
