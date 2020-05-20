@@ -151,7 +151,6 @@ def profile(request):
     """
         个人资料显示
         @author: Edgar，吴嘉锐
-        ToDo: 头像的显示
     """
     if request.method == "GET":
         user = request.user
@@ -175,7 +174,6 @@ def modify(request):
     """
         个人资料的修改
         @author: 吴嘉锐
-        ToDo: 头像的上传以及修改
     """
     user = request.user
     if request.method == "POST":
@@ -195,7 +193,7 @@ def modify(request):
         if request.FILES.get("profile_c") is not None:
             img = request.FILES.get("profile_c")
             media = settings.MEDIA_ROOT
-            with open(media+'/profile/' + request.POST.get("nickname") + '.jpg', 'wb') as save_img:
+            with open(media + '/profile/' + request.POST.get("nickname") + '.jpg', 'wb') as save_img:
                 for part in img.chunks():
                     save_img.write(part)
                     save_img.flush()
@@ -206,7 +204,18 @@ def modify(request):
         return HttpResponseRedirect('/user/profile')
     else:
         user_name = User.objects.get(user=user).user
-        return render(request, 'user/modify.html', {'username': user_name})
+        if User.objects.get(user=user).sex:
+            sex = '男'
+        elif not User.objects.get(user=user).sex:
+            sex = '女'
+        else:
+            sex = '保密'
+        college = User.objects.get(user=user).academy
+        grade_index = {'FR': '大一', 'SO': '大二', 'JR': '大三', 'SR': '大四', "OT": '其他', "UN": "未知"}
+        grade = grade_index[User.objects.get(user=user).grade]
+
+        return render(request, 'user/modify.html',
+                      {'username': user_name, 'sex': sex, 'college': college, 'grade': grade})
 
 
 @login_required()
@@ -214,6 +223,7 @@ def history(request):
     """
             发帖记录
             @author: 吴嘉锐  搬运了Edgar的分页语句
+            TODO： 文本太长时的省略
     """
     post_histories = Post.objects.filter(author_user_id=request.user.id)  # 发帖的记录
     if post_histories.exists():
@@ -408,15 +418,20 @@ def notice(request):
         reply_to_post = PostReply.objects.filter(post_id=post.id)
         for each_reply in reply_to_post:
             received_reply.append(each_reply)
+            if User.objects.filter(id=each_reply.post_user_id) is not None:
+                username = User.objects.get(id=each_reply.post_user_id).user.username
+            else:
+                username = '该用户已注销'
             if not each_reply.if_read:
                 each_reply.if_read = True
+                each_reply.save()
                 notice_unread.append(
-                    {"user": User.objects.get(id=each_reply.post_user_id).user.username, "content": each_reply.content,
+                    {"user": username, "content": each_reply.content,
                      "mytext": post.topic, "time": each_reply.created_date}
                 )
             else:
                 notice_read.append(
-                    {"user": User.objects.get(id=each_reply.post_user_id).user.username, "content": each_reply.content,
+                    {"user": username, "content": each_reply.content,
                      "mytext": post.topic, "time": each_reply.created_date}
                 )
 
@@ -425,20 +440,22 @@ def notice(request):
         comment_to_reply = PostComment.objects.filter(post_id=reply.id)
         for each_comment in comment_to_reply:
             received_comment.append(each_comment)
+            if User.objects.filter(id=each_comment.post_user_id) is not None:
+                username = User.objects.get(id=each_comment.post_user_id).user.username
+            else:
+                username = '该用户已注销'
             if not each_comment.if_read:
                 each_comment.if_read = True
+                each_comment.save()
                 notice_unread.append(
-                    {"user": User.objects.get(id=each_comment.commenter_id).user.username,
+                    {"user": username,
                      "content": each_comment.content, "mytext": reply.content, "time": each_comment.created_date}
                 )
             else:
                 notice_read.append(
-                    {"user": User.objects.get(id=each_comment.commenter_id).user.username,
+                    {"user": username,
                      "content": each_comment.content, "mytext": reply.content, "time": each_comment.created_date}
                 )
-
-    PostReply.save()  # 将回复标为已读
-    PostComment.save()
 
     notice_unread = sorted(notice_unread, key=operator.itemgetter("time"), reverse=True)  # 对时间进行排序
     notice_read = sorted(notice_read, key=operator.itemgetter("time"), reverse=True)
