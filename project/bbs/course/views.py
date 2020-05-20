@@ -117,10 +117,23 @@ def details(request,type,school,page_num):
         pagesNum.append(i)
         i = i + 1
     page=p.page(page_num) #对应分页
-    return render(request, 'course/details.html', {"list": page,"pagesNum":pagesNum,"total_num":total_num,"now_page":page_now})
+    pre_page=page_now-1
+    if pre_page==0:
+        pre_page=1
+    next_page=page_now+1
+    if next_page==total_num:
+        next_page=1
+    return render(request, 'course/details.html', {"list": page,"pagesNum":pagesNum,"total_num":total_num,
+                                                   "now_page":page_now,"pre_page":pre_page,"next_page":next_page})
 
 @require_http_methods(["GET","POST"])
 def coursedes(request,pk):
+    class Newcomments():  # 建立一个新的类
+        def __init__(self):
+            self.image_path = 0  # 头像路径
+            self.user_name = '无'  # 用户名字
+            self.com = '无'  # 评论
+            self.date='None' #评论日期
     course=Course.objects.get(pk=pk)
     teachers=TeacherOfCourse.objects.filter(course_id=course.pk)
     flag=1
@@ -136,8 +149,21 @@ def coursedes(request,pk):
     school=SCHOOLS[int(course.school)-1][1]
     #返回用户评论
     comments=CourseCom.objects.filter(courseid=course.pk)
-    uerloginflag = 0
-    commentflag = 0
+    new_comments=[]       #返回给前端的列表
+    for a in comments:
+        name=a.user_name
+        u=User.objects.get(user__username=name)
+        image_path=u.profile
+        if image_path == None :
+            image_path=0
+        info=Newcomments()
+        info.image_path=image_path
+        info.user_name=name
+        info.com=a.com
+        info.date=a.createddate
+        new_comments.append(info)
+    uerloginflag = 0        #是否有用户登录
+    commentflag = 0         #说明评论是否成功
     if 'username' in request.session :
         uerloginflag=1
     if ('username' in request.session)and request.method == "POST":
@@ -150,9 +176,8 @@ def coursedes(request,pk):
         newcomment.user_name=username
         newcomment.save()
         commentflag=1
-    print(uerloginflag)
     return render(request,'course/coursedes.html',{"course":course,"teacherList":teachers,"des":des,"school":school,
                                                    "type":type,"flag":flag,"userflag":uerloginflag,
-                                                   "commentflag":commentflag,"comments":comments})
+                                                   "commentflag":commentflag,"comments":new_comments})
 
 
