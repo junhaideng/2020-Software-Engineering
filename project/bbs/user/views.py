@@ -194,11 +194,12 @@ def modify(request):
 
         if request.FILES.get("profile_c") is not None:
             img = request.FILES.get("profile_c")
-            with open('media/profile/' + request.POST.get("nickname") + '.jpg', 'wb') as save_img:
+            media = settings.MEDIA_ROOT
+            with open(media+'/profile/' + request.POST.get("nickname") + '.jpg', 'wb') as save_img:
                 for part in img.chunks():
                     save_img.write(part)
                     save_img.flush()
-            user_c.profile = 'media/profile/' + request.POST.get("nickname") + '.jpg'
+            user_c.profile = '/media/profile/' + request.POST.get("nickname") + '.jpg'
 
         user_c.user.save()
         user_c.save()
