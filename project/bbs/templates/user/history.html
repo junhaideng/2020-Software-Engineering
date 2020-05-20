@@ -33,10 +33,12 @@ TODO: 如何显示，显示的具体内容
                 <tbody>
                 {% for post in post_histories %}
                     <tr>
-                        <td>{{ post.topic }}</td>
+                        <td><a href="/community/post/{{ post.id }}">
+                            {{ post.topic }}</a></td>
                         <td>{{ post.created_time }}</td>
-                        <td>{{ post.content }}</td>
+                        <td>{{ post.content |safe }}</td>
                     </tr>
+
                 {% endfor %}
                 </tbody>
                 {% csrf_token %}
@@ -102,5 +104,11 @@ TODO: 如何显示，显示的具体内容
             }
         );
     </script>
+    <style>
+    a:hover{
+        text-decoration: none;
+    }
+    </style>
+
 {% endblock %}
 </html>
