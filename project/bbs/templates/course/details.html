@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %} {# 课程的主界面 #}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,9 +8,9 @@
 
         <style>
             #box {
-                height:180px;
+                height: 180px;
                 background: rgba(255, 255, 255, 0.8);
-                box-shadow: 0 0 10px rgba(73,66,66,.1);
+                box-shadow: 0 0 10px rgba(73, 66, 66, .1);
                 margin: 50px auto;
                 border: 1px solid #E5E5E5;
             }
@@ -40,17 +39,19 @@
             }
 
             #box dl.select {
-                margin:10px 20px;
+                margin: 10px 20px;
             }
 
-            #box dl.select dd{
+            #box dl.select dd {
                 border: 1px solid #c4284d;
                 height: 25px;
                 margin-top: 6px;
                 padding: 0 2px 0 10px;
-                border-radius: 3px;background-color: #fff;
+                border-radius: 3px;
+                background-color: #fff;
             }
-            #box dl.select dd span{
+
+            #box dl.select dd span {
                 width: 20px;
                 height: 20px;
                 display: inline-block;
@@ -59,8 +60,10 @@
                 background: #B22222;
                 color: #fff;
                 margin-left: 10px;
-                cursor: pointer;border-radius: 5px;
+                cursor: pointer;
+                border-radius: 5px;
             }
+
             .button {
                 display: inline-block;
                 border-radius: 4px;
@@ -100,31 +103,36 @@
                 opacity: 1;
                 right: 0;
             }
-            .course{
+
+            .course {
                 margin-top: 25px;
-                height:80px;
-                width:1120px;
+                height: 80px;
+                width: 1120px;
                 border-style: ridge;
                 border-color: #E5E5E5;
-                box-shadow: 10px 10px 20px rgba(73,66,66,.1);
-                border-radius:10px;
-                font-size:17px;
+                box-shadow: 10px 10px 20px rgba(73, 66, 66, .1);
+                border-radius: 10px;
+                font-size: 17px;
                 color: rgba(129, 129, 126, 0.91);
-                text-align:center;
+                text-align: center;
                 cursor: pointer;
             }
+
             .course:hover {
-                background:rgba(73,66,66,.1);
+                background: rgba(73, 66, 66, .1);
             }
+
             ul.pagination {
                 display: inline-block;
                 padding: 0;
-                margin-top:10%;
+                margin-top: 10%;
                 margin-left: 490px;
 
             }
 
-            ul.pagination li {display: inline;}
+            ul.pagination li {
+                display: inline;
+            }
 
             ul.pagination li a {
                 color: black;
@@ -139,8 +147,9 @@
                 border-radius: 5px;
             }
 
-            ul.pagination li a:hover:not(.active)
-            {background-color: #ddd;}
+            ul.pagination li a:hover:not(.active) {
+                background-color: #ddd;
+            }
         </style>
     {% endblock %}
     <title>{% block title %}课程{% endblock %}</title>
@@ -190,112 +199,107 @@
     </div>
 
 
-{% block back_dependecies %}{# 用来加载依赖文件 #}
-    <script>
-        var dls = document.querySelectorAll('dl:not(.select)');
-        var selected=document.querySelector('.select');
-        var dic = {1:"0", 2: "0"}
+    {% block back_dependecies %}{# 用来加载依赖文件 #}
+        <script>
+            var dls = document.querySelectorAll('dl:not(.select)');
+            var selected = document.querySelector('.select');
+            var dic = {1: "0", 2: "0"}
 
-        for (var i = 0; i < dls.length; i++) {
-            dls[i].mark=false;
-            select(i);
-        }
-
-        function select(n) {
-
-            var dds = dls[n].querySelectorAll('dd');
-            var prev=null;
-            var dd=null;
-            let pattern = /csrftoken=(.*)/m;
-            let cookies = document.cookie.split(',');
-            let csrf;
-            for (let j = 0; j < cookies.length; j++) {
-                 if (pattern.test(cookies[j])) {
-                    csrf = pattern.exec(cookies[j])[1];
-                    }
+            for (var i = 0; i < dls.length; i++) {
+                dls[i].mark = false;
+                select(i);
             }
 
-            for (var i = 0; i < dds.length; i++) {
-                dds[i].onclick = function () {
-                    if(prev){
-                        prev.className = ''
-                    }
+            function select(n) {
 
-                    this.className = 'active';
-
-                    prev = this;
-
-                    var parent=this.parentNode;
-                    if(!parent.mark){  // 如果这个元素没有被选中
-                        dd=document.createElement('dd');
-                        dd.innerHTML=this.innerHTML;
-                        selected.appendChild(dd);
-                        parent.mark=true;
-                        if (this.dataset.type === "1"){
-                            dic["1"] = this.innerHTML
-                        }else{
-                            dic["2"] = this.innerHTML
+                var dds = dls[n].querySelectorAll('dd');
+                var prev = null;
+                var dd = null;
+                for (var i = 0; i < dds.length; i++) {
+                    dds[i].onclick = function () {
+                        if (prev) {
+                            prev.className = ''
                         }
 
-                    }else{
-                        dd.innerHTML=this.innerHTML;
-                         if (this.dataset.type === "1"){
-                            dic["1"] = this.innerHTML
-                        }else{
-                            dic["2"] = this.innerHTML
-                        }
-                    }
+                        this.className = 'active';
+                        prev = this;
 
-                    var span=document.createElement('span');
-                    var This=this;
-                    span.innerHTML='X';
-                    span.onclick=function(){
-                        selected.removeChild(dd);
-                        This.className='';
-                        parent.mark=false;
+                        var parent = this.parentNode;
+                        if (!parent.mark) {  // 如果这个元素没有被选中
+                            dd = document.createElement('dd');
+                            dd.innerHTML = this.innerHTML;
+                            selected.appendChild(dd);
+                            parent.mark = true;
+                            if (this.dataset.type === "1") {
+                                dic["1"] = this.innerHTML
+                            } else {
+                                dic["2"] = this.innerHTML
+                            }
+
+                        } else {
+                            dd.innerHTML = this.innerHTML;
+                            if (this.dataset.type === "1") {
+                                dic["1"] = this.innerHTML
+                            } else {
+                                dic["2"] = this.innerHTML
+                            }
+                        }
+
+                        var span = document.createElement('span');
+                        var This = this;
+                        span.innerHTML = 'X';
+                        span.onclick = function () {
+                            selected.removeChild(dd);
+                            This.className = '';
+                            parent.mark = false;
+                        };
+                        dd.appendChild(span);
                     };
-                    dd.appendChild(span);
-                };
+                }
             }
-        }
-        function jump2(){
-            url = "/course/";//此处拼接内容
-            window.location.href = url;
-        }
 
-    </script>
+            function jump2() {
+                url = "/course/";//此处拼接内容
+                window.location.href = url;
+            }
+
+        </script>
     {% endblock %}
 
 
     <button type="button" onclick="jump2()" class="button" style="vertical-align:middle"><span>重置</span></button>
-         <!--<div class="col-5 m-auto" >-->
-               {% for i in list %}
-                   <div class="course" onclick="window.location.href= '/course/coursedes/{{ i.pk }}'">
-                   <div class="form-inline">
-                       <p style="margin-top: 25px" >&nbsp;&nbsp;&nbsp;&nbsp; 课程名:&nbsp;</p><label for="name" style="margin-top: 10px;">{{ i.name }}</label>
-                       <!--</div>
-                       <div class="form-inline">-->
-                       <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;开设学院：&nbsp;</p><label for="name"style="margin-top: 10px;"style="margin-top: 10px;">{{ i.school }}</label>
-                       <!--</div>
-                       <div class="form-inline">-->
-                       <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;任课老师:&nbsp;</p><label for="name"style="margin-top: 10px;">
-                       {% for a in i.teacher %}
-                       {{ a }}
-                        {% endfor %}
-                   </label>
-                   </div>
-                   </div>
+    <!--<div class="col-5 m-auto" >-->
+    {% for i in list %}
+        <div class="course" onclick="window.location.href= '/course/coursedes/{{ i.pk }}'">
+            <div class="form-inline">
+                <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp; 课程名:&nbsp;</p><label for="name"
+                                                                                          style="margin-top: 10px;">{{ i.name }}</label>
+                <!--</div>
+                <div class="form-inline">-->
+                <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;开设学院：&nbsp;</p><label for="name"
+                                                                                          style="margin-top: 10px;"
+                                                                                          style="margin-top: 10px;">{{ i.school }}</label>
+                <!--</div>
+                <div class="form-inline">-->
+                <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;任课老师:&nbsp;</p><label for="name"
+                                                                                          style="margin-top: 10px;">
+                {% for a in i.teacher %}
+                    {{ a }}
                 {% endfor %}
-            </form>
-         <!--</div>-->
+            </label>
+            </div>
+        </div>
+    {% endfor %}
+    </form>
+    <!--</div>-->
     <!-- "total_num":总页码数,"now_page"：当前页码-->
     <ul class="pagination">
         <li><a href="{{ pre_page }}">«</a></li>
         {% for i in pagesNum %}
             {% if i == now_page %}
-            <li><a href="{{i}}" class="active" >{{i}}</a></li>
+                <li><a href="{{ i }}" class="active">{{ i }}</a></li>
             {% else %}
-            <li><a href="{{i}}"  >{{i}}</a></li>
+                <li><a href="{{ i }}">{{ i }}</a></li>
             {% endif %}
         {% endfor %}
         <li><a href="{{ next_page }}">»</a></li>

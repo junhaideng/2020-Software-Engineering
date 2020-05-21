@@ -151,7 +151,6 @@
         </dl>
     </div>
 
-
     {% block back_dependecies %}{# 用来加载依赖文件 #}
         <script>
             var dls = document.querySelectorAll('dl:not(.select)');
@@ -183,7 +182,7 @@
                 "国际与公共事务学院": "22",
                 "上海高级金融学院": "23",
                 "0": "0"
-            }
+            };
 
             for (var i = 0; i < dls.length; i++) {
                 dls[i].mark = false;
@@ -195,21 +194,12 @@
                 var dds = dls[n].querySelectorAll('dd');
                 var prev = null;
                 var dd = null;
-                let pattern = /csrftoken=(.*)/m;
-                let cookies = document.cookie.split(',');
-                let csrf;
-                for (let j = 0; j < cookies.length; j++) {
-                    if (pattern.test(cookies[j])) {
-                        csrf = pattern.exec(cookies[j])[1];
-                    }
-                }
 
                 for (var i = 0; i < dds.length; i++) {
                     dds[i].onclick = function () {
                         if (prev) {
                             prev.className = ''
                         }
-
                         this.className = 'active';
 
                         prev = this;
@@ -234,23 +224,6 @@
                                 dic["2"] = this.innerHTML
                             }
                         }
-                        info = {"TYpe": dic["1"], "School": dic["2"]}
-                        z
-                        // course 查询需要的数据，在该字典中
-                        // 1 表示的是课程类别
-                        // 2 表示开设学院
-                        // 使用ajax将数据上传到后台即可
-                        $.ajax({
-                            type: 'POST',
-                            url: "/course/",
-                            headers: {
-                                "X-CSRFToken": csrf
-                            },
-                            data: info,
-                            success: function () {
-                                console.log(info)
-                            },
-                        });
 
                         var span = document.createElement('span');
                         var This = this;
@@ -275,5 +248,5 @@
 
 
 {% endblock %}
-</body>
+
 </html>
