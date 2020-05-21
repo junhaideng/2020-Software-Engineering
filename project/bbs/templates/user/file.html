@@ -150,7 +150,8 @@ TODO: 如何显示，显示的具体内容
                                 location.reload();
                             },
                             error: function () {
-                                layer.msg("删除失败")
+                              layer.closeAll();
+                              layer.msg("删除失败")
                             }
 
                         })
