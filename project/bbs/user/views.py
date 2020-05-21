@@ -383,7 +383,7 @@ def upload(request):
     if request.method == "POST":
         file = request.FILES.get("file")
         exp_type = request.POST.get("type")
-        pre_path = os.path.join(os.path.join(settings.BASE_DIR, "media"), "experiment_data/")
+        pre_path = os.path.join(os.path.join(settings.BASE_DIR, "media"), "files/")
         alias = time.strftime("%Y_%m_%d_%H_%M_%S_", time.localtime()) + file.name
         if not os.path.exists(pre_path):
             os.mkdir(pre_path)
@@ -394,7 +394,7 @@ def upload(request):
         ExpData.objects.create(user_id=request.user.id,
                                exp_type=exp_type,
                                download_times=0,
-                               path="/media/experiment_data/" + alias,
+                               path="/media/files/" + alias,
                                name=os.path.splitext(file.name)[0]).save()
         return JsonResponse({"status": "success"})
     else:

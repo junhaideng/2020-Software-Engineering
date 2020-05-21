@@ -8,23 +8,19 @@
 <body>
 {% block detail %}
 <div id="file_upload_div"  class="text-center">
-    <div class="layui-upload-drag" id="file_upload">
+    <div class="layui-upload-drag" id="file_upload" style="width: 80%">
         <i class="layui-icon"></i>
         <p>点击上传，或将文件拖拽到此处</p>
+        <p>仅支持选择单一文件</p>
     </div>
     <div class="mt-2 mb-2" id="file_name"></div>
 
 
     <div class="layui-input-inline " style="width: 100%;">
         <div class="layui-input-inline">
-            <label for="type" class="layui-form-label" style="width: 100px">实验类型: </label></div>
+            <label for="type" class="layui-form-label" style="width: 100px">课程类型: </label></div>
         {% csrf_token %}
         <select id="type" class="layui-select" name="type">
-            <option selected value="物理实验">物理实验</option>
-            <option value="化学实验">化学实验</option>
-            <option value="基电实验">基电实验</option>
-            <option value="电子技术实验">电子技术实验</option>
-            <option value="其他实验">其他实验</option>
         </select>
 
     </div>
@@ -35,9 +31,25 @@
 {% endblock %}
 </body>
 {% block back_dependencies %}
+<script>
+// 异步设置课程类型
+// Edgar
+$.ajax({
+    type: "GET",
+    url: "/course/get_all_course",
+    success: (res)=>{
+        let html = res.data.map(value => `<option value="${value}">${value}</option>`).join("\n");
+        $("#type").html('<option value=\"\">请选择</option>' + html);
+    }
+    ,error: (err)=>{
+        console.log(err)
+    }
 
+})
+</script>
 
 <script>
+
     layui.use('upload', function () {
         var upload = layui.upload;
         let cookies = document.cookie.split(',');
