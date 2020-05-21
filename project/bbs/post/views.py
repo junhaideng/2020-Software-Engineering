@@ -25,6 +25,7 @@ def index(request):
             post = Post(topic=topic, course=course, counter=0, author_user_id=request.user.id, content=content)  # 数据库插入
             post.save()
             request.session["status"] = "提交成功"
+            request.session["id"] = post.id
             return JsonResponse({"status": "提交成功", "code": 200})
         else:
             if not topic:
@@ -39,9 +40,11 @@ def index(request):
     for c in course:
         data.append(c.name)
     status = None
-    if request.session.get("status"):
+    id = None
+    if request.session.get("status") and request.session.get("id"):
         status = request.session.pop("status")
-    print(status)
-    return render(request, "post/index.html", context={"data": data, "msg": status})
+        id = request.session.pop("id")
+
+    return render(request, "post/index.html", context={"data": data, "msg": status, "id":id})
 
 

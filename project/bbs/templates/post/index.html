@@ -44,12 +44,10 @@ author: Edgar
         <div class="layui-row">
             <div class="layui-col-lg12" style="{margin-top: 20px; margin-bottom: 20px}">&nbsp;</div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item" style="float: right">
             <div class="layui-input-block">
                 <button class="layui-btn" type="button" id="submit">发帖</button>
-                {% if msg %}
-                    <i class="layui-icon layui-icon-ok-circle" style="color: green">{{ msg }}</i>
-                {% endif %}
+
             </div>
         </div>
     </form>
@@ -57,12 +55,29 @@ author: Edgar
 </body>
 {% block back_dependencies %}
 
+    {% if msg %}
+        <script>
+            layui.use("layer", function () {
+                let layer = layui.layer;
+                layer.open({
+                    title: '提示'
+                    , content: '发帖成功，是否前往社区查看文章？',
+                    yes: () => {
+                        window.location.href = "/community/post/{{ id }}"
+
+                    }
+                });
+
+            })
+        </script>
+    {% endif %}
     <script>
 
-        layui.use('layedit', function () {
+        layui.use(['layedit', "layer"], function () {
 
             var layedit = layui.layedit;
             var layer = layui.layer,
+
 
                 index = layedit.build('content', {
                     tool: [
@@ -103,7 +118,6 @@ author: Edgar
                     success: function (data) {
                         if (data.code === 200) {
                             window.location.href = "."
-
                         } else {
                             layer.msg(data.status)
                         }
