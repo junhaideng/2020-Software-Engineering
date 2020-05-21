@@ -7,90 +7,112 @@
 </head>
 <body>
 {% block detail %}
-<div id="file_upload_div"  class="text-center">
-    <div class="layui-upload-drag" id="file_upload" style="width: 80%">
-        <i class="layui-icon"></i>
-        <p>点击上传，或将文件拖拽到此处</p>
-        <p>仅支持选择单一文件</p>
+    <div id="file_upload_div" class="text-center">
+        <div class="layui-upload-drag" id="file_upload" style="width: 80%">
+            <i class="layui-icon"></i>
+            <p>点击上传，或将文件拖拽到此处</p>
+            <p>仅支持选择单一文件</p>
+        </div>
+        <div class="mt-2 mb-2" id="file_name"></div>
+
+
+        <div class="layui-input-inline " style="width: 100%;">
+            <div class="layui-input-inline">
+                <label for="type" class="layui-form-label" style="width: 100px">课程类型: </label></div>
+            {% csrf_token %}
+            <select id="type" class="layui-select" name="type">
+            </select>
+
+        </div>
+        <button type="submit" class="layui-btn mt-2  layui-btn-disabled" id="upload" disabled="disabled">上传文件</button>
+
+        <div class="row w-100"></div>
     </div>
-    <div class="mt-2 mb-2" id="file_name"></div>
-
-
-    <div class="layui-input-inline " style="width: 100%;">
-        <div class="layui-input-inline">
-            <label for="type" class="layui-form-label" style="width: 100px">课程类型: </label></div>
-        {% csrf_token %}
-        <select id="type" class="layui-select" name="type">
-        </select>
-
-    </div>
-    <button type="submit" class="layui-btn mt-2  layui-btn-disabled" id="upload" disabled="disabled">上传文件</button>
-
-    <div class="row w-100"></div>
-</div>
 {% endblock %}
 </body>
 {% block back_dependencies %}
-<script>
-// 异步设置课程类型
-// Edgar
-$.ajax({
-    type: "GET",
-    url: "/course/get_all_course",
-    success: (res)=>{
-        let html = res.data.map(value => `<option value="${value}">${value}</option>`).join("\n");
-        $("#type").html('<option value=\"\">请选择</option>' + html);
-    }
-    ,error: (err)=>{
-        console.log(err)
-    }
-
-})
-</script>
-
-<script>
-
-    layui.use('upload', function () {
-        var upload = layui.upload;
-        let cookies = document.cookie.split(',');
-        let pattern = /csrftoken=(.*)/m;
-        let csrf;
-        for (let j = 0; j < cookies.length; j++) {
-            if (pattern.test(cookies[j])) {
-                csrf = pattern.exec(cookies[j])[1];
-            }
-        }
-        //执行实例
-        var uploadInst = upload.render({
-            elem: '#file_upload' //绑定元素
-            , headers: {
-                "X-CSRFToken": csrf
-            }
-            , auto: false
-            , bindAction: "#upload"
-            , url: '{% url "user:upload" %}' //上传接口
-            , size: 100 * 1024 // 最大值
-            , accept: "file"
-
-            , data: {type: $('select[name="type"]').val()}
-            , choose: function (obj) {
-                obj.preview(function (index, file, result) {
-                    document.getElementById("file_name").innerHTML = file.name;
-                    document.getElementById("upload").className = "layui-btn mt-2";
-                    $("#upload").removeAttr("disabled")
+    <script>
+        // 异步设置课程类型
+        // Edgar
+        function get_all_course() {
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: "GET",
+                    url: "/course/get_all_course",
+                    success: (res) => {
+                        let html = res.data.map(value => `<option value="${value}">${value}</option>`).join("\n");
+                        $("#type").html('<option value=\"\">请选择</option>' + html);
+                        resolve();
+                    }
+                    , error: (err) => {
+                        console.log(err);
+                        reject();
+                    }
 
                 })
-            }
-            , done: function (res) {
+            })
+        }
+    </script>
 
-                layer.msg("上传成功");
-                location.reload();
-            }
-            , error: function () {
-                layer.msg("上传失败，请重新上传")
-            }
-        });
-    });
-</script>
+    <script>
+        get_all_course().then(() => {
+
+            layui.use('upload', function () {
+                var upload = layui.upload;
+                let cookies = document.cookie.split(',');
+                let pattern = /csrftoken=(.*)/m;
+                let csrf;
+                for (let j = 0; j < cookies.length; j++) {
+                    if (pattern.test(cookies[j])) {
+                        csrf = pattern.exec(cookies[j])[1];
+                    }
+                }
+                //执行实例
+                var uploadInst = upload.render({
+                    elem: '#file_upload' //绑定元素
+                    , headers: {
+                        "X-CSRFToken": csrf
+                    }
+                    , auto: false
+                    , bindAction: "#upload"
+                    , url: '{% url "user:upload" %}' //上传接口
+                    , size: 100 * 1024 // 最大值
+                    , accept: "file"
+
+                    , data: {
+                        type: function () {
+                            return $('select[name="type"]').val();
+                        }
+                    }
+                    , choose: function (obj) {
+                        obj.preview(function (index, file, result) {
+                            document.getElementById("file_name").innerHTML = file.name;
+
+
+                        })
+                    }
+                    , done: function (res) {
+
+                        layer.msg("上传成功");
+                        location.reload();
+                    }
+                    , error: function () {
+                        layer.msg("上传失败，请重新上传")
+                    }
+                });
+            });
+
+            (function () {
+              $('select[name="type"]').on("change", ()=>{
+                    if ($('select[name="type"]').val().trim()!=="") {
+                    document.getElementById("upload").className = "layui-btn mt-2";
+                    $("#upload").removeAttr("disabled")
+                }
+               })
+            })();
+
+
+        })
+    </script>
 {% endblock %}
 </html>

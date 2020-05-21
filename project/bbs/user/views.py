@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
-from .models import User, ExpData
+from .models import User, Files
 from django.contrib.auth.models import User as AuthUser
 from django.core.paginator import Paginator
 from django.conf import settings
@@ -261,7 +261,7 @@ def file(request):
     if request.method == "POST":  # POST 代表删除文件
         file_id = request.POST.get("id")  # 获取文件的id
         if file_id:
-            f = ExpData.objects.get(id=file_id)  # 先获取该文件
+            f = Files.objects.get(id=file_id)  # 先获取该文件
             os.remove(settings.BASE_DIR + f.path)
             f.delete()
 
@@ -269,7 +269,7 @@ def file(request):
         return JsonResponse({"status": "failed"})  # 无此id
     else:
         user_id = request.user.id
-        files = ExpData.objects.filter(user_id=user_id)  # 获取该用户的所有文件
+        files = Files.objects.filter(user_id=user_id)  # 获取该用户的所有文件
         if files.exists():
             per_page_num = 10  # 每一页的帖子数
             p = Paginator(files, per_page_num)  # 分页对象
@@ -283,7 +283,7 @@ def file(request):
                 for file in page:
                     data.append(
                         {"name": file.name, "path": file.path, "downloads": file.download_times,
-                         "exp_type": file.exp_type,
+                         "type": file.type,
                          "date": file.date, "id": file.id})
         else:
             data = None
@@ -382,7 +382,7 @@ def setquestion(request):
 def upload(request):
     if request.method == "POST":
         file = request.FILES.get("file")
-        exp_type = request.POST.get("type")
+        type = request.POST.get("type")
         pre_path = os.path.join(os.path.join(settings.BASE_DIR, "media"), "files/")
         alias = time.strftime("%Y_%m_%d_%H_%M_%S_", time.localtime()) + file.name
         if not os.path.exists(pre_path):
@@ -391,11 +391,11 @@ def upload(request):
         with open(path, "wb") as f:
             for chuck in file.chunks():
                 f.write(chuck)
-        ExpData.objects.create(user_id=request.user.id,
-                               exp_type=exp_type,
-                               download_times=0,
-                               path="/media/files/" + alias,
-                               name=os.path.splitext(file.name)[0]).save()
+        Files.objects.create(user_id=request.user.id,
+                             type=type,
+                             download_times=0,
+                             path="/media/files/" + alias,
+                             name=os.path.splitext(file.name)[0]).save()
         return JsonResponse({"status": "success"})
     else:
         return render(request, 'user/upload.html')
