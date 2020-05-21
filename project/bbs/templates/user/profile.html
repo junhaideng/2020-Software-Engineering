@@ -1,4 +1,5 @@
 {% extends 'user/base.html' %}
+{% load static %}
 <html>
 <head>
     <meta charset="UTF-8">
@@ -26,10 +27,17 @@
             <p class="rlf-tip-wrap errorHint color-red"></p>
         </div>
 
-        <div class="block" style="margin-top:30px;margin-left:120px;">
+        <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:120px;">
             <label class="label-name" for="grade">年级：</label>
             {{ grade }}
             <p class="rlf-tip-wrap errorHint color-red"></p>
+        </div>
+        
+        
+        <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:120px;">
+            <label class="label-name" for="portrait">头像：</label>
+            <img scr="{% static 'images/sjtu.png' %}" width="60" height="60">
+
         </div>
 
         <div class="block center" style="margin-top:30px;margin-left:120px;">

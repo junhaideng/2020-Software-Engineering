@@ -37,10 +37,10 @@ class User(models.Model):
         return self.user.username
 
 
-class ExpData(models.Model):
+class Files(models.Model):
     """实验数据"""
     user_id = models.IntegerField()  # 上传文件的用户
-    exp_type = models.CharField(choices=EXP_TYPE, max_length=40)  # 与之有关的课程id
+    type = models.CharField(choices=EXP_TYPE, max_length=40)  # 课程类型
     date = models.DateTimeField(default=timezone.now)  # 上传文件的时间
     download_times = models.IntegerField()  # 下载次数
     path = models.CharField(max_length=100)  # 实验数据的路径, 路径下的文件名需要进行一下处理，以免冲突

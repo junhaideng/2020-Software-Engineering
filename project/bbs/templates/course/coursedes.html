@@ -60,7 +60,7 @@
         </style>
         <script>
         function jump(){
-        url = "http://127.0.0.1:8000/user/login/";//此处拼接内容
+        url = "{% url 'user:login' %}?next=" + window.location.pathname;//此处拼接内容
         window.location.href = url;
         }
         </script>
@@ -141,15 +141,23 @@
 
     {% if userflag == 1 %}
     <div id='inputbox' class="box">
-        <form action="{% url 'course:coursedes' course.pk %}" method="post" style="margin-top:10%">
+        <form action="{% url 'course:coursedes' course.pk %}" method="post">
             {% csrf_token %}
+         <div style="margin-left: -110px;">
+          <div class="layui-form-item layui-form-text">
             <div class="layui-input-block">
-                <textarea class="layui-textarea" placeholder="请输入内容" style="margin-left:-120px;width:1100px;" id="comment" name="comment">
-                </textarea>
+            <textarea class="layui-textarea" placeholder="在这里可以留下您的评论"
+                      id="comment" name="comment"></textarea>
             </div>
-            <button type="submit" style="vertical-align:middle"><span>发表</span></button>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn">立即提交</button>
+            </div>
+        </div>
+         </div>
     {% else %}
-        <button type="button" onclick="jump()" style="float:right"><span>点击此处登录后评价</span></button>
+        <button type="button" class="layui-btn-primary layui-btn" onclick="jump()" style="float:right"><span>点击此处登录后评价</span></button>
     {% endif %}
 </form>
 </div>

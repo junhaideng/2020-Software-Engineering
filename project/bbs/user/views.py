@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
-from .models import User, ExpData
+from .models import User, Files
 from django.contrib.auth.models import User as AuthUser
 from django.core.paginator import Paginator
 from django.conf import settings
@@ -151,7 +151,6 @@ def profile(request):
     """
         个人资料显示
         @author: Edgar，吴嘉锐
-        ToDo: 头像的显示
     """
     if request.method == "GET":
         user = request.user
@@ -175,7 +174,6 @@ def modify(request):
     """
         个人资料的修改
         @author: 吴嘉锐
-        ToDo: 头像的上传以及修改
     """
     user = request.user
     if request.method == "POST":
@@ -195,7 +193,7 @@ def modify(request):
         if request.FILES.get("profile_c") is not None:
             img = request.FILES.get("profile_c")
             media = settings.MEDIA_ROOT
-            with open(media+'/profile/' + request.POST.get("nickname") + '.jpg', 'wb') as save_img:
+            with open(media + '/profile/' + request.POST.get("nickname") + '.jpg', 'wb') as save_img:
                 for part in img.chunks():
                     save_img.write(part)
                     save_img.flush()
@@ -206,7 +204,18 @@ def modify(request):
         return HttpResponseRedirect('/user/profile')
     else:
         user_name = User.objects.get(user=user).user
-        return render(request, 'user/modify.html', {'username': user_name})
+        if User.objects.get(user=user).sex:
+            sex = '男'
+        elif not User.objects.get(user=user).sex:
+            sex = '女'
+        else:
+            sex = '保密'
+        college = User.objects.get(user=user).academy
+        grade_index = {'FR': '大一', 'SO': '大二', 'JR': '大三', 'SR': '大四', "OT": '其他', "UN": "未知"}
+        grade = grade_index[User.objects.get(user=user).grade]
+
+        return render(request, 'user/modify.html',
+                      {'username': user_name, 'sex': sex, 'college': college, 'grade': grade})
 
 
 @login_required()
@@ -214,6 +223,7 @@ def history(request):
     """
             发帖记录
             @author: 吴嘉锐  搬运了Edgar的分页语句
+            TODO： 文本太长时的省略
     """
     post_histories = Post.objects.filter(author_user_id=request.user.id)  # 发帖的记录
     if post_histories.exists():
@@ -251,7 +261,7 @@ def file(request):
     if request.method == "POST":  # POST 代表删除文件
         file_id = request.POST.get("id")  # 获取文件的id
         if file_id:
-            f = ExpData.objects.get(id=file_id)  # 先获取该文件
+            f = Files.objects.get(id=file_id)  # 先获取该文件
             os.remove(settings.BASE_DIR + f.path)
             f.delete()
 
@@ -259,7 +269,7 @@ def file(request):
         return JsonResponse({"status": "failed"})  # 无此id
     else:
         user_id = request.user.id
-        files = ExpData.objects.filter(user_id=user_id)  # 获取该用户的所有文件
+        files = Files.objects.filter(user_id=user_id)  # 获取该用户的所有文件
         if files.exists():
             per_page_num = 10  # 每一页的帖子数
             p = Paginator(files, per_page_num)  # 分页对象
@@ -273,7 +283,7 @@ def file(request):
                 for file in page:
                     data.append(
                         {"name": file.name, "path": file.path, "downloads": file.download_times,
-                         "exp_type": file.exp_type,
+                         "type": file.type,
                          "date": file.date, "id": file.id})
         else:
             data = None
@@ -372,8 +382,8 @@ def setquestion(request):
 def upload(request):
     if request.method == "POST":
         file = request.FILES.get("file")
-        exp_type = request.POST.get("type")
-        pre_path = os.path.join(os.path.join(settings.BASE_DIR, "media"), "experiment_data/")
+        type = request.POST.get("type")
+        pre_path = os.path.join(os.path.join(settings.BASE_DIR, "media"), "files/")
         alias = time.strftime("%Y_%m_%d_%H_%M_%S_", time.localtime()) + file.name
         if not os.path.exists(pre_path):
             os.mkdir(pre_path)
@@ -381,11 +391,11 @@ def upload(request):
         with open(path, "wb") as f:
             for chuck in file.chunks():
                 f.write(chuck)
-        ExpData.objects.create(user_id=request.user.id,
-                               exp_type=exp_type,
-                               download_times=0,
-                               path="/media/experiment_data/" + alias,
-                               name=os.path.splitext(file.name)[0]).save()
+        Files.objects.create(user_id=request.user.id,
+                             type=type,
+                             download_times=0,
+                             path="/media/files/" + alias,
+                             name=os.path.splitext(file.name)[0]).save()
         return JsonResponse({"status": "success"})
     else:
         return render(request, 'user/upload.html')
@@ -408,15 +418,20 @@ def notice(request):
         reply_to_post = PostReply.objects.filter(post_id=post.id)
         for each_reply in reply_to_post:
             received_reply.append(each_reply)
+            if User.objects.filter(id=each_reply.post_user_id) is not None:
+                username = User.objects.get(id=each_reply.post_user_id).user.username
+            else:
+                username = '该用户已注销'
             if not each_reply.if_read:
                 each_reply.if_read = True
+                each_reply.save()
                 notice_unread.append(
-                    {"user": User.objects.get(id=each_reply.post_user_id).user.username, "content": each_reply.content,
+                    {"user": username, "content": each_reply.content,
                      "mytext": post.topic, "time": each_reply.created_date}
                 )
             else:
                 notice_read.append(
-                    {"user": User.objects.get(id=each_reply.post_user_id).user.username, "content": each_reply.content,
+                    {"user": username, "content": each_reply.content,
                      "mytext": post.topic, "time": each_reply.created_date}
                 )
 
@@ -425,20 +440,22 @@ def notice(request):
         comment_to_reply = PostComment.objects.filter(post_id=reply.id)
         for each_comment in comment_to_reply:
             received_comment.append(each_comment)
+            if User.objects.filter(id=each_comment.post_user_id) is not None:
+                username = User.objects.get(id=each_comment.post_user_id).user.username
+            else:
+                username = '该用户已注销'
             if not each_comment.if_read:
                 each_comment.if_read = True
+                each_comment.save()
                 notice_unread.append(
-                    {"user": User.objects.get(id=each_comment.commenter_id).user.username,
+                    {"user": username,
                      "content": each_comment.content, "mytext": reply.content, "time": each_comment.created_date}
                 )
             else:
                 notice_read.append(
-                    {"user": User.objects.get(id=each_comment.commenter_id).user.username,
+                    {"user": username,
                      "content": each_comment.content, "mytext": reply.content, "time": each_comment.created_date}
                 )
-
-    PostReply.save()  # 将回复标为已读
-    PostComment.save()
 
     notice_unread = sorted(notice_unread, key=operator.itemgetter("time"), reverse=True)  # 对时间进行排序
     notice_read = sorted(notice_read, key=operator.itemgetter("time"), reverse=True)

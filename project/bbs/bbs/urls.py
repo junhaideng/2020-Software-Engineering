@@ -17,7 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-import home.views
+from search.views import files
 
 urlpatterns = [
     path('admin/', admin.site.urls),  # 管理路由
@@ -28,6 +28,7 @@ urlpatterns = [
     path("user/", include("user.urls")),  # 用户相关路由
     path("community/", include("community.urls")),  # 社区相关路由
     path("feedback/", include("feedback.urls")),  # 反馈路由
+    path("download/", files, name="file"),  # 文件下载路由
 ]
 
 # 添加media 文件夹

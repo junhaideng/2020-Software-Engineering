@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %} {# 课程的主界面 #}
 <!DOCTYPE html>
 <html lang="en">
@@ -9,9 +8,9 @@
 
         <style>
             #box {
-                height:180px;
+                height: 180px;
                 background: rgba(255, 255, 255, 0.8);
-                box-shadow: 0 0 10px rgba(73,66,66,.1);
+                box-shadow: 0 0 10px rgba(73, 66, 66, .1);
                 margin: 50px auto;
                 border: 1px solid #E5E5E5;
             }
@@ -40,17 +39,19 @@
             }
 
             #box dl.select {
-                margin:10px 20px;
+                margin: 10px 20px;
             }
 
-            #box dl.select dd{
+            #box dl.select dd {
                 border: 1px solid #c4284d;
                 height: 25px;
                 margin-top: 6px;
                 padding: 0 2px 0 10px;
-                border-radius: 3px;background-color: #fff;
+                border-radius: 3px;
+                background-color: #fff;
             }
-            #box dl.select dd span{
+
+            #box dl.select dd span {
                 width: 20px;
                 height: 20px;
                 display: inline-block;
@@ -59,8 +60,10 @@
                 background: #B22222;
                 color: #fff;
                 margin-left: 10px;
-                cursor: pointer;border-radius: 5px;
+                cursor: pointer;
+                border-radius: 5px;
             }
+
             .button {
                 display: inline-block;
                 border-radius: 4px;
@@ -148,126 +151,102 @@
         </dl>
     </div>
 
+    {% block back_dependecies %}{# 用来加载依赖文件 #}
+        <script>
+            var dls = document.querySelectorAll('dl:not(.select)');
+            var selected = document.querySelector('.select');
+            var dic = {1: "0", 2: "0"}
+            var dic1 = {"必修": "CO", "选修": "El", "实验": "Ex", "其他": "Ot", "0": "0"};
+            var dic2 = {
+                "电子信息与电气工程学院": "1",
+                "机械与动力工程学院": "2",
+                "船舶海洋与建筑工程学院": "3",
+                "生物医学工程学院": "4",
+                "航空航天学院": "5",
+                "数学科学院": "6",
+                "物理与天文学院": "7",
+                "化学化工学院": "8",
+                "致远学院": "9",
+                "医学院": "10",
+                "安泰经济与管理学院": "11",
+                "人文学院": "12",
+                "材料科学与工程学院": "13",
+                "海洋学院": "14",
+                "药学院": "15",
+                "生命科学技术学院": "16",
+                "农业与生物学院": "17",
+                "凯原法学院": "18",
+                "外国语学院": "19",
+                "体育系": "20",
+                "马克思主义学院": "21",
+                "国际与公共事务学院": "22",
+                "上海高级金融学院": "23",
+                "0": "0"
+            };
 
-{% block back_dependecies %}{# 用来加载依赖文件 #}
-    <script>
-        var dls = document.querySelectorAll('dl:not(.select)');
-        var selected=document.querySelector('.select');
-        var dic = {1:"0", 2: "0"}
-        var dic1= {"必修":"CO", "选修":"El", "实验":"Ex", "其他":"Ot","0":"0"};
-        var dic2={"电子信息与电气工程学院":"1",
-            "机械与动力工程学院":"2",
-            "船舶海洋与建筑工程学院":"3",
-            "生物医学工程学院":"4",
-            "航空航天学院":"5",
-            "数学科学院":"6",
-            "物理与天文学院":"7",
-            "化学化工学院":"8",
-            "致远学院":"9",
-            "医学院":"10",
-            "安泰经济与管理学院":"11",
-            "人文学院":"12",
-            "材料科学与工程学院":"13",
-            "海洋学院":"14",
-            "药学院":"15",
-            "生命科学技术学院":"16",
-            "农业与生物学院":"17",
-            "凯原法学院":"18",
-            "外国语学院":"19",
-            "体育系":"20",
-            "马克思主义学院":"21",
-            "国际与公共事务学院":"22",
-            "上海高级金融学院":"23",
-            "0":"0"
-        }
-
-        for (var i = 0; i < dls.length; i++) {
-            dls[i].mark=false;
-            select(i);
-        }
-
-        function select(n) {
-
-            var dds = dls[n].querySelectorAll('dd');
-            var prev=null;
-            var dd=null;
-            let pattern = /csrftoken=(.*)/m;
-            let cookies = document.cookie.split(',');
-            let csrf;
-            for (let j = 0; j < cookies.length; j++) {
-                 if (pattern.test(cookies[j])) {
-                    csrf = pattern.exec(cookies[j])[1];
-                    }
+            for (var i = 0; i < dls.length; i++) {
+                dls[i].mark = false;
+                select(i);
             }
 
-            for (var i = 0; i < dds.length; i++) {
-                dds[i].onclick = function () {
-                    if(prev){
-                        prev.className = ''
-                    }
+            function select(n) {
 
-                    this.className = 'active';
+                var dds = dls[n].querySelectorAll('dd');
+                var prev = null;
+                var dd = null;
 
-                    prev = this;
+                for (var i = 0; i < dds.length; i++) {
+                    dds[i].onclick = function () {
+                        if (prev) {
+                            prev.className = ''
+                        }
+                        this.className = 'active';
 
-                    var parent=this.parentNode;
-                    if(!parent.mark){  // 如果这个元素没有被选中
-                        dd=document.createElement('dd');
-                        dd.innerHTML=this.innerHTML;
-                        selected.appendChild(dd);
-                        parent.mark=true;
-                        if (this.dataset.type === "1"){
-                            dic["1"] = this.innerHTML
-                        }else{
-                            dic["2"] = this.innerHTML
+                        prev = this;
+
+                        var parent = this.parentNode;
+                        if (!parent.mark) {  // 如果这个元素没有被选中
+                            dd = document.createElement('dd');
+                            dd.innerHTML = this.innerHTML;
+                            selected.appendChild(dd);
+                            parent.mark = true;
+                            if (this.dataset.type === "1") {
+                                dic["1"] = this.innerHTML
+                            } else {
+                                dic["2"] = this.innerHTML
+                            }
+
+                        } else {
+                            dd.innerHTML = this.innerHTML;
+                            if (this.dataset.type === "1") {
+                                dic["1"] = this.innerHTML
+                            } else {
+                                dic["2"] = this.innerHTML
+                            }
                         }
 
-                    }else{
-                        dd.innerHTML=this.innerHTML;
-                         if (this.dataset.type === "1"){
-                            dic["1"] = this.innerHTML
-                        }else{
-                            dic["2"] = this.innerHTML
-                        }
-                    }
-                    info={"TYpe":dic["1"],"School":dic["2"]}
-                    // course 查询需要的数据，在该字典中
-                    // 1 表示的是课程类别
-                    // 2 表示开设学院
-                    // 使用ajax将数据上传到后台即可
-                     $.ajax({
-                    type: 'POST',
-                    url: "http://127.0.0.1:8000/course/",
-                    headers:{
-                    "X-CSRFToken": csrf
-                    },
-                    data: info,
-                    success:function(){
-                   console.log(info)
-                    },
-                    });
-
-                    var span=document.createElement('span');
-                    var This=this;
-                    span.innerHTML='X';
-                    span.onclick=function(){
-                        selected.removeChild(dd);
-                        This.className='';
-                        parent.mark=false;
+                        var span = document.createElement('span');
+                        var This = this;
+                        span.innerHTML = 'X';
+                        span.onclick = function () {
+                            selected.removeChild(dd);
+                            This.className = '';
+                            parent.mark = false;
+                        };
+                        dd.appendChild(span);
                     };
-                    dd.appendChild(span);
-                };
+                }
             }
-        }
-        function jump1(){
-            url = "details/"+dic1[dic["1"]]+"/"+dic2[dic["2"]]+"/"+"1";//跳转到第一页
-            window.location.href = url;
-        }
-    </script>
+
+            function jump1() {
+                url = "details/" + dic1[dic["1"]] + "/" + dic2[dic["2"]] + "/" + "1";//跳转到第一页
+                window.location.href = url;
+            }
+        </script>
     {% endblock %}
     <button type="button" onclick="jump1()" class="button" style="vertical-align:middle"><span>确认</span></button>
 
 
 {% endblock %}
-</body>
+
 </html>

@@ -36,7 +36,7 @@ TODO: 如何显示，显示的具体内容
                 {% for file in files %}
                     <tr>
                         <td>{{ file.name }}</td>
-                        <td>{{ file.exp_type }}</td>
+                        <td>{{ file.type }}</td>
                         <td>{{ file.downloads }}</td>
                         <td>{{ file.date }}</td>
                         <td>
@@ -150,7 +150,8 @@ TODO: 如何显示，显示的具体内容
                                 location.reload();
                             },
                             error: function () {
-                                layer.msg("删除失败")
+                              layer.closeAll();
+                              layer.msg("删除失败")
                             }
 
                         })

@@ -10,7 +10,7 @@ TODO: footer显示 ？？
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
-    {# 在bootstrap之前引入能够清除对相同元素的样式的干扰，主要的样式还是bootstrap #}
+    {# 在bootstrap之前引入能够清除对相同元素的样式的干扰 #}
     <link rel="stylesheet" href="{% static 'layui/css/layui.css' %}">
     <link rel="icon" href="{% static 'images/favicon.ico' %}">
     <script src="{% static 'js/jquery-3.3.1.js' %}"></script>
@@ -62,13 +62,14 @@ TODO: footer显示 ？？
                         <a class="nav-link" href="{% url 'post:index' %}">发帖</a>
                     {% endif %}
                 </li>
-                <li class="nav-item">
-                    {% if request.path == '/feedback/' %}
-                        <a class="nav-link active" style="color: #007fff;" href="{% url 'feedback:index' %}">反馈</a>
+             <li class="nav-item">
+                    {% if request.path == '/download/' %}
+                        <a class="nav-link active" style="color: #007fff;" href="/download">下载</a>
                     {% else %}
-                        <a class="nav-link" href="{% url 'feedback:index' %}">反馈</a>
+                        <a class="nav-link" href="/download/">下载</a>
                     {% endif %}
                 </li>
+
 
             </ul>
             {% if request.user.is_authenticated %}  {# 如果用户登录了，显示相应的头像等信息 #}
@@ -98,6 +99,7 @@ TODO: footer显示 ？？
                         </a>
                         <div class="dropdown-menu ">
                             <a class="dropdown-item" href="{% url 'user:profile' %}">个人中心</a>
+                             <a class="dropdown-item" href="{% url 'feedback:index' %}">反馈</a>
                             <a class="dropdown-item" href="javascript:void(0);" onclick="logout()">登出</a>
                         </div>
                     </div>
