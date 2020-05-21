@@ -7,15 +7,10 @@ from django.conf import settings
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.paginator import Paginator
-from django.http import HttpResponse
 from django.views.decorators.http import require_http_methods
 from user.models import User
 from .models import Course, TeacherOfCourse, CourseDes, Major, CourseCom
-from user.models import ExpData
-import time
-import os
-from django.contrib.auth.models import User as AuthUser
-import json
+
 
 TYPES = (  # 课程的类型
     ("CO", "必修"),  # 必修
