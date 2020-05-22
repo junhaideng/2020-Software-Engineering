@@ -3,14 +3,12 @@ author: Edgar
 课程路由下的页面显示
 TODO: 如何显示课程，怎么样显示
 """
-from django.conf import settings
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from user.models import User
-from .models import Course, TeacherOfCourse, CourseDes, Major, CourseCom
-
+from .models import Course, TeacherOfCourse, CourseDes, CourseCom
 
 TYPES = (  # 课程的类型
     ("CO", "必修"),  # 必修
@@ -19,30 +17,30 @@ TYPES = (  # 课程的类型
     ("Ot", '其他')  # 其他
 )
 
-SCHOOLS=(   #   学院名称
-    ("电子信息与电气工程学院","1"),
-    ("机械与动力工程学院","2"),
-    ("船舶海洋与建筑工程学院","3"),
-    ("生物医学工程学院","4"),
-    ("航空航天学院","5"),
-    ("数学科学院","6"),
-    ("物理与天文学院","7"),
-    ("化学化工学院","8"),
-    ("致远学院","9"),
-    ("医学院","10"),
-    ("安泰经济与管理学院","11"),
-    ("人文学院","12"),
-    ("材料科学与工程学院","13"),
-    ("海洋学院","14"),
-    ("药学院","15"),
-    ("生命科学技术学院","16"),
-    ("农业与生物学院","17"),
-    ("凯原法学院","18"),
-    ("外国语学院","19"),
-    ("体育系","20"),
-    ("马克思主义学院","21"),
-    ("国际公共与事务学院","22"),
-    ("上海高级金融学院","23")
+SCHOOLS = (  # 学院名称
+    ("电子信息与电气工程学院", "1"),
+    ("机械与动力工程学院", "2"),
+    ("船舶海洋与建筑工程学院", "3"),
+    ("生物医学工程学院", "4"),
+    ("航空航天学院", "5"),
+    ("数学科学院", "6"),
+    ("物理与天文学院", "7"),
+    ("化学化工学院", "8"),
+    ("致远学院", "9"),
+    ("医学院", "10"),
+    ("安泰经济与管理学院", "11"),
+    ("人文学院", "12"),
+    ("材料科学与工程学院", "13"),
+    ("海洋学院", "14"),
+    ("药学院", "15"),
+    ("生命科学技术学院", "16"),
+    ("农业与生物学院", "17"),
+    ("凯原法学院", "18"),
+    ("外国语学院", "19"),
+    ("体育系", "20"),
+    ("马克思主义学院", "21"),
+    ("国际公共与事务学院", "22"),
+    ("上海高级金融学院", "23")
 )
 
 
@@ -69,15 +67,15 @@ def details(request, type, school, page_num):
     School = school
     if Type == "0":  # 我将没有选择的时候设置为了0
         for m in SCHOOLS:
-            if m[1]==School:
-                School=m[0]
+            if m[1] == School:
+                School = m[0]
         courselist = Course.objects.filter(school=School)
     elif School == "0":
         courselist = Course.objects.filter(type=Type)
     else:
         for m in SCHOOLS:
-            if m[1]==School:
-                School=m[0]
+            if m[1] == School:
+                School = m[0]
         courselist = Course.objects.filter(school=School, type=Type)
     List = []
     for course in courselist:  # 将教师和课程 组合在一个列表中
@@ -107,8 +105,8 @@ def details(request, type, school, page_num):
     if next_page == total_num + 1:
         next_page = page_now
     return render(request, 'course/details.html', {"list": page, "pagesNum": pagesNum, "total_num": total_num,
-                                                   "now_page": page_now, "pre_page": pre_page, "next_page": next_page
-                                                    , "Type": Type, "School": School})
+                                                   "now_page": page_now, "pre_page": pre_page, "next_page": next_page,
+                                                   "Type": Type, "School": School})
 
 
 @require_http_methods(["GET", "POST"])
@@ -129,10 +127,11 @@ def coursedes(request, pk):
         des = '暂无描述'
     else:
         des = CourseDes.objects.get(course_id=course.pk)
+    type = None
     for i in TYPES:
-        if i[0]==course.type:
-            type=i[1]
-    school=course.school
+        if i[0] == course.type:
+            type = i[1]
+    school = course.school
     uerloginflag = 0  # 是否有用户登录
     commentflag = 0  # 说明评论是否成功
     if 'username' in request.session:
@@ -154,7 +153,7 @@ def coursedes(request, pk):
         name = a.user_name
         u = User.objects.get(user__username=name)
         image_path = u.profile
-        if image_path == None:
+        if image_path is None:
             image_path = 0
         info = Newcomments()
         info.image_path = image_path
