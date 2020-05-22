@@ -313,7 +313,7 @@ def resetpwd(request):
                 u.set_password(newpwd)
                 u.save()
                 message = "您的密码已经修改"
-            return render(request, 'user/resetpwd.html', context={"message": message})
+            return redirect(reverse("user:login"))
         else:
             message = "旧密码错误"
             request.session['user_reset_message'] = message

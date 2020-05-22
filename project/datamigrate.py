@@ -1,6 +1,6 @@
 import sqlite3
-from bbs.course.models import TeacherOfCourse,Course
-SCHOOLS = (  # 学院名称
+
+SCHOOL = (  # 学院名称
     ("电子信息与电气工程学院", "电子信息与电气工程学院"),
     ("机械与动力工程学院", "机械与动力工程学院"),
     ("船舶海洋与建筑工程学院", "船舶海洋与建筑工程学院"),
@@ -27,28 +27,12 @@ SCHOOLS = (  # 学院名称
     ("巴黎高科卓越工程师学院", "巴黎高科卓越工程师学院")
 )
 
-data=sqlite3.connect("D:/gitRepository/2020-Software-Engineering/data.db")
-da=data.cursor()
-ret = da.execute("select * from CLASSES")    #获取该表所有元素
+
+course = sqlite3.connect("D:/gitRepository/2020-Software-Engineering/project/bbs/db.sqlite3")
+cou = course.cursor()
+cou.execute("delete from course_teacherofcourse;")
 # 2 SCHOOL 4 课程名  5 教师  8 选修1 or 必修0
-# course_course 1name 2type 3major 4school
-# course_teacherofcourse 1 name 2 course_id
-no='暂无'
-type="CO"
-for row in ret:
-    print(row[1]) #这里就是获取去除来的每行的第2个元素的内容，row[0]则是第一个
-    if row[8] == 1:
-        type = "El"
-    for i in SCHOOLS:
-        if i[0] == row[2]:
-            print("1")
-            a=Course()
-            a.name=row[4]
-            a.school=row[2]
-            a.major="暂无信息"
-            a.type=type
-            a.save()
-            break
-        #(1,"+ row[4] + "," + type + ", " + no + ", " + row[2] + ")
-    break
-data.close()
+# course_course 1name 2type 3major 4school 0 id
+# course_teacherofcourse 1 name 2 course_id_id
+course.commit()
+course.close()
