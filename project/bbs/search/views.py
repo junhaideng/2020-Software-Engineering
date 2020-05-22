@@ -1,11 +1,7 @@
 """
 author: Edgar
 对搜索界面的显示进行处理
-TODO: 用户输入的数据后回车，或者点击按钮的界面进行处理 此时url中有参数 keyword， 收集课程的信息
 """
-import json
-
-from django.core import serializers
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.urls import reverse
@@ -53,25 +49,27 @@ def search_course(request):
 
 def search_post(request):
     keyword = request.GET.get("keyword")
-    posts = Post.objects.filter(topic__contains=keyword)
+    posts = Post.objects.filter(topic__contains=keyword)  # 获取所有满足条件的帖子
     data = []
     for post in posts:
         content = post.content
         if len(content) > 20:
-            content = content[:20] + "..."
+            content = content[:20] + "..."  # 对内容处理一下
         data.append({"topic": post.topic, "content": content, "id": post.id, "time": post.created_time})
     return render(request, 'search/search_post.html', context={"keyword": keyword, "data": data})
 
 
 @csrf_exempt
 def files(request):
+    """下载页的文件显示"""
     if request.method == "GET":
-        files = Files.objects.all()
+        files = Files.objects.all()  # 如果是get请求的话，会将所有的文件都进行显示
         return render(request, "download/index.html", context={"files": files})
-    elif request.method == "POST":
+    elif request.method == "POST":  # 异步请求返回json数据，前端进行处理
         value = request.POST.get("value")
+        # 将文件的一系列信息进行返回
         files = list(map(lambda x: {"name": x.name, "type": x.type, "date": str(x.date).split(" ")[0],
-                                    "download_times": x.download_times,
+                                    "download_times": x.download_times, "url": x.path,
                                     "username": User.objects.get(user_id=x.user_id).user.username},
                          Files.objects.filter(type__contains=value)))
         return JsonResponse({"data": files})
