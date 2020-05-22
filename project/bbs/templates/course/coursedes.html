@@ -107,9 +107,10 @@
             {% if flag == 0 %}
                 <td>暂无老师</td>
             {% else %}
-                {% for t in teacherList %}
-                    <td>{{ t.name }}</td>
-            {% endfor %}
+                <td>{% for t in teacherList %}
+                    {{ t.name }}&nbsp;&nbsp;
+                {% endfor %}
+                </td>
             {% endif %}
         </tr>
         </tbody>
@@ -121,8 +122,12 @@
     {% for i in comments %}
     <div class="comment">
         <div class="imgdiv">
-        <img class="imgcss"  src="user.jpg">
-        </div><!--还是显示一下用户头像吧！使用 i.image_path获取路径 注意：若没有上传头像 则image_path=0-->
+            {% if i.image_path == 0 %}
+                <img class="imgcss"  src="{% static 'images/headsculpture.png' %}">
+            {% else %}
+                <img class="imgcss"  src="{{i.image_path}}">
+            {% endif %}
+        </div>
         <div class="conmment_details">
             <div style="float:left;">
                 <span class="comment_name">{{ i.user_name }}</span>
