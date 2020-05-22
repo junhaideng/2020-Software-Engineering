@@ -96,3 +96,6 @@ fabric.properties
 project/**/venv/
 *.pyc
 **/migrations/
+
+*.log
+media/
