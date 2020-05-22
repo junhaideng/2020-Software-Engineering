@@ -133,21 +133,6 @@ def coursedes(request, pk):
         if i[0]==course.type:
             type=i[1]
     school=course.school
-    #返回用户评论
-    comments=CourseCom.objects.filter(courseid=course.pk)
-    new_comments=[]       #返回给前端的列表
-    for a in comments:
-        name = a.user_name
-        u = User.objects.get(user__username=name)
-        image_path = u.profile
-        if image_path == None:
-            image_path = 0
-        info = Newcomments()
-        info.image_path = image_path
-        info.user_name = name
-        info.com = a.com
-        info.date = a.createddate
-        new_comments.append(info)
     uerloginflag = 0  # 是否有用户登录
     commentflag = 0  # 说明评论是否成功
     if 'username' in request.session:
@@ -162,6 +147,21 @@ def coursedes(request, pk):
         newcomment.user_name = username
         newcomment.save()
         commentflag = 1
+        # 返回用户评论
+    comments = CourseCom.objects.filter(courseid=course.pk)
+    new_comments = []  # 返回给前端的列表
+    for a in comments:
+        name = a.user_name
+        u = User.objects.get(user__username=name)
+        image_path = u.profile
+        if image_path == None:
+            image_path = 0
+        info = Newcomments()
+        info.image_path = image_path
+        info.user_name = name
+        info.com = a.com
+        info.date = a.createddate
+        new_comments.append(info)
     return render(request, 'course/coursedes.html',
                   {"course": course, "teacherList": teachers, "des": des, "school": school,
                    "type": type, "flag": flag, "userflag": uerloginflag,
