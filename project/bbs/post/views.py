@@ -1,15 +1,12 @@
 """
 author: Edgar
 发帖界面, 负责用户帖子的上传，页面的展示
-TODO: 发帖界面的美化
 """
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.views.decorators.http import require_http_methods
 from post.models import Post
 from django.http import JsonResponse
 from course.models import Course
-
 
 
 @login_required
@@ -19,7 +16,6 @@ def index(request):
         topic = request.POST.get("topic")  # 主题
         course = request.POST.get("course")
         content = request.POST.get("content")  # 内容
-        print(request.POST)
 
         if topic and course and content:
             post = Post(topic=topic, course=course, counter=0, author_user_id=request.user.id, content=content)  # 数据库插入
@@ -45,6 +41,4 @@ def index(request):
         status = request.session.pop("status")
         id = request.session.pop("id")
 
-    return render(request, "post/index.html", context={"data": data, "msg": status, "id":id})
-
-
+    return render(request, "post/index.html", context={"data": data, "msg": status, "id": id})

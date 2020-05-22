@@ -116,7 +116,7 @@ def signup(request):
             confirm = request.POST.get("confirm")
             if password == confirm:
                 email = request.POST.get("email")
-                auth = AuthUser(username=username, password=password, email=email)
+                auth = AuthUser(username=username, email=email)
                 auth.set_password(password)
                 auth.save()
                 user1 = User(user=auth)
@@ -333,7 +333,7 @@ def setquestion(request):
         """
     username = request.session.get('username')
     U = User.objects.get(user__username=username)
-    if U.question != None:  # 原先有密保 则需要输入密码设置密保
+    if U.question is None:  # 原先有密保 则需要输入密码设置密保
         flag = 1
     else:  # 原先无密保 则需要验证原先密保更改密保
         flag = 0
