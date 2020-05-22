@@ -87,15 +87,3 @@ class CourseCom(models.Model):
 
     class Meta:
         ordering = ("-createddate",)  # 按照时间的降序排
-
-
-class Major(models.Model):
-    """专业对应的信息"""
-    name = models.CharField(max_length=40)  # 专业名
-    academy = models.CharField(choices=SCHOOLS, max_length=40, default='')  # 所属的学院
-
-    class Meta:
-        ordering = ("name",)
-
-    def __str__(self):
-        return self.name

@@ -26,13 +26,6 @@ class AdminTeacher(admin.ModelAdmin):
     ordering = ("name", )
     search_fields = ("name",)
 
-
-class AdminMajor(admin.ModelAdmin):
-    list_display = ("name", "academy")
-    list_per_page = 30
-    ordering = ("name", "academy")
-    search_fields = ("name", )
-
 class AdminComment(admin.ModelAdmin):
     list_display = ("courseid", "user_name","com","createddate")
     list_per_page = 30
@@ -42,5 +35,4 @@ class AdminComment(admin.ModelAdmin):
 admin.site.register(CourseCom, AdminComment)
 admin.site.register(Course, AdminCourse)
 admin.site.register(CourseDes, AdminCourseDes)
-admin.site.register(Major, AdminMajor)
 admin.site.register(TeacherOfCourse, AdminTeacher)
