@@ -91,7 +91,7 @@ def details(request, type, school, page_num):
             for b in TeacherOfCourse.objects.filter(course_id=course.pk):
                 a.teacher.append(b.name)
         List.append(a)
-    p = Paginator(List, 2)
+    p = Paginator(List, 10)
     total_num = p.num_pages  # 页数
     pagesNum = []  # 页码列表
     i = 1
@@ -99,15 +99,9 @@ def details(request, type, school, page_num):
         pagesNum.append(i)
         i = i + 1
     page = p.page(page_num)  # 对应分页
-    pre_page = page_now - 1
-    if pre_page == 0:
-        pre_page = 1
-    next_page = page_now + 1
-    if next_page == total_num + 1:
-        next_page = page_now
-    return render(request, 'course/details.html', {"list": page, "pagesNum": pagesNum, "total_num": total_num,
-                                                   "now_page": page_now, "pre_page": pre_page, "next_page": next_page,
-                                                   "Type": Type, "School": School})
+    nums = courselist.count()
+    return render(request, 'course/details.html', {"list": page, "pagesNum": pagesNum, "total_num": total_num,"count": nums,
+                                                   "now_page": page_now, "Type": Type, "School": School})
 
 
 @require_http_methods(["GET", "POST"])
