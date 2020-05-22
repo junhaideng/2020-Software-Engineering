@@ -14,7 +14,7 @@ author: 祁山青
 {% block detail %}
         {% if flag %}
             <div class="col-5 m-auto">
-            <form action="{% url 'user:setquestion/' %}" method="post" style="margin-top: 40%">
+            <form action="{% url 'user:setquestion' %}" method="post" style="margin-top: 40%">
                 {% csrf_token %}
                  <div class="form-group">
                     <label for="oldquestion">oldQuestion：<br/>{{ oldQuestion }} </label>
