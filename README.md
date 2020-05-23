@@ -22,3 +22,4 @@
 4. [django 入门教程](https://www.jianshu.com/p/6ae4e1af34fb )  
 5. [django 官方网站(中文版)](https://docs.djangoproject.com/zh-hans/3.0)
 6. 使用 [layui](https://www.layui.com/doc/) 美化界面
+7. [Django测试教程（UnitTest版）](https://www.bilibili.com/video/BV1uE41117jk?p=1)
