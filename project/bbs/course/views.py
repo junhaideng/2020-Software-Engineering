@@ -63,6 +63,8 @@ def details(request, type, school, page_num):
             self.school = '无'  # 专业名
             self.teacher = []  # 老师 可能有多个
 
+
+
     page_now = page_num  # 当前页码
     Type = type
     School = school
@@ -79,6 +81,7 @@ def details(request, type, school, page_num):
                 School = m[0]
         courselist = Course.objects.filter(school=School, type=Type)
     List = []
+    teacher_count = 0
     for course in courselist:  # 将教师和课程 组合在一个列表中
         a = NewCourse()
         a.name = course.name
@@ -89,7 +92,13 @@ def details(request, type, school, page_num):
             a.teacher = ['None']
         else:
             for b in TeacherOfCourse.objects.filter(course_id=course.pk):
-                a.teacher.append(b.name)
+                teacher_count = teacher_count+1
+                if teacher_count <= 4:
+                    a.teacher.append(b.name)
+                else:
+                    a.teacher.append("等若干教师...")
+                    break
+        teacher_count = 0
         List.append(a)
     p = Paginator(List, 10)
     total_num = p.num_pages  # 页数
