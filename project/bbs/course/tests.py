@@ -38,3 +38,4 @@ class Test(StaticLiveServerTestCase):
 
     def tearDown(self) -> None:
         self.browser.close()
+

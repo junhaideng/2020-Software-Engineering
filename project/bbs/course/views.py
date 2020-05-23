@@ -40,7 +40,8 @@ SCHOOLS = (  # 学院名称
     ("体育系", "20"),
     ("马克思主义学院", "21"),
     ("国际公共与事务学院", "22"),
-    ("上海高级金融学院", "23")
+    ("上海高级金融学院", "23"),
+    ("巴黎高科卓越工程师学院","24")
 )
 
 
@@ -55,7 +56,7 @@ def index(request):
 def details(request, type, school, page_num):
     """课程界面的首页"""
 
-    class Newcourse():  # 建立一个新的类
+    class NewCourse():  # 建立一个新的类
         def __init__(self):
             self.pk = None  # 课程主键
             self.name = '无'  # 课程的名字
@@ -79,7 +80,7 @@ def details(request, type, school, page_num):
         courselist = Course.objects.filter(school=School, type=Type)
     List = []
     for course in courselist:  # 将教师和课程 组合在一个列表中
-        a = Newcourse()
+        a = NewCourse()
         a.name = course.name
         a.pk = course.pk
         a.school = School
@@ -90,7 +91,7 @@ def details(request, type, school, page_num):
             for b in TeacherOfCourse.objects.filter(course_id=course.pk):
                 a.teacher.append(b.name)
         List.append(a)
-    p = Paginator(List, 2)
+    p = Paginator(List, 10)
     total_num = p.num_pages  # 页数
     pagesNum = []  # 页码列表
     i = 1
@@ -98,20 +99,14 @@ def details(request, type, school, page_num):
         pagesNum.append(i)
         i = i + 1
     page = p.page(page_num)  # 对应分页
-    pre_page = page_now - 1
-    if pre_page == 0:
-        pre_page = 1
-    next_page = page_now + 1
-    if next_page == total_num + 1:
-        next_page = page_now
-    return render(request, 'course/details.html', {"list": page, "pagesNum": pagesNum, "total_num": total_num,
-                                                   "now_page": page_now, "pre_page": pre_page, "next_page": next_page,
-                                                   "Type": Type, "School": School})
+    nums = courselist.count()
+    return render(request, 'course/details.html', {"list": page, "pagesNum": pagesNum, "total_num": total_num,"count": nums,
+                                                   "now_page": page_now, "Type": Type, "School": School})
 
 
 @require_http_methods(["GET", "POST"])
 def coursedes(request, pk):
-    class Newcomments():  # 建立一个新的类
+    class NewComments():  # 建立一个新的类
         def __init__(self):
             self.image_path = 0  # 头像路径
             self.user_name = '无'  # 用户名字
@@ -132,10 +127,10 @@ def coursedes(request, pk):
         if i[0] == course.type:
             type = i[1]
     school = course.school
-    uerloginflag = 0  # 是否有用户登录
-    commentflag = 0  # 说明评论是否成功
+    uer_flag = 0  # 是否有用户登录
+    comment_flag = 0  # 说明评论是否成功
     if 'username' in request.session:
-        uerloginflag = 1
+        uer_flag = 1
     if ('username' in request.session) and request.method == "POST":
         comment = request.POST.get("comment")
         username = request.session['username']
@@ -155,7 +150,7 @@ def coursedes(request, pk):
         image_path = u.profile
         if image_path is None:
             image_path = 0
-        info = Newcomments()
+        info = NewComments()
         info.image_path = image_path
         info.user_name = name
         info.com = a.com
@@ -163,8 +158,8 @@ def coursedes(request, pk):
         new_comments.append(info)
     return render(request, 'course/coursedes.html',
                   {"course": course, "teacherList": teachers, "des": des, "school": school,
-                   "type": type, "flag": flag, "userflag": uerloginflag,
-                   "commentflag": commentflag, "comments": new_comments})
+                   "type": type, "flag": flag, "userflag": uer_flag,
+                   "commentflag": comment_flag, "comments": new_comments})
 
 
 @require_http_methods(["GET"])

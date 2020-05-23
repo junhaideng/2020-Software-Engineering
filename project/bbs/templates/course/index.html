@@ -8,7 +8,7 @@
 
         <style>
             #box {
-                height: 180px;
+                height: 200px;
                 background: rgba(255, 255, 255, 0.8);
                 box-shadow: 0 0 10px rgba(73, 66, 66, .1);
                 margin: 50px auto;
@@ -34,7 +34,7 @@
             }
 
             #box dd.active {
-                color: #c4284d;
+                color: #009688;
                 font-weight: bold;
             }
 
@@ -43,7 +43,7 @@
             }
 
             #box dl.select dd {
-                border: 1px solid #c4284d;
+                border: 1px solid #009688;
                 height: 25px;
                 margin-top: 6px;
                 padding: 0 2px 0 10px;
@@ -57,51 +57,11 @@
                 display: inline-block;
                 text-align: center;
                 line-height: 20px;
-                background: #B22222;
+                background:#009688;
                 color: #fff;
                 margin-left: 10px;
                 cursor: pointer;
                 border-radius: 5px;
-            }
-
-            .button {
-                display: inline-block;
-                border-radius: 4px;
-                background-color: rgba(138, 138, 138, 0.67);;
-                border: none;
-                color: #FFFFFF;
-                text-align: center;
-                font-size: 17px;
-                padding: 20px;
-                width: 150px;
-                transition: all 0.5s;
-                cursor: pointer;
-                margin-left: 500px;
-            }
-
-            .button span {
-                cursor: pointer;
-                display: inline-block;
-                position: relative;
-                transition: 0.5s;
-            }
-
-            .button span:after {
-                content: '»';
-                position: absolute;
-                opacity: 0;
-                top: 0;
-                right: -20px;
-                transition: 0.5s;
-            }
-
-            .button:hover span {
-                padding-right: 25px;
-            }
-
-            .button:hover span:after {
-                opacity: 1;
-                right: 0;
             }
 
         </style>
@@ -145,6 +105,7 @@
             <dd data-type="2">马克思主义学院</dd>
             <dd data-type="2">国际与公共事务学院</dd>
             <dd data-type="2">上海高级金融学院</dd>
+            <dd data-type="2">巴黎高科卓越工程师学院</dd>
         </dl><!--排版还有点点问题-->
         <dl class="select row">
             <dt>已选条件：</dt>
@@ -181,6 +142,7 @@
                 "马克思主义学院": "21",
                 "国际与公共事务学院": "22",
                 "上海高级金融学院": "23",
+                "巴黎高科卓越工程师学院":"24",
                 "0": "0"
             };
 
@@ -244,7 +206,7 @@
             }
         </script>
     {% endblock %}
-    <button type="button" onclick="jump1()" class="button" style="vertical-align:middle"><span>确认</span></button>
+    <button class="layui-btn layui-btn-primary layui-btn-lg" type="button" onclick="jump1()" style="margin-left:45%;"><span><span>确认<span></span></button>
 
 
 {% endblock %}

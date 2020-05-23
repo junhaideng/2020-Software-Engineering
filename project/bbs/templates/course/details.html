@@ -8,7 +8,7 @@
 
         <style>
             #box {
-                height: 180px;
+                height: 200px;
                 background: rgba(255, 255, 255, 0.8);
                 box-shadow: 0 0 10px rgba(73, 66, 66, .1);
                 margin: 50px auto;
@@ -33,75 +33,15 @@
                 cursor: pointer;
             }
 
-            #box dd.active {
-                color: #c4284d;
+            #box chosen {
+                color: #009688;
                 font-weight: bold;
-            }
-
-            #box dl.select {
-                margin: 10px 20px;
-            }
-
-            #box dl.select dd {
-                border: 1px solid #c4284d;
+                margin: 2px 10px;
+                border: 1px solid #009688;
                 height: 25px;
-                margin-top: 6px;
                 padding: 0 2px 0 10px;
                 border-radius: 3px;
                 background-color: #fff;
-            }
-
-            #box dl.select dd span {
-                width: 20px;
-                height: 20px;
-                display: inline-block;
-                text-align: center;
-                line-height: 20px;
-                background: #B22222;
-                color: #fff;
-                margin-left: 10px;
-                cursor: pointer;
-                border-radius: 5px;
-            }
-
-            .button {
-                display: inline-block;
-                border-radius: 4px;
-                background-color: rgba(138, 138, 138, 0.67);;
-                border: none;
-                color: #FFFFFF;
-                text-align: center;
-                font-size: 17px;
-                padding: 20px;
-                width: 150px;
-                transition: all 0.5s;
-                cursor: pointer;
-                margin-left: 500px;
-            }
-
-            .button span {
-                cursor: pointer;
-                display: inline-block;
-                position: relative;
-                transition: 0.5s;
-            }
-
-            .button span:after {
-                content: '»';
-                position: absolute;
-                opacity: 0;
-                top: 0;
-                right: -20px;
-                transition: 0.5s;
-            }
-
-            .button:hover span {
-                padding-right: 25px;
-            }
-
-            .button:hover span:after {
-                opacity: 1;
-                right: 0;
             }
 
             .course {
@@ -192,82 +132,46 @@
             <dd data-type="2">马克思主义学院</dd>
             <dd data-type="2">国际与公共事务学院</dd>
             <dd data-type="2">上海高级金融学院</dd>
+            <dd data-type="2">巴黎高科卓越工程师学院</dd>
         </dl>
         <dl class="select row">
             <dt>已选条件：</dt>
+            {% if Type == "0" %}
+                <p></p>
+            {% else %}
+                {% if Type == "CO" %}
+                    <chosen>必修</chosen>
+                {% else %}
+                    {% if Type == "El" %}
+                        <chosen>必修</chosen>
+                    {% else %}
+                        {% if Type == "Ex" %}
+                            <chosen>实验</chosen>
+                        {% else %}
+                            <chosen>其他</chosen>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+            {% if School == "0" %}
+                <p></p>
+            {% else %}
+                <chosen>{{ School }}</chosen>
+            {% endif %}
         </dl>
     </div>
 
 
     {% block back_dependecies %}{# 用来加载依赖文件 #}
         <script>
-            var dls = document.querySelectorAll('dl:not(.select)');
-            var selected = document.querySelector('.select');
-            var dic = {1: "0", 2: "0"}
-
-            for (var i = 0; i < dls.length; i++) {
-                dls[i].mark = false;
-                select(i);
-            }
-
-            function select(n) {
-
-                var dds = dls[n].querySelectorAll('dd');
-                var prev = null;
-                var dd = null;
-                for (var i = 0; i < dds.length; i++) {
-                    dds[i].onclick = function () {
-                        if (prev) {
-                            prev.className = ''
-                        }
-
-                        this.className = 'active';
-                        prev = this;
-
-                        var parent = this.parentNode;
-                        if (!parent.mark) {  // 如果这个元素没有被选中
-                            dd = document.createElement('dd');
-                            dd.innerHTML = this.innerHTML;
-                            selected.appendChild(dd);
-                            parent.mark = true;
-                            if (this.dataset.type === "1") {
-                                dic["1"] = this.innerHTML
-                            } else {
-                                dic["2"] = this.innerHTML
-                            }
-
-                        } else {
-                            dd.innerHTML = this.innerHTML;
-                            if (this.dataset.type === "1") {
-                                dic["1"] = this.innerHTML
-                            } else {
-                                dic["2"] = this.innerHTML
-                            }
-                        }
-
-                        var span = document.createElement('span');
-                        var This = this;
-                        span.innerHTML = 'X';
-                        span.onclick = function () {
-                            selected.removeChild(dd);
-                            This.className = '';
-                            parent.mark = false;
-                        };
-                        dd.appendChild(span);
-                    };
-                }
-            }
-
             function jump2() {
                 url = "/course/";//此处拼接内容
                 window.location.href = url;
             }
-
         </script>
     {% endblock %}
 
-
-    <button type="button" onclick="jump2()" class="button" style="vertical-align:middle"><span>重置</span></button>
+    <button class="layui-btn layui-btn-primary layui-btn-lg" type="button" onclick="jump2()" style="margin-left:45%;"><span>返回课程界面</span></button>
     <!--<div class="col-5 m-auto" >-->
     {% for i in list %}
         <div class="course" onclick="window.location.href= '/course/coursedes/{{ i.pk }}'">
@@ -293,21 +197,30 @@
     </form>
     <!--</div>-->
     <!-- "total_num":总页码数,"now_page"：当前页码-->
-    <ul class="pagination">
-        <li><a href="{{ pre_page }}">«</a></li>
-        {% for i in pagesNum %}
-            {% if i == now_page %}
-                <li><a href="{{ i }}" class="active">{{ i }}</a></li>
-            {% else %}
-                <li><a href="{{ i }}">{{ i }}</a></li>
-            {% endif %}
-        {% endfor %}
-        <li><a href="{{ next_page }}">»</a></li>
-
-    </ul>
-
-
-
+    {% if count > 10 %}
+        <div id="page"></div>
+    {% endif %}
 {% endblock %}
 </body>
+{% block back_dependencies %}
+<script>
+    layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+
+            //总页数低于页码总数
+            laypage.render({
+                elem: 'page'
+                , count:{{ count }}//数据总数
+                , curr: {{ now_page }}
+                , jump: function (obj, first) {
+                    if (!first) {
+                        location.href = obj.curr;
+                    }
+                }
+            })
+        }
+    );
+</script>
+{% endblock %}
 </html>
