@@ -28,7 +28,6 @@ author: Edgar
                 color: rgba(129, 129, 126, 0.91);
                 text-align: center;
             }
-
             .course:hover {
                 background: rgba(73, 66, 66, .1);
             }
@@ -37,57 +36,54 @@ author: Edgar
 </head>
 <body>
 {% block content %}
-    <div class="layui-row mt-4">
-        <div class=" layui-col-md6" style="margin-left: 200px">
-            <input id="input" class="layui-input">
-        </div>
-        <div class="layui-col-md3" style="margin-left: 10px">
-            <button class="layui-btn layui-btn-primary" onclick="search()">搜索</button>
-        </div>
+<div class="layui-row mt-4">
+<div class=" layui-col-md6" style="margin-left: 200px">
+    <input id="input" class="layui-input">
+</div>
+<div class="layui-col-md3" style="margin-left: 10px">
+  <button class="layui-btn layui-btn-primary" onclick="search()">搜索</button>
+</div>
 
-    </div>
-    <div>
-        <ul id="list" style="margin-left: 12px; margin-top: 40px">
-            {% if files %}
-                {% for item in files %}
-                    <div class="course">
-                        <div>
-                            <div class="row">
-                                <a href="{{ item.path }}"
-                                   style="margin-left: 50px;margin-top: 10px;font-size: 19px">{{ item.name }} </a>
-                                <div><span class="layui-badge-rim"
-                                           style="float:right;margin-top: 10px">{{ item.type }}</span></div>
-                            </div>
-                            <div class="row">
-                                <span style="margin-left: 50px">this is the description</span>
-                            </div>
-                            <div class="row">
-                                {% load user_related %}
-                                <span class="layui-icon layui-icon-user"
-                                      style="margin-left: 40px"> {{ item.user_id|getNameFromId }} </span>
-                                <span class="layui-icon layui-icon-time"
-                                      style="margin-left: 900px"> {{ item.date | date:"Y-m-d" }} </span>
-                                {# 此处虽然IDE报错，但是并不是错误的 #}
-                            </div>
-                        </div>
+</div>
+    <div >
+    <ul id="list" style="margin-left: 12px; margin-top: 40px">
+    {% if files %}
+        {% for item in files %}
+            <ul class="course">
+            <li>
+                <div>
+                    <div class="row">
+                        <a href="{{ item.path }}" style="margin-left: 50px;margin-top: 10px;font-size: 19px">{{item.name}} </a>
+                    <div><span class="layui-badge-rim" style="float:right;margin-top: 10px">{{item.type}}</span></div>
                     </div>
-                {% endfor %}
-            {% endif %}
-        </ul>
-    </div>
+                    <div class="row">
+                        <span style="margin-left: 50px">this is the description</span>
+                    </div>
+                    <div class="row">
+                        <span class="layui-icon layui-icon-user" style="margin-left: 40px"> {{item.username}} </span>
+                        <span class="layui-icon layui-icon-time" style="margin-left: 900px"> {{ item.date | date:"Y-m-d" }} </span> {# 此处虽然IDE报错，但是并不是错误的 #}
+                    </div>
+                </div>
+            </li>
+            </ul>
+        {% endfor %}
+    {% endif %}
+    </ul>
+</div>
 
 {% endblock %}
 </body>
 {% block back_dependencies %}
-    <script>
-        function search() {
-            $.ajax({
-                type: "POST",
-                url: ".",
-                data: {value: $("#input").val().trim()},
-                success: (res) => {
-                    let html = res.data.map(value => `<li>
-            <div class="course">
+<script>
+function search() {
+    $.ajax({
+        type: "POST",
+        url: ".",
+        data: {value:  $("#input").val().trim()},
+        success: (res)=>{
+           let html = res.data.map(value => `<ul class="course">
+           <li>
+            <div>
                     <div class="row">
                         <a href="${value.url}" style="margin-left: 50px;margin-top: 10px;font-size: 19px">${value.name} </a>
                     <div><span class="layui-badge-rim" style="float:right;margin-top: 10px">${value.type}</span></div>
@@ -100,14 +96,14 @@ author: Edgar
                         <span class="layui-icon layui-icon-time" style="margin-left: 900px"> ${value.date} </span> {# 此处虽然IDE报错，但是并不是错误的 #}
                     </div>
                 </div>
-        </li>`).join("\n");
-                    $("#list").html(html)
-                },
-                error: () => {
-                    console.log("error")
-                }
-            })
+        </li></ul>`).join("\n")
+            $("#list").html(html)
+        },
+        error: ()=>{
+            console.log("error")
         }
-    </script>
+    })
+}
+</script>
 {% endblock %}
 </html>
