@@ -2,11 +2,11 @@
 author: Edgar
 对搜索界面的显示进行处理
 """
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-
 from course.models import Course
 from user.models import Files, User
 from post.models import Post
@@ -37,6 +37,7 @@ def search(request):
 
 
 def search_course(request):
+    """搜索课程"""
     keyword = request.GET.get("keyword")
     courses = Course.objects.filter(name__contains=keyword)  # 查询
     data = []
@@ -48,6 +49,7 @@ def search_course(request):
 
 
 def search_post(request):
+    """搜索帖子"""
     keyword = request.GET.get("keyword")
     posts = Post.objects.filter(topic__contains=keyword)  # 获取所有满足条件的帖子
     data = []
@@ -71,5 +73,5 @@ def files(request):
         files = list(map(lambda x: {"name": x.name, "type": x.type, "date": str(x.date).split(" ")[0],
                                     "download_times": x.download_times, "url": x.path,
                                     "username": User.objects.get(user_id=x.user_id).user.username},
-                         Files.objects.filter(type__contains=value)))
+                         Files.objects.filter(Q(type__contains=value) | Q(name__contains=value))))
         return JsonResponse({"data": files})
