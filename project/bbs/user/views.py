@@ -161,7 +161,10 @@ def profile(request):
             sex = '男'
         elif User.objects.get(user=user).sex is None:
             sex = '保密'
-        academy = User.objects.get(user=user).academy  # 把年级转换成中文，同样语句有点低级。。
+        if User.objects.get(user=user).academy == 'None':
+            academy = '您还没有设置学院哦！'
+        else:
+            academy = User.objects.get(user=user).academy
         grade_index = {'FR': '大一', 'SO': '大二', 'JR': '大三', 'SR': '大四', "OT": '其他', "UN": "未知"}
         grade = grade_index[User.objects.get(user=user).grade]
         return render(request, 'user/profile.html', context={"profile": profile, "username": user_name, "sex": sex,
