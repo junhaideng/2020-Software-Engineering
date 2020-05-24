@@ -15,19 +15,19 @@ from course.models import TeacherOfCourse
 
 def search(request):
     """搜索相关"""
-    if request.method == 'POST':  # 处理ajax对应的事件，可以实时的获取信息
-        value = request.POST.get("value")
-        type = request.POST.get("type")
-        data = []
-        if value and type == "course":
-            courses = Course.objects.filter(name__contains=value)  # 查询
-            for course in courses:
-                data.append({"name": course.name, "id": course.id})
-        if value and type == "post":
-            posts = Post.objects.filter(topic__contains=value)
-            for post in posts:
-                data.append({"name": post.topic, "id": post.id, "content": post.content})
-        return JsonResponse({"data": data})  # 返回数据，前端处理显示
+    # if request.method == 'POST':  # 处理ajax对应的事件，可以实时的获取信息
+    #     value = request.POST.get("value")
+    #     type = request.POST.get("type")
+    #     data = []
+    #     if value and type == "course":
+    #         courses = Course.objects.filter(name__contains=value)  # 查询
+    #         for course in courses:
+    #             data.append({"name": course.name, "id": course.id})
+    #     if value and type == "post":
+    #         posts = Post.objects.filter(topic__contains=value)
+    #         for post in posts:
+    #             data.append({"name": post.topic, "id": post.id, "content": post.content})
+    #     return JsonResponse({"data": data})  # 返回数据，前端处理显示
     if request.method == "GET":  #
         keyword = request.GET.get("keyword")
         if keyword:  # 如果含有keyword处理 点击search按钮之后的事件
