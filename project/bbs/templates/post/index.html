@@ -32,7 +32,7 @@ author: Edgar
         <div class="layui-form-item">
             <label class="layui-form-label "> 所属课程 </label>
             <div class="layui-input-block">
-                <select name="course" lay-verify="required" class="layui-select" placeholder="请选择课程">
+                <select name="course" lay-verify="required" class="layui-select"  lay-search="">>
                     <option value="" disabled selected>请选择相应课程</option>
                     {% for c in data %}
                         <option value="{{ c }}">{{ c }}</option>
