@@ -11,38 +11,96 @@ TODO: 具体如何显示，美化显示方式
 
     <meta charset="UTF-8">
     {% block forward_dependecies %}
-
     {% endblock %}
-
     <title>{% block title %}社区{% endblock %}</title>
-
 </head>
 <body>
 {% block content %}
     <div class="container">
-        <div style="max-height: 600px; min-height: 600px;">
-            {% for post in posts %}
-                {{ post.date_created }}
-                <li class="list-group-item"><a class="card-link"
-                                               href="{% url 'community:detail' post.id %}">{{ post.topic }}</a></li>
-            {% endfor %}
+        <div class="row">
+            <div class="col-7">
+                <div class="container">
+                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
+                        <a class="card-link" href="/community/post/1">
+                            <font style="vertical-align: inherit">
+                                <font style="vertical-align: inherit">name</font>
+                            </font>
+                        </a>
+                        <br/>
+                        <p>内容简介</p>
+                    </li>
+                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
+                        <a class="card-link" href="/community/post/2">
+                            <font style="vertical-align: inherit">
+                                <font style="vertical-align: inherit">name</font>
+                            </font>
+                        </a> <br/>
+                        <p>内容简介</p>
+                    </li>
+                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
+                        <a class="card-link" href="/community/post/3">
+                            <font style="vertical-align: inherit">
+                                <font style="vertical-align: inherit">name</font>
+
+                            </font>
+                        </a> <br/>
+                        <p>内容简介</p>
+                    </li>
+                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
+                        <a class="card-link" href="/community/post/4">
+                            <font style="vertical-align: inherit">
+                                <font style="vertical-align: inherit">name</font>
+
+                            </font>
+                        </a> <br/>
+                        <p>内容简介</p>
+                    </li>
+                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
+                        <a class="card-link" href="/community/post/5">
+                            <font style="vertical-align: inherit">
+                                <font style="vertical-align: inherit">name</font>
+
+                            </font>
+                        </a> <br/>
+                        <p>内容简介</p>
+                    </li>
+                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
+                        <a class="card-link" href="/community/post/5">
+                            <font style="vertical-align: inherit">
+                                <font style="vertical-align: inherit">name</font>
+
+                            </font>
+                        </a> <br/>
+                        <p>内容简介</p>
+                </div>
+            </div>
+            <div class="col-4">
+                <p style="margin-top: 8%;margin-left:10%;">热门帖子一览</p>
+                <br/>
+                <p style="margin-left:10%;"><a href="#">1.&nbsp;热门帖子</a></p>
+                <p style="margin-top: 1%;margin-left:10%;"><a href="#">2.&nbsp;热门帖子</a></p>
+                <p style="margin-top: 1%;margin-left:10%;"><a href="#">3.&nbsp;热门帖子</a></p>
+                <p style="margin-top: 1%;margin-left:10%;"><a href="#">4.&nbsp;热门帖子</a></p>
+                <p style="margin-top: 1%;margin-left:10%;"><a href="#">5.&nbsp;热门帖子</a></p>
+                <p style="margin-top: 1%;margin-left:10%;"><a href="#">6.&nbsp;热门帖子</a></p>
+                <p style="margin-top: 1%;margin-left:10%;"><a href="#">7.&nbsp;热门帖子</a></p>
+                <p style="margin-top: 1%;margin-left:10%;"><a href="#">8.&nbsp;热门帖子</a></p>
+                <p style="margin-top: 1%;margin-left:10%;"><a href="#">9.&nbsp;热门帖子</a></p>
+                <p style="margin-top: 1%;margin-left:10%;"><a href="#">10.&nbsp;热门帖子</a></p>
+            </div>
         </div>
+        {% if total > 10 %}
+            <div class=" mt-2">
 
-    {% if total > 10 %}
-        <div class=" mt-2">
-
-            <div id="page"></div>
-        </div>
-    {% endif %}
-
+                <div id="page"></div>
+            </div>
+        {% endif %}
     </div>
-
 
 {% endblock %}
 </body>
 {% block back_dependencies %}
     <script src="{% static 'layui/layui.js' %}"></script>
-
     <script>
         layui.use(['laypage', 'layer'], function () {
                 var laypage = layui.laypage
@@ -51,7 +109,7 @@ TODO: 具体如何显示，美化显示方式
                 //总页数低于页码总数
                 laypage.render({
                     elem: 'page'
-                    , count:{{ total}} //数据总数
+                    , count:{{total}} //数据总数
                     , curr: {{ curr_page }}
                     , jump: function (obj, first) {
                         if (!first) {

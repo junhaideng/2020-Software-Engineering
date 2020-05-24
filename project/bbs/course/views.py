@@ -89,7 +89,7 @@ def details(request, type, school, page_num):
         a.school = School
         info = TeacherOfCourse.objects.filter(course_id=course.pk)
         if info.count() == 0:
-            a.teacher = ['None']
+            a.teacher = ['暂无信息']
         else:
             for b in TeacherOfCourse.objects.filter(course_id=course.pk):
                 teacher_count = teacher_count+1

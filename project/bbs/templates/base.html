@@ -1,7 +1,6 @@
 <!--
 author: Edgar
 每一个模板文件的基类， 每个模板都必须继承该文件
-TODO: footer显示 ？？
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +29,6 @@ TODO: footer显示 ？？
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
@@ -40,7 +38,6 @@ TODO: footer显示 ？？
                         <a class="nav-link" href="{% url 'home:index' %}">主页</a>
                     {% endif %}
                 </li>
-
                 <li class="nav-item">
                     {% if request.path == '/course/' %}
                         <a class="nav-link active" style="color: #007fff;" href="{% url 'course:index' %}">课程</a>
@@ -62,15 +59,13 @@ TODO: footer显示 ？？
                         <a class="nav-link" href="{% url 'post:index' %}">发帖</a>
                     {% endif %}
                 </li>
-             <li class="nav-item">
+                <li class="nav-item">
                     {% if request.path == '/download/' %}
                         <a class="nav-link active" style="color: #007fff;" href="/download">下载</a>
                     {% else %}
                         <a class="nav-link" href="/download/">下载</a>
                     {% endif %}
                 </li>
-
-
             </ul>
             {% if request.user.is_authenticated %}  {# 如果用户登录了，显示相应的头像等信息 #}
                 <div class="form-inline">
@@ -99,12 +94,11 @@ TODO: footer显示 ？？
                         </a>
                         <div class="dropdown-menu ">
                             <a class="dropdown-item" href="{% url 'user:profile' %}">个人中心</a>
-                             <a class="dropdown-item" href="{% url 'feedback:index' %}">反馈</a>
+                            <a class="dropdown-item" href="{% url 'feedback:index' %}">反馈</a>
                             <a class="dropdown-item" href="javascript:void(0);" onclick="logout()">登出</a>
                         </div>
                     </div>
                 </div>
-
             {% else %}
                 <a class="nav-link nav-item mr-2 p-0" href="{% url 'user:login' %}">登录</a>
                 <a class="nav-link nav-item mr-2 p-0" href="{% url 'user:signup' %}">注册</a>
@@ -112,23 +106,16 @@ TODO: footer显示 ？？
 
         </div>
     </nav>
-
     {% block content %} {#  用来存放其他的实质性内容 #}
     {% endblock %}
-
 </div>
-
-
 </body>
 <style>
-    body .container{
+    body .container {
         min-width: 1140px;
     }
 </style>
 <script src="{% static 'js/user/logout.js' %}"></script>
-
-
-
 {% block back_dependencies %} {# 用来加载需要的依赖文件，比如css， js #}
 {% endblock %}
 </html>

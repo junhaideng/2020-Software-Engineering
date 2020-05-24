@@ -1,30 +1,28 @@
 {% extends 'user/base.html' %}
-<html xmlns:width="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>个人资料修改</title>
-
 </head>
 <body>
 {% block detail %}
     <div>
-
-        <form class="layui-form" action="{% url 'user:modify' %}" method="post" enctype="multipart/form-data">{% csrf_token %}
-
+        <form class="layui-form" action="{% url 'user:modify' %}" method="post"
+              enctype="multipart/form-data">{% csrf_token %}
             <div class="layui-input-item" style="margin-top:30px;margin-left:120px;">
                 <label class="label-name" for="nick">昵称：</label>
                 <div class="layui-input-block layui-inline" style="margin-left:0px;">
-                    <input type="text" name="nickname" id="nick"  required lay-verify="required" autocomplete="off"
+                    <input type="text" name="nickname" id="nick" required lay-verify="required" autocomplete="off"
                            data-validate="require-nick" placeholder="请输入昵称" class="layui-input" value={{ username }}>
                 </div>
                 <p class="rlf-tip-wrap errorHint color-red"></p>
             </div>
-
             <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:120px;">
                 <label class="label-name" for="sex">性别：</label>
                 <div class="btn-group open">
                     <select class="btn btn-secondary btn-sm " value='sex' name="sex">
-                        <option class="dropdown-item" selected>{{sex}}</option>
+                        <option class="dropdown-item" selected>{{ sex }}</option>
                         <option class="dropdown-item">男</option>
                         <option class="dropdown-item">女</option>
                         <option class="dropdown-item">保密</option>
@@ -32,12 +30,11 @@
                 </div>
                 <p class="rlf-tip-wrap errorHint color-red"></p>
             </div>
-
             <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:120px;">
                 <label class="label-name" for="college">学院：</label>
                 <div class="btn-group open">
                     <select class="btn btn-secondary btn-sm " value='college' name="college">
-                        <option selected>{{college}}</option>
+                        <option selected>{{ college }}</option>
                         <option>船舶海洋与建筑工程学院</option>
                         <option>机械与动力工程学院</option>
                         <option>电子信息与电气工程学院</option>
@@ -75,7 +72,7 @@
                 <label class="label-name" for="grade">年级：</label>
                 <div class="btn-group open">
                     <select class="btn btn-secondary btn-sm " value='grade' name="grade">
-                        <option selected>{{grade}}</option>
+                        <option selected>{{ grade }}</option>
                         <option>大一</option>
                         <option>大二</option>
                         <option>大三</option>
@@ -88,7 +85,7 @@
 
             <div class="block" style="margin-top:30px;margin-left:120px;">
                 <label class="label-name" for="nick">修改头像（支持jpg、png格式）：</label>
-                <input type="file" name="profile_c" accept=".jpg, .png" >
+                <input type="file" name="profile_c" accept=".jpg, .png">
                 <p class="rlf-tip-wrap errorHint color-red"></p>
             </div>
 
@@ -97,28 +94,27 @@
                 <button type="submit" class="layui-btn layui-btn-primary">确认修改</button>
 
                 <!--取消修改-->
-                <a href="{% url 'user:profile' %}"><button  class="layui-btn layui-btn-primary">取消修改</button></a>
+                <a href="{% url 'user:profile' %}">
+                    <button class="layui-btn layui-btn-primary">取消修改</button>
+                </a>
 
             </div>
 
-
-
-
-            </div>
         </form>
+    </div>
 
-        <script>
-            //Demo
-            layui.use('form', function(){
-              var form = layui.form;
+    <script>
+        //Demo
+        layui.use('form', function () {
+            var form = layui.form;
 
-              //监听提交
-              form.on('submit(formDemo)', function(data){
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
                 layer.msg(JSON.stringify(data.field));
                 return false;
-              });
             });
-        </script>
+        });
+    </script>
     </div>
 
 {% endblock %}

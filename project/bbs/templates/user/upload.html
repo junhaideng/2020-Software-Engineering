@@ -14,20 +14,25 @@
             <p>仅支持选择单一文件</p>
         </div>
         <div class="mt-2 mb-2" id="file_name"></div>
-
-
-        <div class="layui-input-inline " style="width: 100%;">
-            <div class="layui-input-inline">
-                <label for="type" class="layui-form-label" style="width: 100px">课程类型: </label></div>
-            {% csrf_token %}
-            <select id="type" class="layui-select" name="type">
-            </select>
-
-        </div>
-        <button type="submit" class="layui-btn mt-2  layui-btn-disabled" id="upload" disabled="disabled">上传文件</button>
-
-        <div class="row w-100"></div>
     </div>
+    <div class="layui-row">
+        <form class="layui-form layui-col-md6 layui-col-md-offset3  ">
+            <div class="layui-form-item">
+                <label for="type" class="layui-form-label" style="width: 100px">课程类型: </label>
+                <div class="layui-input-block" style="width: 400px">
+                    <select id="type" lay-filter="select" name="type" lay-verify="required" lay-search="">
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-col-md4 layui-col-md-offset4">
+                <button type="submit" class="layui-btn mt-2  layui-btn-disabled" id="upload" disabled="disabled">上传文件
+                </button>
+            </div>
+        </form>
+
+    </div>
+    {% csrf_token %}
+
 {% endblock %}
 </body>
 {% block back_dependencies %}
@@ -48,17 +53,15 @@
                         console.log(err);
                         reject();
                     }
-
                 })
             })
         }
     </script>
-
     <script>
         get_all_course().then(() => {
-
-            layui.use('upload', function () {
+            layui.use(['upload', 'form'], function () {
                 var upload = layui.upload;
+                var form = layui.form;
                 let cookies = document.cookie.split(',');
                 let pattern = /csrftoken=(.*)/m;
                 let csrf;
@@ -87,31 +90,22 @@
                     , choose: function (obj) {
                         obj.preview(function (index, file, result) {
                             document.getElementById("file_name").innerHTML = file.name;
-
-
                         })
                     }
                     , done: function (res) {
-
                         layer.msg("上传成功");
-                        location.reload();
                     }
                     , error: function () {
                         layer.msg("上传失败，请重新上传")
                     }
                 });
+                form.on("select(select)", (data) => {
+                    if (data.value.trim() !== "") {
+                        document.getElementById("upload").className = "layui-btn mt-2";
+                        $("#upload").removeAttr("disabled")
+                    }
+                })
             });
-
-            (function () {
-              $('select[name="type"]').on("change", ()=>{
-                    if ($('select[name="type"]').val().trim()!=="") {
-                    document.getElementById("upload").className = "layui-btn mt-2";
-                    $("#upload").removeAttr("disabled")
-                }
-               })
-            })();
-
-
         })
     </script>
 {% endblock %}

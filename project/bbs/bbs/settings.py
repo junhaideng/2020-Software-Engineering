@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'o4&wb0v9)fzcevfsyco!%4+f&t!*%-@ol!m_%l^f14arhvq8n3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -121,17 +121,12 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = "/static/"
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    os.path.join(BASE_DIR, "media")
-]
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 # 上传文件夹
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # 关闭浏览器的时候清除session
-
 
 LOGIN_URL = "/user/login"

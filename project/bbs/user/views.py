@@ -161,7 +161,10 @@ def profile(request):
             sex = '男'
         elif User.objects.get(user=user).sex is None:
             sex = '保密'
-        academy = User.objects.get(user=user).academy  # 把年级转换成中文，同样语句有点低级。。
+        if User.objects.get(user=user).academy == 'None':
+            academy = '您还没有设置学院哦！'
+        else:
+            academy = User.objects.get(user=user).academy
         grade_index = {'FR': '大一', 'SO': '大二', 'JR': '大三', 'SR': '大四', "OT": '其他', "UN": "未知"}
         grade = grade_index[User.objects.get(user=user).grade]
         return render(request, 'user/profile.html', context={"profile": profile, "username": user_name, "sex": sex,
@@ -223,7 +226,6 @@ def history(request):
     """
             发帖记录
             @author: 吴嘉锐  搬运了Edgar的分页语句
-            TODO： 文本太长时的省略
     """
     post_histories = Post.objects.filter(author_user_id=request.user.id)  # 发帖的记录
     if post_histories.exists():
@@ -237,8 +239,13 @@ def history(request):
         page = p.page(curr_page)  # 获取当前页面的信息
         if page:
             for post in page:
+                if len(post.content) < 10:
+                    content = post.content
+                else:
+                    content = post.content[0:8] + '...'
                 data.append(
-                    {"topic": post.topic, "created_time": post.created_time, "content": post.content})
+                    {"topic": post.topic, "created_time": post.created_time, "content": content}
+                )
         else:
             data = None
             total = 0
@@ -255,7 +262,7 @@ def history(request):
 @require_http_methods(["GET", "POST"])
 def file(request):
     """
-    用户上传的文件(实验数据)
+    用户上传的文件
     @author： Edgar
     """
     if request.method == "POST":  # POST 代表删除文件

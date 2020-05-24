@@ -8,7 +8,6 @@
 <body>
 {% block detail %}
     <div>
-
         <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:120px;">
             <label class="label-name" for="nick">昵称：</label>
             {{ username }}
@@ -32,21 +31,37 @@
             {{ grade }}
             <p class="rlf-tip-wrap errorHint color-red"></p>
         </div>
-        
-        
+
+
         <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:120px;">
             <label class="label-name" for="portrait">头像：</label>
-            <img scr="{% static 'images/sjtu.png' %}" width="60" height="60">
+            {% load user_related %}
+            {% if request.user.id|getProfileFromAuthId %}  {# 如果有自定义的头像 #}
+                <img class="rounded-circle " style="width: 60px;height:60px"
+                     src="{{ request.user.id|getProfileFromAuthId }}" alt="profile"
+                     title="{{ request.user.username }}"/>
+            {% else %}  {# 否则使用默认的头像svg #}
+                <svg class="bi bi-people-circle" width="4em" height="4em" viewBox="0 0 16 16"
+                     fill="currentColor"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 008 15a6.987 6.987 0 005.468-2.63z"></path>
+                    <path fill-rule="evenodd" d="M8 9a3 3 0 100-6 3 3 0 000 6z"
+                          clip-rule="evenodd"></path>
+                    <path fill-rule="evenodd"
+                          d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z"
+                          clip-rule="evenodd"></path>
+                </svg>
+            {% endif %}
 
         </div>
 
         <div class="block center" style="margin-top:30px;margin-left:120px;">
-            <a href="/user/modify">
+            <a href="{% url 'user:modify' %}">
                 <button type="button" class="layui-btn layui-btn-primary">修改</button>
             </a>
         </div>
 
-   </div>
+    </div>
 
 {% endblock %}
 </body>
