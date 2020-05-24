@@ -13,53 +13,75 @@ author: Edgar
             下载中心
         {% endblock %}
     </title>
+    {% load static %}
+    {% block forward_dependecies %}{# 用来加载依赖文件 #}
+
+        <style>
+            .course {
+                margin-top: 25px;
+                height: 100px;
+                width: 1120px;
+                border-style: ridge;
+                border-color: #E5E5E5;
+                box-shadow: 10px 10px 20px rgba(73, 66, 66, .1);
+                font-size: 17px;
+                color: rgba(129, 129, 126, 0.91);
+                text-align: center;
+            }
+            .course:hover {
+                background: rgba(73, 66, 66, .1);
+            }
+        </style>
+    {% endblock %}
 </head>
 <body>
 {% block content %}
-    <div class="layui-row mt-4">
-        <div class=" layui-col-md6">
-            <input id="input" class="layui-input">
-        </div>
-        <div class="layui-col-md3" style="margin-left: 10px">
-            <button class="layui-btn layui-btn-primary" onclick="search()">搜索</button>
-        </div>
+<div class="layui-row mt-4">
+<div class=" layui-col-md6" style="margin-left: 200px">
+    <input id="input" class="layui-input">
+</div>
+<div class="layui-col-md3" style="margin-left: 10px">
+  <button class="layui-btn layui-btn-primary" onclick="search()">搜索</button>
+</div>
 
-    </div>
-    <div>
-        <ul id="list" style="margin-left: 12px; margin-top: 40px">
-            {% for item in files %}
-                <li>
-                    <div>
-                        <div class="row">
-                            <h5 style="margin-right: 10px">{{ item.name }} </h5>
-                            <div><span class="layui-badge-rim">{{ item.type }}</span></div>
-                        </div>
-                        <div class="row">
-                            <span>this is the description</span>
-                        </div>
-                        <div class="row">
-                            <span class="layui-icon layui-icon-user"
-                                  style="margin-right: 10px"> {{ item.username }} </span>
-                            <span class="layui-icon layui-icon-time"> {{ item.date | date:"Y-m-d" }} </span>
-                            {# 此处虽然IDE报错，但是并不是错误的 #}
-                        </div>
+</div>
+    <div >
+    <ul id="list" style="margin-left: 12px; margin-top: 40px">
+    {% if files %}
+        {% for item in files %}
+            <div class="course">
+            <li>
+                <div>
+                    <div class="row">
+                        <a href="{{ item.path }}" style="margin-left: 50px;margin-top: 10px;font-size: 19px">{{item.name}} </a>
+                    <div><span class="layui-badge-rim" style="float:right;margin-top: 10px">{{item.type}}</span></div>
                     </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+                    <div class="row">
+                        <span style="margin-left: 50px">this is the description</span>
+                    </div>
+                    <div class="row">
+                        <span class="layui-icon layui-icon-user" style="margin-left: 40px"> {{item.username}} </span>
+                        <span class="layui-icon layui-icon-time" style="margin-left: 900px"> {{ item.date | date:"Y-m-d" }} </span> {# 此处虽然IDE报错，但是并不是错误的 #}
+                    </div>
+                </div>
+            </li>
+            </div>
+        {% endfor %}
+    {% endif %}
+    </ul>
+</div>
 
 {% endblock %}
 </body>
 {% block back_dependencies %}
-    <script>
-        function search() {
-            $.ajax({
-                type: "POST",
-                url: ".",
-                data: {value: $("#input").val().trim()},
-                success: (res) => {
-                    let html = res.data.map(value => `<li>
+<script>
+function search() {
+    $.ajax({
+        type: "POST",
+        url: ".",
+        data: {value:  $("#input").val().trim()},
+        success: (res)=>{
+           let html = res.data.map(value => `<li>
             <div>
                 <div class="row">
                     <h5 style="margin-right: 10px">${value.name} </h5>
@@ -74,13 +96,13 @@ author: Edgar
                 </div>
             </div>
         </li>`).join("\n")
-                    $("#list").html(html)
-                },
-                error: () => {
-                    console.log("error")
-                }
-            })
+            $("#list").html(html)
+        },
+        error: ()=>{
+            console.log("error")
         }
-    </script>
+    })
+}
+</script>
 {% endblock %}
 </html>
