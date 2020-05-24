@@ -226,7 +226,6 @@ def history(request):
     """
             发帖记录
             @author: 吴嘉锐  搬运了Edgar的分页语句
-            TODO： 文本太长时的省略
     """
     post_histories = Post.objects.filter(author_user_id=request.user.id)  # 发帖的记录
     if post_histories.exists():
@@ -240,8 +239,13 @@ def history(request):
         page = p.page(curr_page)  # 获取当前页面的信息
         if page:
             for post in page:
+                if len(post.content) < 10:
+                    content = post.content
+                else:
+                    content = post.content[0:8] + '...'
                 data.append(
-                    {"topic": post.topic, "created_time": post.created_time, "content": post.content})
+                    {"topic": post.topic, "created_time": post.created_time, "content": content}
+                )
         else:
             data = None
             total = 0
