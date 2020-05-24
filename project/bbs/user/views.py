@@ -262,7 +262,7 @@ def history(request):
 @require_http_methods(["GET", "POST"])
 def file(request):
     """
-    用户上传的文件(实验数据)
+    用户上传的文件
     @author： Edgar
     """
     if request.method == "POST":  # POST 代表删除文件
