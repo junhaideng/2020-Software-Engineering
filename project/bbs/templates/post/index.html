@@ -12,27 +12,22 @@ author: Edgar
 <body>
 {% block content %}
     <style>
-        form {
-            margin-top: 40px;
-        }
-
         .layui-form-label {
             width: 100px;
         }
     </style>
-    <form class="layui-form" action="" method="POST">
+    <form class="layui-form" action="" method="POST" style="margin-top: 40px">
         {% csrf_token %}
-
         <div class="layui-form-item">
-            <label class="layui-form-label" style="{width: 100px}">标题</label>
+            <label for="title" class="layui-form-label" style="{width: 100px}">标题</label>
             <div class="layui-input-block">
-                <input class="layui-input" name="topic" type="text" placeholder="请输入标题" required>
+                <input id="title" class="layui-input" name="topic" type="text" placeholder="请输入标题" required>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label "> 所属课程 </label>
+            <label for="course" class="layui-form-label "> 所属课程 </label>
             <div class="layui-input-block">
-                <select name="course" lay-verify="required" class="layui-select"  lay-search="">>
+                <select id="course" name="course" lay-verify="required" class="layui-select" lay-search="">
                     <option value="" disabled selected>请选择相应课程</option>
                     {% for c in data %}
                         <option value="{{ c }}">{{ c }}</option>
@@ -47,14 +42,12 @@ author: Edgar
         <div class="layui-form-item" style="float: right">
             <div class="layui-input-block">
                 <button class="layui-btn" type="button" id="submit">发帖</button>
-
             </div>
         </div>
     </form>
 {% endblock %}
 </body>
 {% block back_dependencies %}
-
     {% if msg %}
         <script>
             layui.use("layer", function () {
@@ -64,21 +57,16 @@ author: Edgar
                     , content: '发帖成功，是否前往社区查看文章？',
                     yes: () => {
                         window.location.href = "/community/post/{{ id }}"
-
                     }
                 });
-
             })
         </script>
     {% endif %}
     <script>
 
         layui.use(['layedit', "layer"], function () {
-
-            var layedit = layui.layedit;
-            var layer = layui.layer,
-
-
+            let layedit = layui.layedit;
+            let layer = layui.layer,
                 index = layedit.build('content', {
                     tool: [
                         'strong' //加粗
@@ -94,7 +82,6 @@ author: Edgar
                         , 'face' //表情
                     ]
                 }); //建立编辑器
-
             let cookies = document.cookie.split(',');
             let pattern = /csrftoken=(.*)/m;
             let csrf;
@@ -106,7 +93,6 @@ author: Edgar
             $("#submit").click(function () {
                 let content = layedit.getContent(index);
                 let form_data = $("form").serializeArray();
-
                 form_data.push({"name": "content", value: content})
                 $.ajax({
                     type: "post",
@@ -128,10 +114,6 @@ author: Edgar
                 })
             })
         });
-
-
     </script>
-
-
 {% endblock %}
 </html>
