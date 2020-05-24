@@ -8,7 +8,7 @@
 </head>
 <body>
 {% block content %}
-    <div>
+    <div style="margin-top: 20px">
     {% for data in data %}
             <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top:5px;">
                 标题：{{ data.topic }}
@@ -18,11 +18,11 @@
                     </button>
                 </a>
                     <hr>
-                所属课程：！@#￥%&<!--发帖时选择的所属课程-->
+                所属课程：{{data.course}}<!--发帖时选择的所属课程-->
                     <hr>
                 帖子内容：{{ data.content }}  <!--帖子内容-->
                     <hr>
-                发布时间：-/*+ <!--帖子发布时间-->
+                发布时间：{{data.time|date:"Y-m-d"}} <!--帖子发布时间-->
                     
             </blockquote>
 
@@ -30,20 +30,39 @@
 
     </div>
 
-    <div id="test1" class="grid-demo grid-demo-bg1" style="float:right">
+    <div id="page" class="grid-demo grid-demo-bg1" style="float:right">
 
-        <script>
-        layui.use('laypage', function(){
-            var laypage = layui.laypage;
+               <script>
+                   // 获取url中参数
+            function getQueryVariable(variable) {
+                let query = window.location.search.substring(1);
+                let vars = query.split("&");
+                for (let i = 0; i < vars.length; i++) {
+                    let pair = vars[i].split("=");
+                    if (pair[0] === variable) {
+                        return "?" + variable + "=" + pair[1];
+                    }
+                }
+                return false;
+            }
 
-          //执行一个laypage实例
-             laypage.render({
-             elem: 'test1', //注意，这里的 test1 是 ID，不用加 # 号
-             count: 6 ,//数据总数，从服务端得到
-             limit: 2
-             });
-         });
+            layui.use('laypage', function () {
+                var laypage = layui.laypage;
+
+                //执行一个laypage实例
+                laypage.render({
+                    elem: 'page'
+                    , count:{{ total }}//数据总数
+                    , curr: {{ curr_page }}
+                    , jump: function (obj, first) {
+                        if (!first) {
+                            location.href = getQueryVariable("keyword") + "&page=" + obj.curr;
+                        }
+                    }
+                })
+            });
         </script>
+
 
     </div>
 {% endblock %}

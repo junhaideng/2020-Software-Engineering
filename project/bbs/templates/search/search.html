@@ -7,7 +7,7 @@
 </head>
 <body>
 {% block content %}
-    <div>
+    <div style="margin-top: 20px">
         {% for data in data %}
             <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top:5px;">
                 <!--课程名-->课程：{{ data.name }}
@@ -17,26 +17,43 @@
                     </button>
                 </a>
                 <hr>
-                <!--开设学院名-->开设学院：1234
+                <!--开设学院名-->开设学院：{{ data.school }}
                 <hr>
                 <!--教师名-->授课教师：{{ data.teacher }}
             </blockquote>
         {% endfor %}
     </div>
 
-    <div id="test1" class="grid-demo grid-demo-bg1" style="float:right">
+    <div id="page" class="grid-demo grid-demo-bg1" style="float:right">
 
         <script>
-        layui.use('laypage', function(){
-            var laypage = layui.laypage;
+            function getQueryVariable(variable) {
+                let query = window.location.search.substring(1);
+                let vars = query.split("&");
+                for (let i = 0; i < vars.length; i++) {
+                    let pair = vars[i].split("=");
+                    if (pair[0] === variable) {
+                        return "?" + variable + "=" + pair[1];
+                    }
+                }
+                return false;
+            }
 
-          //执行一个laypage实例
-             laypage.render({
-              elem: 'test1',//注意，这里的 test1 是 ID，不用加 # 号
-              count: 50 ,//数据总数，从服务端得到
-              limit:5
-             });
-         });
+            layui.use('laypage', function () {
+                var laypage = layui.laypage;
+
+                //执行一个laypage实例
+                laypage.render({
+                    elem: 'page'
+                    , count:{{ total }}//数据总数
+                    , curr: {{ curr_page }}
+                    , jump: function (obj, first) {
+                        if (!first) {
+                            location.href = getQueryVariable("keyword") + "&page=" + obj.curr;
+                        }
+                    }
+                })
+            });
         </script>
     </div>
 {% endblock %}
