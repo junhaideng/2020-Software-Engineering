@@ -14,9 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls.static import static
+from django.views import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from search.views import files
 
 urlpatterns = [
@@ -28,8 +28,8 @@ urlpatterns = [
     path("user/", include("user.urls")),  # 用户相关路由
     path("community/", include("community.urls")),  # 社区相关路由
     path("feedback/", include("feedback.urls")),  # 反馈路由
-    path("download/", files, name="file"),  # 文件下载路由
+    path("download/", files, name="file"),  # 文件下载路由,
+    # Debug为False的时候应该使用：
+    re_path(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),  # 静态加载文件
+    re_path(r'^media/(?P<path>.*)$', static.serve, {'document_root': settings.MEDIA_ROOT}, name='media'),  # 媒体文件
 ]
-
-# 添加media 文件夹
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
