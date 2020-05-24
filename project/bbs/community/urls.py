@@ -8,7 +8,8 @@ from .views import *
 app_name = "community"
 urlpatterns = [
     path("", index, name='index'),  # 社区的主页
-    path("post/<int:id>", detail, name='detail'),  # 每个帖子的详情页
-    path("post/reply", reply, name="reply"),  # 提交回答
-    path("post/comment", comment, name="comment"),  # 进行回复
+    path("post/<int:id>/", detail, name='detail'),  # 每个帖子的详情页
+    path("post/reply/", reply, name="reply"),  # 提交回答
+    path("post/comment/", comment, name="comment"),  # 进行回复
+    path("get_hot/", get_hot, name="hot"),
 ]

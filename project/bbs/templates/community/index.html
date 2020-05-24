@@ -1,7 +1,6 @@
 <!--
 author: Edgar
 大体框架， 社区界面的显示
-TODO: 具体如何显示，美化显示方式
 -->
 
 {% extends 'base.html' %}
@@ -18,83 +17,37 @@ TODO: 具体如何显示，美化显示方式
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-7">
-                <div class="container">
-                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
-                        <a class="card-link" href="/community/post/1">
-                            <font style="vertical-align: inherit">
-                                <font style="vertical-align: inherit">name</font>
-                            </font>
-                        </a>
-                        <br/>
-                        <p>内容简介</p>
-                    </li>
-                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
-                        <a class="card-link" href="/community/post/2">
-                            <font style="vertical-align: inherit">
-                                <font style="vertical-align: inherit">name</font>
-                            </font>
-                        </a> <br/>
-                        <p>内容简介</p>
-                    </li>
-                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
-                        <a class="card-link" href="/community/post/3">
-                            <font style="vertical-align: inherit">
-                                <font style="vertical-align: inherit">name</font>
+            <div class="col-8">
+                <div class="container" style="margin-top: 20px">
+                    {% for post in posts %}
+                        <li class="list-group-item" style="margin-top:20px;width:66.7%">
+                            <a style="font-size: 20px" class="card-link" href="/community/post/{{ post.id }}">
+                                {{ post }}
+                            </a>
+                            <span  class="layui-badge-rim">{{ post.course }}</span>
+                            <p style="margin-top: 10px">{{ post.content }}</p>
+                            {% load user_related %}
+                        <i class="layui-icon layui-icon-user">  {{ post.author_user_id | getNameFromId }}</i>
+                        </li>
+                    {% endfor %}
 
-                            </font>
-                        </a> <br/>
-                        <p>内容简介</p>
-                    </li>
-                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
-                        <a class="card-link" href="/community/post/4">
-                            <font style="vertical-align: inherit">
-                                <font style="vertical-align: inherit">name</font>
-
-                            </font>
-                        </a> <br/>
-                        <p>内容简介</p>
-                    </li>
-                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
-                        <a class="card-link" href="/community/post/5">
-                            <font style="vertical-align: inherit">
-                                <font style="vertical-align: inherit">name</font>
-
-                            </font>
-                        </a> <br/>
-                        <p>内容简介</p>
-                    </li>
-                    <li class="list-group-item" style="margin-top:3%;margin-right:45%">
-                        <a class="card-link" href="/community/post/5">
-                            <font style="vertical-align: inherit">
-                                <font style="vertical-align: inherit">name</font>
-
-                            </font>
-                        </a> <br/>
-                        <p>内容简介</p>
+                    {% if total > 10 %}
+                        <div class="row">
+                        <div class="mt-2 col-7">
+                            <div id="page"  style="float: right; margin-right: 20px"></div>
+                        </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
-            <div class="col-4">
-                <p style="margin-top: 8%;margin-left:10%;">热门帖子一览</p>
-                <br/>
-                <p style="margin-left:10%;"><a href="#">1.&nbsp;热门帖子</a></p>
-                <p style="margin-top: 1%;margin-left:10%;"><a href="#">2.&nbsp;热门帖子</a></p>
-                <p style="margin-top: 1%;margin-left:10%;"><a href="#">3.&nbsp;热门帖子</a></p>
-                <p style="margin-top: 1%;margin-left:10%;"><a href="#">4.&nbsp;热门帖子</a></p>
-                <p style="margin-top: 1%;margin-left:10%;"><a href="#">5.&nbsp;热门帖子</a></p>
-                <p style="margin-top: 1%;margin-left:10%;"><a href="#">6.&nbsp;热门帖子</a></p>
-                <p style="margin-top: 1%;margin-left:10%;"><a href="#">7.&nbsp;热门帖子</a></p>
-                <p style="margin-top: 1%;margin-left:10%;"><a href="#">8.&nbsp;热门帖子</a></p>
-                <p style="margin-top: 1%;margin-left:10%;"><a href="#">9.&nbsp;热门帖子</a></p>
-                <p style="margin-top: 1%;margin-left:10%;"><a href="#">10.&nbsp;热门帖子</a></p>
+            <div class="col-2 offset-1">
+                <p style="margin-top: 20px; font-size: 20px">热门帖子一览</p>
+                <div id="hot">
+                    <i class="layui-icon layui-icon-loading layui-icon layui-anim layui-anim-rotate layui-anim-loop text-center"></i>
+                </div>
             </div>
         </div>
-        {% if total > 10 %}
-            <div class=" mt-2">
 
-                <div id="page"></div>
-            </div>
-        {% endif %}
     </div>
 
 {% endblock %}
@@ -120,5 +73,29 @@ TODO: 具体如何显示，美化显示方式
             }
         );
     </script>
+    <script>
+        $.ajax({
+            type: "GET",
+            url: "get_hot",
+            success: res => {
+                let html = "";
+                if (res.data.length === 0) {
+                    html = "暂时没有任何帖子"
+                } else {
+                    html = res.data.map((item, index) => `<p style="margin-top: 10px"><a href="post/${item.id}">${index + 1}.  ${item.topic}</a></p>`)
+                }
+                $("#hot").html(html)
+            },
+            error: err => {
+                console.log(err)
+            }
+        })
+    </script>
+    <style>
+        a:hover {
+            text-decoration: none;
+            text-underline: none;
+        }
+    </style>
 {% endblock %}
 </html>
