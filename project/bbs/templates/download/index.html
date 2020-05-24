@@ -83,18 +83,18 @@ function search() {
         success: (res)=>{
            let html = res.data.map(value => `<li>
             <div>
-                <div class="row">
-                    <h5 style="margin-right: 10px">${value.name} </h5>
-                <div><span class="layui-badge-rim">${value.type}</span></div>
+                    <div class="row">
+                        <a href="${value.url}" style="margin-left: 50px;margin-top: 10px;font-size: 19px">${value.name} </a>
+                    <div><span class="layui-badge-rim" style="float:right;margin-top: 10px">${value.type}</span></div>
+                    </div>
+                    <div class="row">
+                        <span style="margin-left: 50px">this is the description</span>
+                    </div>
+                    <div class="row">
+                        <span class="layui-icon layui-icon-user" style="margin-left: 40px"> ${value.username} </span>
+                        <span class="layui-icon layui-icon-time" style="margin-left: 900px"> ${value.date} </span> {# 此处虽然IDE报错，但是并不是错误的 #}
+                    </div>
                 </div>
-               <div class="row">
-                    <span>this is the description</span>
-               </div>
-                <div class="row">
-                    <span class="layui-icon layui-icon-user" style="margin-right: 10px">${value.username}  </span>
-                    <span class="layui-icon layui-icon-time">${value.date}</span>
-                </div>
-            </div>
         </li>`).join("\n")
             $("#list").html(html)
         },
