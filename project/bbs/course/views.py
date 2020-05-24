@@ -3,9 +3,9 @@ author: Edgar
 课程路由下的页面显示
 TODO: 如何显示课程，怎么样显示
 """
-from django.shortcuts import render
-from django.http import JsonResponse
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from user.models import User
 from .models import Course, TeacherOfCourse, CourseDes, CourseCom
@@ -115,6 +115,7 @@ def details(request, type, school, page_num):
 
 @require_http_methods(["GET", "POST"])
 def coursedes(request, pk):
+    path=request.get_full_path()
     class NewComments():  # 建立一个新的类
         def __init__(self):
             self.image_path = 0  # 头像路径
@@ -149,7 +150,7 @@ def coursedes(request, pk):
         newcomment.com = comment
         newcomment.user_name = username
         newcomment.save()
-        commentflag = 1
+        comment_flag = 1
         # 返回用户评论
     comments = CourseCom.objects.filter(courseid=course.pk)
     new_comments = []  # 返回给前端的列表
@@ -165,7 +166,10 @@ def coursedes(request, pk):
         info.com = a.com
         info.date = a.createddate
         new_comments.append(info)
-    return render(request, 'course/coursedes.html',
+    if comment_flag == 1:
+        return redirect(path)
+    else:
+        return render(request, 'course/coursedes.html',
                   {"course": course, "teacherList": teachers, "des": des, "school": school,
                    "type": type, "flag": flag, "userflag": uer_flag,
                    "commentflag": comment_flag, "comments": new_comments})
