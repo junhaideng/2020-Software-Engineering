@@ -1,7 +1,5 @@
 <!--
 author: Edgar
-大体框架，帖子详情界面
-TODO: 如何显示， 美化显示
 -->
 {% extends 'base.html' %}
 <!DOCTYPE html>
@@ -12,7 +10,6 @@ TODO: 如何显示， 美化显示
 </head>
 <body>
 {% load user_related %}{# 加载和用户相关的过滤器 #}
-
 {% block content %}
 <div class=" bg-light shadow p-0 mt-2 ">
     <div class="row">
@@ -154,7 +151,6 @@ TODO: 如何显示， 美化显示
         a {
             text-decoration: none;
         }
-
         a:hover {
             text-decoration: none;
         }
@@ -165,9 +161,7 @@ TODO: 如何显示， 美化显示
             let element = document.getElementById("reply_" + id);
             element.hidden = !element.hidden
         }
-
         function reply() {
-            console.log('f')
             let element = document.getElementById("reply");
             element.hidden = !element.hidden;
         }
@@ -216,10 +210,7 @@ TODO: 如何显示， 美化显示
                     );
                 }
             })
-
-
         }
     </script>
-
 {% endblock %}
 </html>

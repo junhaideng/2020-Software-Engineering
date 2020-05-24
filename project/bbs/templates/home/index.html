@@ -22,9 +22,9 @@ author: Eilliot
          width="233" height="233" style=" margin-top: 0%;margin-left: 32%;">
     <div class="container">
         <div class=" h-100" style="margin-top: 3%; margin-left: 25%;">
-             <div class="custom-control-inline">
-                 查询类别:
-             </div>
+            <div class="custom-control-inline">
+                查询类别:
+            </div>
             <div class="custom-control custom-radio custom-control-inline">
                 <input type="radio" id="type1" name="type" checked class="custom-control-input" value="course">
                 <label class="custom-control-label" for="type1">课程</label>
@@ -33,7 +33,7 @@ author: Eilliot
                 <input type="radio" id="type2" name="type" class="custom-control-input" value="post">
                 <label class="custom-control-label" for="type2">帖子</label>
             </div>
-            <div class="form-inline"  style=" height: 70px" >
+            <div class="form-inline" style=" height: 70px">
                 <div class="input-group w-50">
                     <label for="search"></label><input type="text" id="search" class="form-control" style="height: 50px"
                                                        placeholder="输入查询内容" name="keyword"
@@ -76,9 +76,9 @@ author: Eilliot
 </body>
 {% block back_dependencies %}
     <script>
-    document.getElementById("button").addEventListener("click", ()=>{
-        window.location.href = "/search/"+$("input[name='type']:checked").val()+"/?keyword="+$("#search").val();
-    })
+        document.getElementById("button").addEventListener("click", () => {
+            window.location.href = "/search/" + $("input[name='type']:checked").val() + "/?keyword=" + $("#search").val();
+        })
     </script>
 
 {% endblock %}

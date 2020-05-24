@@ -16,48 +16,50 @@ author: Edgar
 </head>
 <body>
 {% block content %}
-<div class="layui-row mt-4">
-<div class=" layui-col-md6">
-    <input id="input" class="layui-input">
-</div>
-<div class="layui-col-md3" style="margin-left: 10px">
-  <button class="layui-btn layui-btn-primary" onclick="search()">搜索</button>
-</div>
+    <div class="layui-row mt-4">
+        <div class=" layui-col-md6">
+            <input id="input" class="layui-input">
+        </div>
+        <div class="layui-col-md3" style="margin-left: 10px">
+            <button class="layui-btn layui-btn-primary" onclick="search()">搜索</button>
+        </div>
 
-</div>
-    <div >
-    <ul id="list" style="margin-left: 12px; margin-top: 40px">
-        {% for item in files %}
-        <li>
-            <div>
-                <div class="row">
-                    <h5 style="margin-right: 10px">{{item.name}} </h5>
-                <div><span class="layui-badge-rim">{{item.type}}</span></div>
-                </div>
-               <div class="row">
-                    <span>this is the description</span>
-               </div>
-                <div class="row">
-                    <span class="layui-icon layui-icon-user" style="margin-right: 10px"> {{item.username}} </span>
-                    <span class="layui-icon layui-icon-time"> {{ item.date | date:"Y-m-d" }} </span> {# 此处虽然IDE报错，但是并不是错误的 #}
-                </div>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
-</div>
+    </div>
+    <div>
+        <ul id="list" style="margin-left: 12px; margin-top: 40px">
+            {% for item in files %}
+                <li>
+                    <div>
+                        <div class="row">
+                            <h5 style="margin-right: 10px">{{ item.name }} </h5>
+                            <div><span class="layui-badge-rim">{{ item.type }}</span></div>
+                        </div>
+                        <div class="row">
+                            <span>this is the description</span>
+                        </div>
+                        <div class="row">
+                            <span class="layui-icon layui-icon-user"
+                                  style="margin-right: 10px"> {{ item.username }} </span>
+                            <span class="layui-icon layui-icon-time"> {{ item.date | date:"Y-m-d" }} </span>
+                            {# 此处虽然IDE报错，但是并不是错误的 #}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 
 {% endblock %}
 </body>
 {% block back_dependencies %}
-<script>
-function search() {
-    $.ajax({
-        type: "POST",
-        url: ".",
-        data: {value:  $("#input").val().trim()},
-        success: (res)=>{
-           let html = res.data.map(value => `<li>
+    <script>
+        function search() {
+            $.ajax({
+                type: "POST",
+                url: ".",
+                data: {value: $("#input").val().trim()},
+                success: (res) => {
+                    let html = res.data.map(value => `<li>
             <div>
                 <div class="row">
                     <h5 style="margin-right: 10px">${value.name} </h5>
@@ -72,13 +74,13 @@ function search() {
                 </div>
             </div>
         </li>`).join("\n")
-            $("#list").html(html)
-        },
-        error: ()=>{
-            console.log("error")
+                    $("#list").html(html)
+                },
+                error: () => {
+                    console.log("error")
+                }
+            })
         }
-    })
-}
-</script>
+    </script>
 {% endblock %}
 </html>

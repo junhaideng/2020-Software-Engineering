@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     {% load static %}
     {% block forward_dependecies %}{# 用来加载依赖文件 #}
-
         <style>
             #box {
                 height: 200px;
@@ -60,35 +59,6 @@
 
             .course:hover {
                 background: rgba(73, 66, 66, .1);
-            }
-
-            ul.pagination {
-                display: inline-block;
-                padding: 0;
-                margin-top: 10%;
-                margin-left: 490px;
-
-            }
-
-            ul.pagination li {
-                display: inline;
-            }
-
-            ul.pagination li a {
-                color: black;
-                padding: 8px 16px;
-                text-decoration: none;
-                border-radius: 5px;
-            }
-
-            ul.pagination li a.active {
-                background-color: rgba(129, 129, 126, 0.91);
-                color: white;
-                border-radius: 5px;
-            }
-
-            ul.pagination li a:hover:not(.active) {
-                background-color: #ddd;
             }
         </style>
     {% endblock %}
@@ -160,8 +130,6 @@
             {% endif %}
         </dl>
     </div>
-
-
     {% block back_dependecies %}{# 用来加载依赖文件 #}
         <script>
             function jump2() {
@@ -171,22 +139,16 @@
         </script>
     {% endblock %}
 
-    <button class="layui-btn layui-btn-primary layui-btn-lg" type="button" onclick="jump2()" style="margin-left:45%;"><span>返回课程界面</span></button>
+    <button class="layui-btn layui-btn-primary layui-btn-lg" type="button" onclick="jump2()" style="margin-left:45%;">
+        <span>返回课程界面</span></button>
     <!--<div class="col-5 m-auto" >-->
     {% for i in list %}
         <div class="course" onclick="window.location.href= '/course/coursedes/{{ i.pk }}'">
             <div class="form-inline">
-                <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp; 课程名:&nbsp;</p><label for="name"
-                                                                                          style="margin-top: 10px;">{{ i.name }}</label>
-                <!--</div>
-                <div class="form-inline">-->
-                <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;开设学院：&nbsp;</p><label for="name"
-                                                                                          style="margin-top: 10px;"
-                                                                                          style="margin-top: 10px;">{{ i.school }}</label>
-                <!--</div>
-                <div class="form-inline">-->
-                <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;任课老师:&nbsp;</p><label for="name"
-                                                                                          style="margin-top: 10px;">
+                <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp; 课程名:&nbsp;</p><label for="name" style="margin-top: 10px;">{{ i.name }}</label>
+                <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;开设学院：&nbsp;</p><label for="name" style="margin-top: 10px; " >{{ i.school }}</label>
+
+                <p style="margin-top: 25px">&nbsp;&nbsp;&nbsp;&nbsp;任课老师:&nbsp;</p><label for="name" style="margin-top: 10px;">
                 {% for a in i.teacher %}
                     {{ a }}
                 {% endfor %}
@@ -195,7 +157,6 @@
         </div>
     {% endfor %}
     </form>
-    <!--</div>-->
     <!-- "total_num":总页码数,"now_page"：当前页码-->
     {% if count > 10 %}
         <div id="page"></div>
@@ -203,24 +164,24 @@
 {% endblock %}
 </body>
 {% block back_dependencies %}
-<script>
-    layui.use(['laypage', 'layer'], function () {
-            var laypage = layui.laypage
-                , layer = layui.layer;
+    <script>
+        layui.use(['laypage', 'layer'], function () {
+                var laypage = layui.laypage
+                    , layer = layui.layer;
 
-            //总页数低于页码总数
-            laypage.render({
-                elem: 'page'
-                , count:{{ count }}//数据总数
-                , curr: {{ now_page }}
-                , jump: function (obj, first) {
-                    if (!first) {
-                        location.href = obj.curr;
+                //总页数低于页码总数
+                laypage.render({
+                    elem: 'page'
+                    , count:{{ count }}//数据总数
+                    , curr: {{ now_page }}
+                    , jump: function (obj, first) {
+                        if (!first) {
+                            location.href = obj.curr;
+                        }
                     }
-                }
-            })
-        }
-    );
-</script>
+                })
+            }
+        );
+    </script>
 {% endblock %}
 </html>
