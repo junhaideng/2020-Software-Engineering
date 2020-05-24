@@ -6,73 +6,64 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="layui.css" media="all">
+    <link rel="stylesheet" href="layui.css"  media="all">
     {% load static %}
     {% block forward_dependecies %}{# 用来加载依赖文件 #}
 
         <style>
             .comment {
-                width: auto;
-                border-top: 1px solid rgba(233, 233, 233, 0.79);
-                border-bottom: 1px solid rgba(233, 233, 233, 0.79);
-                margin-top: 10px;
+                width:auto;
+                border-top: 1px solid  rgba(233, 233, 233, 0.79);
+                border-bottom: 1px solid  rgba(233, 233, 233, 0.79);
+                margin-top:10px;
             }
-
             .comment_content {
-                clear: both;
-                margin: 5px 50px;
-                font-size: 16px;
+                clear:both;
+                margin-left:80px;
+                font-size:17px;
             }
-
-            .imgdiv {
-                width: 80px;
-                height: 70px;
-                float: left;
+            .imgdiv{
+                margin-top: 2px;
+                width:50px;
+                height:50px;
+                float:left;
             }
-
             .imgcss {
-                width: 60px;
-                height: 60px;
+                width:50px;
+                height:50px;
                 border-radius: 50%;
             }
-
             .comment_name {
-                margin-left: 10px;
-                color: #3D9EEA;
-                font-size: 17px;
+                margin-left:40px;
+                color:#3D9EEA;
+                font-size:17px;
             }
-
             .comment_time {
-                margin-left: 800px;
-                float: right;
+                margin-left:800px;
+                float:right;
                 color: #061019;
-                font-size: 16px;
+                font-size:16px;
             }
-
-            .box {
-                margin-top: 10%;
-                margin: auto;
-                padding: 28px;
-                height: 200px;
+            .box{
+                margin-top:10%;
+                margin:auto;
+                padding:28px;
+                height:200px;
                 /*display:none;  默认文本框隐藏 */
             }
-
-            .box.show {
-                display: block;
-            }
-
+            .box.show
+            {display:block;}
             .box input {
-                width: 1000px;
-                height: 100px;
-                font-size: 17px;
-                margin-top: 18px;
-            }
+                width:1000px;
+                height:100px;
+                font-size:17px;
+                margin-top:18px;}
         </style>
         <script>
-            function jump() {
-                url = "{% url 'user:login' %}?next=" + window.location.pathname;//此处拼接内容
-                window.location.href = url;
-            }
+        function jump(){
+        url = "{% url 'user:login' %}?next=" + window.location.pathname;//此处拼接内容
+        window.location.href = url;
+        }
         </script>
     {% endblock %}
 
@@ -130,46 +121,45 @@
     </fieldset>
 
     {% for i in comments %}
-        <div class="comment">
-            <div class="imgdiv">
-                {% if i.image_path == 0 %}
-                    <img class="imgcss" src="{% static 'images/headsculpture.png' %}">
-                {% else %}
-                    <img class="imgcss" src="{{ i.image_path }}">
-                {% endif %}
+    <div class="comment">
+        <div class="imgdiv">
+            {% if i.image_path == 0 %}
+                <img class="imgcss"  src="{% static 'images/headsculpture.png' %}">
+            {% else %}
+                <img class="imgcss"  src="{{i.image_path}}">
+            {% endif %}
+        </div>
+        <div class="conmment_details">
+            <div style="float:left;">
+                <span class="comment_name">{{ i.user_name }}</span>
+                <span class="comment_time">{{ i.date }}</span>
             </div>
-            <div class="conmment_details">
-                <div style="float:left;">
-                    <span class="comment_name">{{ i.user_name }}</span>
-                    <span class="comment_time">{{ i.date }}</span>
-                </div>
-                <div class="comment_content">{{ i.com }}
-                </div>
+            <div class="comment_content" >{{ i.com }}
             </div>
         </div>
+    </div>
     {% endfor %}
     {% csrf_token %}
 
     {% if userflag == 1 %}
-        <div id='inputbox' class="box">
+    <div id='inputbox' class="box">
         <form action="{% url 'course:coursedes' course.pk %}" method="post">
-        {% csrf_token %}
-        <div style="margin-left: -110px;">
-            <div class="layui-form-item layui-form-text">
-                <div class="layui-input-block">
+            {% csrf_token %}
+         <div style="margin-left: -110px;">
+          <div class="layui-form-item layui-form-text">
+            <div class="layui-input-block">
             <textarea class="layui-textarea" placeholder="在这里可以留下您的评论"
                       id="comment" name="comment"></textarea>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button type="submit" class="layui-btn">立即提交</button>
-                </div>
             </div>
         </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn">立即提交</button>
+            </div>
+        </div>
+         </div>
     {% else %}
-        <button type="button" class="layui-btn-primary layui-btn" onclick="jump()" style="float:right">
-            <span>点击此处登录后评价</span></button>
+        <button type="button" class="layui-btn-primary layui-btn" onclick="jump()" style="float:right;margin-top: 10px;"><span>点击此处登录后评价</span></button>
     {% endif %}
 </form>
 </div>
