@@ -161,7 +161,7 @@ def profile(request):
             sex = '男'
         elif User.objects.get(user=user).sex is None:
             sex = '保密'
-        if User.objects.get(user=user).academy == 'None':
+        if User.objects.get(user=user).academy is None:
             academy = '您还没有设置学院哦！'
         else:
             academy = User.objects.get(user=user).academy
@@ -444,7 +444,7 @@ def notice(request):
 
     received_comment = []  # 获得用户收到的评论
     for reply in my_reply:
-        comment_to_reply = PostComment.objects.filter(post_id=reply.id)
+        comment_to_reply = PostComment.objects.filter(reply=reply.id)
         for each_comment in comment_to_reply:
             received_comment.append(each_comment)
             if User.objects.filter(id=each_comment.post_user_id) is not None:
