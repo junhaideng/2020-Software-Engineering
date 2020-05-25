@@ -1,5 +1,7 @@
 <!--
 author: Edgar
+大体框架，帖子详情界面
+TODO: 如何显示， 美化显示
 -->
 {% extends 'base.html' %}
 <!DOCTYPE html>
@@ -10,11 +12,13 @@ author: Edgar
 </head>
 <body>
 {% load user_related %}{# 加载和用户相关的过滤器 #}
+
 {% block content %}
 <div class=" bg-light shadow p-0 mt-2 ">
     <div class="row">
         <div class="col-8">
-            <div class="layui-badge-rim" ><span style="font-size: 20px" >{{ post.course }}</span> </div>
+            <div class="layui-badge-rim" style="margin-left: 25px"><span
+                    style="font-size: 14px">{{ post.course }}</span></div>
         </div>
         <div class="col-4">
             <div class="text">
@@ -23,31 +27,33 @@ author: Edgar
         </div>
     </div>
 </div>
-<div class="bg-light border-bottom row ">
-    <div class="col card-title">
+<div class="bg-light border-bottom row " style="margin-left: 1px;margin-right: 1px;">
+    <div class="col card-title" style="font-size: 27px;margin-top: 12px;margin-left: 8px">
         {{ post.topic }}
     </div>
+    <br/><br/><br/>
     <div class="w-100 row"></div>
-    <div class="col">
+    <div class="col" style="font-size: 17px;margin-top: 8px">
         {% autoescape off %}
-        {{ post.content |safe }}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ post.content |safe }}
         {% endautoescape %}
     </div>
+    <br/><br/><br/>
     <div class="w-100"></div>
-    <div class="col m-2">
-        <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="reply()">
+    <div class="col" style="margin-bottom: 13px">
+        <button class="layui-btn layui-btn-normal layui-btn-checked" onclick="reply()" style="margin-left: 7px;">
             <i class="layui-icon layui-icon-edit"></i>
             写回答
         </button>
         <div id="reply" hidden>
-            <div class="row m-2">
+            <div class="row" style="margin-left:5px;margin-top: 10px">
                 <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
                 </textarea>
             </div>
-            <div class="row m-2">
+            <div class="row">
                 <div class="m-2">
-                    <button class="layui-btn">提交</button>
-                    <button class="layui-btn layui-btn-primary">取消</button>
+                    <button class="layui-btn" style="margin-left:7px;margin-top: 10px;">提交</button>
+                    <button class="layui-btn layui-btn-primary" style="margin-top: 10px;">取消</button>
                 </div>
             </div>
         </div>
@@ -142,7 +148,7 @@ author: Edgar
 
         {% csrf_token %}
     </div>
-<div class="row " style="margin-top: 60px"  ></div>
+    <div class="row " style="margin-top: 60px"></div>
 </div>
 {% endblock %}
 </body>
@@ -151,6 +157,7 @@ author: Edgar
         a {
             text-decoration: none;
         }
+
         a:hover {
             text-decoration: none;
         }
@@ -161,7 +168,9 @@ author: Edgar
             let element = document.getElementById("reply_" + id);
             element.hidden = !element.hidden
         }
+
         function reply() {
+            console.log('f')
             let element = document.getElementById("reply");
             element.hidden = !element.hidden;
         }
@@ -210,7 +219,10 @@ author: Edgar
                     );
                 }
             })
+
+
         }
     </script>
+
 {% endblock %}
 </html>
