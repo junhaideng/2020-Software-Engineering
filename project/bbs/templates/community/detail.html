@@ -1,7 +1,6 @@
 <!--
 author: Edgar
 大体框架，帖子详情界面
-TODO: 如何显示， 美化显示
 -->
 {% extends 'base.html' %}
 <!DOCTYPE html>
@@ -14,10 +13,10 @@ TODO: 如何显示， 美化显示
 {% load user_related %}{# 加载和用户相关的过滤器 #}
 
 {% block content %}
-<div class=" bg-light shadow p-0 mt-2 ">
-    <div class="row">
+<div class=" bg-light shadow p-0 mt-4 ">
+    <div class="row mt-2">
         <div class="col-8">
-            <div class="layui-badge-rim" style="margin-left: 25px"><span
+            <div class="layui-badge-rim mt-1" style="margin-left: 25px;"><span
                     style="font-size: 14px">{{ post.course }}</span></div>
         </div>
         <div class="col-4">
@@ -31,29 +30,30 @@ TODO: 如何显示， 美化显示
     <div class="col card-title" style="font-size: 27px;margin-top: 12px;margin-left: 8px">
         {{ post.topic }}
     </div>
-    <br/><br/><br/>
     <div class="w-100 row"></div>
-    <div class="col" style="font-size: 17px;margin-top: 8px">
+    <div class="col" style="font-size: 17px;margin-top: 8px; margin-left: 20px">
         {% autoescape off %}
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ post.content |safe }}
+        {{ post.content |safe }}
         {% endautoescape %}
     </div>
-    <br/><br/><br/>
-    <div class="w-100"></div>
+    <div class="w-100 mt-3"></div>
     <div class="col" style="margin-bottom: 13px">
-        <button class="layui-btn layui-btn-normal layui-btn-checked" onclick="reply()" style="margin-left: 7px;">
+        <button class="layui-btn layui-btn-normal layui-btn-checked" onclick="reply_edit()" style="margin-left: 7px;">
             <i class="layui-icon layui-icon-edit"></i>
             写回答
         </button>
         <div id="reply" hidden>
-            <div class="row" style="margin-left:5px;margin-top: 10px">
-                <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+            <div class="row mt-4" style="margin-left:5px;">
+                <textarea id="reply_content" placeholder="请输入内容" class="layui-textarea"></textarea>
                 </textarea>
             </div>
-            <div class="row">
+            <div class="row float-right">
                 <div class="m-2">
-                    <button class="layui-btn" style="margin-left:7px;margin-top: 10px;">提交</button>
-                    <button class="layui-btn layui-btn-primary" style="margin-top: 10px;">取消</button>
+                    <button onclick="reply({{ post.id }})" class="layui-btn" style="margin-left:7px;margin-top: 10px;">
+                        提交
+                    </button>
+                    <button onclick="reply_edit()" class="layui-btn layui-btn-primary" style="margin-top: 10px;">取消
+                    </button>
                 </div>
             </div>
         </div>
@@ -65,12 +65,12 @@ TODO: 如何显示， 美化显示
         {% for one in data %}{# 对于每一条回复信息 #}
             <div class="border-top">
                 <div class="row mt-4">
-                    <div class="col-1 mt-2 ml-0">
+                    <div class="mt-2 ml-0" style="padding-left: 15px; padding-right: 15px">
                         {% if one.user.profile %} {# 首先展示用户的基本信息，比如头像，用户名以及学院信息 #}
-                            <img class="rounded-circle " width="40px" height="40px" src="{{ one.user.profile }}"
+                            <img class="rounded-circle " width="32px" height="32px" src="{{ one.user.profile }}"
                                  alt="{{ one.user.user.name }}">
                         {% else %}
-                            <svg class="bi bi-people-circle" width="35px" height="35px" viewBox="0 0 16 16"
+                            <svg class="bi bi-people-circle" width="32px" height="32px" viewBox="0 0 16 16"
                                  fill="currentColor"
                                  xmlns="http://www.w3.org/2000/svg">
                                 <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 008 15a6.987 6.987 0 005.468-2.63z"></path>
@@ -82,7 +82,7 @@ TODO: 如何显示， 美化显示
                             </svg>
                         {% endif %}
                     </div>
-                    <div class="col-8 p-0 m-0">
+                    <div class="p-0 m-0" style="margin-left: 10px">
                         <div class="card-title mb-0"
                              style="font-size: 1.2rem; font-weight: 600"> {{ one.user.user.username }}</div>
                         <div class=" mt-2 pt-0"> {{ one.reply.content }}</div>
@@ -90,7 +90,7 @@ TODO: 如何显示， 美化显示
                 </div>
                 <div class="row m-2 mb-2">
                     <div class="mr-2">
-                        <i class="layui-icon layui-icon-time mr-1"></i> {{ one.reply.created_date }}
+                        <i class="layui-icon layui-icon-time mr-1"></i> {{ one.reply.created_date | date:'Y-m-d' }}
                     </div>
                     <div class="mr-2">
                         <a href="javascript:void(0)" onclick="show_edit({{ one.reply.id }})"> <i
@@ -100,7 +100,6 @@ TODO: 如何显示， 美化显示
                     </div>
                 </div>
                 <div id="reply_{{ one.reply.id }}" hidden>
-
                     <div class="ml-4">
                         <div class="list-group">
                             {% for comment in one.comments %}  {# 对于回复中的每一个评论 #}
@@ -120,32 +119,27 @@ TODO: 如何显示， 美化显示
                                                   d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z"
                                                   clip-rule="evenodd"></path>
                                         </svg>
-
                                     {% endif %}
-                                    {{ comment.commenter_id|getNameFromId }}
+                                    <span style="margin-left: 10px">{{ comment.commenter_id|getNameFromId }}</span>
                                     <div class="row ml-4">
-                                        {{ comment.content }}
+                                        {{ comment.content }} {{ comment.commenter_id }}
                                     </div>
                                 </div>
                             {% endfor %}
-
                         </div>
                     </div>
                     <div class="row m-2">
                         <div class="layui-input-inline" style="width: 80%">
                             <input class="layui-input" id="input_{{ one.reply.id }}">
                         </div>
-                        <button class="layui-btn layui-btn-normal layui-input-inline"
+                        <button class="layui-btn layui-btn-normal layui-input-inline ml-1"
                                 onclick="submit({{ one.reply.id }})">
                             评论
                         </button>
-
                     </div>
                 </div>
             </div>
-
         {% endfor %}
-
         {% csrf_token %}
     </div>
     <div class="row " style="margin-top: 60px"></div>
@@ -169,8 +163,7 @@ TODO: 如何显示， 美化显示
             element.hidden = !element.hidden
         }
 
-        function reply() {
-            console.log('f')
+        function reply_edit() {
             let element = document.getElementById("reply");
             element.hidden = !element.hidden;
         }
@@ -187,6 +180,40 @@ TODO: 如何显示， 美化显示
             return csrf
         }
 
+        function reply(id) {
+            layui.use(["layer"], () => {
+                let layer = layui.layer;
+                let csrf = get_csrf();
+                let content = $("#reply_content").val();
+                if (content.trim() === "") {
+                    layer.msg("回答不能为空")
+                } else {
+                    $.ajax({
+                            type: "post",
+                            url: "{% url "community:reply" %}",
+                            headers: {
+                                "X-CSRFToken": csrf
+                            },
+                            data: {id: id, content: content},
+
+                            success: function (data) {
+                                if (data.status === 200) {
+                                    window.location.reload();
+                                    layer.msg(data.message)
+                                } else {
+                                    layer.msg(data.message)
+                                }
+
+                            },
+                            err: function (err) {
+                                console.log(err)
+                            }
+                        }
+                    );
+                }
+            })
+        }
+
         function submit(id) {
             layui.use(["layer"], () => {
                 layer = layui.layer;
@@ -197,7 +224,7 @@ TODO: 如何显示， 美化显示
                 } else {
                     $.ajax({
                             type: "post",
-                            url: "/community/post/comment",
+                            url: "{% url 'community:comment' %}",
                             headers: {
                                 "X-CSRFToken": csrf
                             },
