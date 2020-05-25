@@ -19,33 +19,32 @@
             }
             .comment_content {
                 clear:both;
-                margin-left:80px;
+                margin-left:50px;
                 font-size:17px;
             }
             .imgdiv{
                 margin-top: 2px;
-                width:50px;
-                height:50px;
+                width:35px;
+                height:35px;
                 float:left;
             }
             .imgcss {
-                width:50px;
-                height:50px;
+                width:35px;
+                height:35px;
                 border-radius: 50%;
             }
             .comment_name {
-                margin-left:40px;
+                margin-left:20px;
                 color:#3D9EEA;
                 font-size:17px;
             }
             .comment_time {
-                margin-left:800px;
+                margin-right: 0;
                 float:right;
                 color: #061019;
                 font-size:16px;
             }
             .box{
-                margin-top:10%;
                 margin:auto;
                 padding:28px;
                 height:200px;
@@ -130,9 +129,9 @@
             {% endif %}
         </div>
         <div class="conmment_details">
-            <div style="float:left;">
+            <div >
                 <span class="comment_name">{{ i.user_name }}</span>
-                <span class="comment_time">{{ i.date }}</span>
+                <span class="comment_time">{{ i.date | date:"Y-m-d" }}</span>
             </div>
             <div class="comment_content" >{{ i.com }}
             </div>
