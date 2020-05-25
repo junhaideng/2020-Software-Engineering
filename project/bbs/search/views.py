@@ -14,6 +14,7 @@ from course.models import Course
 from user.models import Files, User
 from post.models import Post
 from course.models import TeacherOfCourse
+import re
 
 
 def search(request):
@@ -45,7 +46,7 @@ def search_course(request):
     print(keyword)
     courses = Course.objects.filter(name__contains=keyword)  # 查询
     data = []
-    per_page_num = 10  # 每一页的帖子数
+    per_page_num = 10  # 每一页的数量
     p = Paginator(courses, per_page_num)  # 分页对象
     total = ceil(courses.count() / per_page_num) * 10  # 总共页数， *10 是为了适应在layui中的显示(count变量)
     curr_page = 1 if not request.GET.get("page") else request.GET.get("page")  # 默认的时候指定的是第一页
@@ -66,25 +67,33 @@ def search_post(request):
     """搜索帖子"""
     keyword = request.GET.get("keyword")
     posts = Post.objects.filter(topic__contains=keyword)  # 获取所有满足条件的帖子
-    per_page_num = 2  # 每一页的帖子数
+    per_page_num = 10  # 每一页的帖子数
     p = Paginator(posts, per_page_num)  # 分页对象
     total = ceil(posts.count() / per_page_num) * 10  # 总共页数， *10 是为了适应在layui中的显示(count变量)
     curr_page = 1 if not request.GET.get("page") else request.GET.get("page")  # 默认的时候指定的是第一页
     data = []
+    pattern = re.compile("<.*?>(.*?)</.*?>")
     for post in p.page(curr_page):
-        content = post.content
+        content = re.sub(pattern, lambda x: x.group(1) if pattern.match(post.content) else post.content, post.content)
         if len(content) > 20:
             content = content[:20] + "..."  # 对内容处理一下
-        data.append({"topic": post.topic, "course": post.course, "content": content, "id": post.id, "time": post.created_time})
-    return render(request, 'search/search_post.html', context={"keyword": keyword, "data": data, "total": total, "curr_page": curr_page})
+        data.append(
+            {"topic": post.topic, "course": post.course, "content": content, "id": post.id, "time": post.created_time})
+    return render(request, 'search/search_post.html',
+                  context={"keyword": keyword, "data": data, "total": total, "curr_page": curr_page})
 
 
 @csrf_exempt
 def files(request):
     """下载页的文件显示"""
     if request.method == "GET":
-        files = Files.objects.all()  # 如果是get请求的话，会将所有的文件都进行显示
-        return render(request, "download/index.html", context={"files": files})
+        files = Files.objects.all().order_by("-date")  # 如果是get请求的话，会将所有的文件都进行显示
+        per_page_num = 10  # 每一页的数量
+        p = Paginator(files, per_page_num)  # 分页对象
+        total = ceil(files.count() / per_page_num) * 10  # 总共页数， *10 是为了适应在layui中的显示(count变量)
+        curr_page = 1 if not request.GET.get("page") else request.GET.get("page")  # 默认的时候指定的是第一页
+        return render(request, "download/index.html",
+                      context={"files": p.page(curr_page), "total": total, "curr_page": curr_page})
     elif request.method == "POST":  # 异步请求返回json数据，前端进行处理
         value = request.POST.get("value")
         # 将文件的一系列信息进行返回
