@@ -24,6 +24,12 @@
                     </select>
                 </div>
             </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" style="width: 100px">文件描述</label>
+                <div class="layui-input-block" style="width: 400px">
+                    <textarea id="desc" lay-filter="desc" class="layui-textarea" placeholder="在这里给文件添加一些描述"></textarea>
+                </div>
+            </div>
             <div class="layui-form-item layui-col-md4 layui-col-md-offset4">
                 <button type="submit" class="layui-btn mt-2  layui-btn-disabled" id="upload" disabled="disabled">上传文件
                 </button>
@@ -46,7 +52,7 @@
                     url: "/course/get_all_course",
                     success: (res) => {
                         let html = res.data.map(value => `<option value="${value}">${value}</option>`).join("\n");
-                        $("#type").html('<option value=\"\">请选择</option>' + html);
+                        $("#type").html('<option value=\"\">请选择课程类型</option>' + html);
                         resolve();
                     }
                     , error: (err) => {
@@ -79,12 +85,16 @@
                     , auto: false
                     , bindAction: "#upload"
                     , url: '{% url "user:upload" %}' //上传接口
+                    , type: "POST"
                     , size: 100 * 1024 // 最大值
                     , accept: "file"
 
                     , data: {
                         type: function () {
                             return $('select[name="type"]').val();
+                        },
+                        desc: function () {
+                            return $("#desc").val();
                         }
                     }
                     , choose: function (obj) {
@@ -99,12 +109,29 @@
                         layer.msg("上传失败，请重新上传")
                     }
                 });
-                form.on("select(select)", (data) => {
-                    if (data.value.trim() !== "") {
+
+                function check() {
+                    if ($("#type").val().trim() !== ""
+                        && document.querySelector("#file_upload_div > input").files.length > 0
+                        && $("#desc").val().trim() !== "") {
                         document.getElementById("upload").className = "layui-btn mt-2";
                         $("#upload").removeAttr("disabled")
+                    }else{
+                        document.getElementById("upload").className = "layui-btn mt-2  layui-btn-disabled";
+                        $("#upload").disabled = true
                     }
+                }
+
+                $("#desc").on("input", () => {
+                    check();
+                });
+                $("#file_upload_div").on("change", () => {
+                    check();
+                });
+                form.on("select(select)", () => {
+                    check()
                 })
+
             });
         })
     </script>
