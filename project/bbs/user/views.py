@@ -46,7 +46,6 @@ def forget(request):
 @require_http_methods(["GET", "POST"])
 def forgetdetail(request):
     """验证密保 author 祁山青
-    ToDo: 验证三个密保，两个正确即可重置
     """
     username = request.session.get('msg')
     u = User.objects.get(user__username=username)
@@ -390,6 +389,7 @@ def upload(request):
     if request.method == "POST":
         file = request.FILES.get("file")
         type = request.POST.get("type")
+        desc = request.POST.get("desc")
         pre_path = os.path.join(os.path.join(settings.BASE_DIR, "media"), "files/")
         alias = time.strftime("%Y_%m_%d_%H_%M_%S_", time.localtime()) + file.name
         if not os.path.exists(pre_path):
@@ -402,7 +402,8 @@ def upload(request):
                              type=type,
                              download_times=0,
                              path="/media/files/" + alias,
-                             name=os.path.splitext(file.name)[0]).save()
+                             name=os.path.splitext(file.name)[0],
+                             desc=desc).save()
         return JsonResponse({"status": "success"})
     else:
         return render(request, 'user/upload.html')
