@@ -45,6 +45,7 @@ class Files(models.Model):
     download_times = models.IntegerField()  # 下载次数
     path = models.CharField(max_length=100)  # 实验数据的路径, 路径下的文件名需要进行一下处理，以免冲突
     name = models.CharField(max_length=40)  # 实验数据的名称
+    desc = models.TextField(default="暂无描述")  # 文件的描述信息
 
     def __str__(self):
         return self.name
