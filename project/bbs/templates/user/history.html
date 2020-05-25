@@ -34,10 +34,9 @@ author: Edgar
                     <tr>
                         <td><a href="/community/post/{{ post.id }}">
                             {{ post.topic }}</a></td>
-                        <td>{{ post.created_time }}</td>
+                        <td>{{ post.created_time | date:'Y-m-d-h:m:s' }}</td>
                         <td>{{ post.content |safe }}</td>
                     </tr>
-
                 {% endfor %}
                 </tbody>
                 {% csrf_token %}

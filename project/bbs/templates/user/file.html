@@ -37,7 +37,7 @@ author: Edgar
                         <td>{{ file.name }}</td>
                         <td>{{ file.type }}</td>
                         <td>{{ file.downloads }}</td>
-                        <td>{{ file.date }}</td>
+                        <td>{{ file.date | date:'Y-m-d-h:m:s' }}</td>
                         <td>
                             <div class="layui-row">
                                 <a style="text-decoration: none;" href="{{ file.path }}" download="{{ file.name }}"
