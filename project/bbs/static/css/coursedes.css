@@ -1,0 +1,46 @@
+.comment {
+                width:auto;
+                border-top: 1px solid  rgba(233, 233, 233, 0.79);
+                border-bottom: 1px solid  rgba(233, 233, 233, 0.79);
+                margin-top:10px;
+            }
+            .comment_content {
+                clear:both;
+                margin-left:50px;
+                font-size:17px;
+            }
+            .imgdiv{
+                margin-top: 2px;
+                width:35px;
+                height:35px;
+                float:left;
+            }
+            .imgcss {
+                width:35px;
+                height:35px;
+                border-radius: 50%;
+            }
+            .comment_name {
+                margin-left:20px;
+                color:#3D9EEA;
+                font-size:17px;
+            }
+            .comment_time {
+                margin-right: 0;
+                float:right;
+                color: #061019;
+                font-size:16px;
+            }
+            .box{
+                margin:auto;
+                padding:28px;
+                height:200px;
+                /*display:none;  默认文本框隐藏 */
+            }
+            .box.show
+            {display:block;}
+            .box input {
+                width:1000px;
+                height:100px;
+                font-size:17px;
+                margin-top:18px;}
