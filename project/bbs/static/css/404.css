@@ -1,40 +1,78 @@
 {
-        padding-right: 0px; padding-left: 0px; padding-bottom: 0px; margin: 0px; padding-top: 0px
-    }
-    body {
-        font-family: "微软雅黑"
-    }
-    img {
-        border-top-style: none; border-right-style: none; border-left-style: none; border-bottom-style: none
-    }
-    a  {
-        cursor: pointer
-    }
-    a {
-        text-decoration: none; outline: none
-    }
-    a:hover {
-        text-decoration: underline
-    }
+    padding-right: 0px
+;
+    padding-left: 0px
+;
+    padding-bottom: 0px
+;
+    margin: 0px
+;
+    padding-top: 0px
+}
+body {
+    font-family: "微软雅黑"
+}
 
-    .cont {
-        margin: 0px auto; width: 500px; line-height: 20px
-    }
-    .c1 {
-        height: 360px; text-align: center
-    }
-    .c1 .img1 {
-        margin-top: 180px
-    }
-    .cont h2 {
-        font-weight: normal; font-size: 18px; color: #555; height: 35px; text-align: center
-    }
-    .c2 {
-        height: 35px; text-align: center
-    }
-    .c2 a {
-        display: inline-block; font-size: 14px; margin: 0px 4px; color: #626262; padding-top: 1px; height: 23px; text-align: left; text-decoration: none
-    }
-    .c2 a:hover {
-        color: #626262; text-decoration: none
-    }
+img {
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+    border-bottom-style: none
+}
+
+a {
+    cursor: pointer
+}
+
+a {
+    text-decoration: none;
+    outline: none
+}
+
+a:hover {
+    text-decoration: underline
+}
+
+.cont {
+    margin: 0px auto;
+    width: 500px;
+    line-height: 20px
+}
+
+.c1 {
+    height: 360px;
+    text-align: center
+}
+
+.c1 .img1 {
+    margin-top: 180px
+}
+
+.cont h2 {
+    font-weight: normal;
+    font-size: 18px;
+    color: #555;
+    height: 35px;
+    text-align: center
+}
+
+.c2 {
+    height: 35px;
+    text-align: center
+}
+
+.c2 a {
+    display: inline-block;
+    font-size: 14px;
+    margin: 0px 4px;
+    color: #626262;
+    padding-top: 1px;
+    height: 23px;
+    text-align: left;
+    text-decoration: none
+}
+
+.c2 a:hover {
+    color: #626262;
+    text-decoration: none
+}
