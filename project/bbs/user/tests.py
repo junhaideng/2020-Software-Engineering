@@ -82,39 +82,25 @@ class Test(StaticLiveServerTestCase):
         用户资料显示
         author: 吴嘉锐
         """
-        url = self.live_server_url + reverse("user:signup")  # 先进行注册
-        self.browser.get(url)
-        self.browser.find_element_by_xpath('//*[@id="username"]').send_keys("hello")  # 输入用户名
-        self.browser.find_element_by_xpath('//*[@id="email"]').send_keys("123@qq.com")  # 输入邮箱
-        self.browser.find_element_by_xpath('//*[@id="password"]').send_keys("123456")  # 输入密码
-        self.browser.find_element_by_xpath('//*[@id="confirm"]').send_keys("123456")  # 确认密码
-        self.browser.find_element_by_xpath('//*[@id="btn"]').click()  # 点击注册
-
+        self.login('test', '123456')  # 登录
         url = self.live_server_url + reverse("user:profile")  # 再测试用户信息
         self.browser.get(url)
         # 获取显示的用户各项资料
-        name = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[2]/text()').text
-        sex = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[3]/text()').text
-        academy = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[4]/text()').text
-        grade = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[5]/text()').text
-        self.assertEqual(name, "hello")
-        self.assertEqual(sex, "男")
-        self.assertEqual(academy, "您还没有设置学院哦！")
-        self.assertEqual(grade, "未知")
+        name = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[2]').text  # 用户名
+        sex = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[3]').text  # 性别
+        academy = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[4]').text  # 学院
+        grade = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[5]').text  # 年级
+        self.assertEqual(name, "昵称： test")
+        self.assertEqual(sex, "性别： 男")
+        self.assertEqual(academy, '学院： 未知')
+        self.assertEqual(grade, "年级： 未知")
 
     def test_modify(self):
         """
             用户资料修改
             author: 吴嘉锐
         """
-        url = self.live_server_url + reverse("user:signup")  # 先进行注册
-        self.browser.get(url)
-        self.browser.find_element_by_xpath('//*[@id="username"]').send_keys("hello")  # 输入用户名
-        self.browser.find_element_by_xpath('//*[@id="email"]').send_keys("123@qq.com")  # 输入邮箱
-        self.browser.find_element_by_xpath('//*[@id="password"]').send_keys("123456")  # 输入密码
-        self.browser.find_element_by_xpath('//*[@id="confirm"]').send_keys("123456")  # 确认密码
-        self.browser.find_element_by_xpath('//*[@id="btn"]').click()  # 点击注册
-
+        self.login('test', '123456')
         url = self.live_server_url + reverse("user:modify")  # 修改个人资料
         self.browser.get(url)
         name = self.browser.find_element_by_id("nick")  # 修改用户名“modify_test”
