@@ -50,23 +50,23 @@ author: 祁山青
             <form action="{% url 'user:setquestion' %}" method="post" style="margin-top: 40%">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="pwd">Password</label>
+                    <label for="pwd">密码</label>
                     <input type="password" class="form-control" id="pwd" name="pwd" autocomplete="off" autofocus
                            required>
                 </div>
 
                 <div class="form-group">
-                    <label for="newQuestion">newQuestion</label>
+                    <label for="newQuestion">密保问题</label>
                     <input type="text" class="form-control" id="newQuestion" name="newQuestion"  autocomplete="off"
-                           autofocus required>
+                            required>
                 </div>
 
                 <div class="form-group">
-                    <label for="newAnswer">newAnswer</label>
+                    <label for="newAnswer">密保答案</label>
                     <input type="text" class="form-control" id="newAnswer" name="newAnswer"  autocomplete="off"
-                           autofocus required>
+                            required>
                 </div>
-                <button type="submit" id="btn" class="btn btn-outline-primary text-center">Submit
+                <button type="submit" id="btn" class="btn btn-outline-primary text-center">提交
             </button>
             </form>
 
