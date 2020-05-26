@@ -10,13 +10,13 @@ author: ForDemain
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/coursedes.css' %}">
     {% block forward_dependecies %}{# 用来加载依赖文件 #}
+        <link rel="stylesheet" href="{% static 'css/coursedes.css' %}">
         <script>
-        function jump(){
-        url = "{% url 'user:login' %}?next=" + window.location.pathname;//此处拼接内容
-        window.location.href = url;
-        }
+            function jump() {
+                url = "{% url 'user:login' %}?next=" + window.location.pathname;//此处拼接内容
+                window.location.href = url;
+            }
         </script>
     {% endblock %}
 
@@ -74,45 +74,46 @@ author: ForDemain
     </fieldset>
 
     {% for i in comments %}
-    <div class="comment">
-        <div class="imgdiv">
-            {% if i.image_path == 0 %}
-                <img class="imgcss"  src="{% static 'images/headsculpture.png' %}">
-            {% else %}
-                <img class="imgcss"  src="{{i.image_path}}">
-            {% endif %}
-        </div>
-        <div class="conmment_details">
-            <div >
-                <span class="comment_name">{{ i.user_name }}</span>
-                <span class="comment_time">{{ i.date | date:"Y-m-d" }}</span>
+        <div class="comment">
+            <div class="imgdiv">
+                {% if i.image_path == 0 %}
+                    <img class="imgcss" src="{% static 'images/headsculpture.png' %}">
+                {% else %}
+                    <img class="imgcss" src="{{ i.image_path }}">
+                {% endif %}
             </div>
-            <div class="comment_content" >{{ i.com }}
+            <div class="conmment_details">
+                <div>
+                    <span class="comment_name">{{ i.user_name }}</span>
+                    <span class="comment_time">{{ i.date | date:"Y-m-d" }}</span>
+                </div>
+                <div class="comment_content">{{ i.com }}
+                </div>
             </div>
         </div>
-    </div>
     {% endfor %}
     {% csrf_token %}
 
     {% if userflag == 1 %}
-    <div id='inputbox' class="box">
+        <div id='inputbox' class="box">
         <form action="{% url 'course:coursedes' course.pk %}" method="post">
-            {% csrf_token %}
-         <div style="margin-left: -110px;">
-          <div class="layui-form-item layui-form-text">
-            <div class="layui-input-block">
+        {% csrf_token %}
+        <div style="margin-left: -110px;">
+            <div class="layui-form-item layui-form-text">
+                <div class="layui-input-block">
             <textarea class="layui-textarea" placeholder="在这里可以留下您的评论"
                       id="comment" name="comment"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn">立即提交</button>
+                </div>
             </div>
         </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button type="submit" class="layui-btn">立即提交</button>
-            </div>
-        </div>
-         </div>
     {% else %}
-        <button type="button" class="layui-btn-primary layui-btn" onclick="jump()" style="float:right;margin-top: 10px;"><span>点击此处登录后评价</span></button>
+        <button type="button" class="layui-btn-primary layui-btn" onclick="jump()"
+                style="float:right;margin-top: 10px;"><span>点击此处登录后评价</span></button>
     {% endif %}
 </form>
 </div>

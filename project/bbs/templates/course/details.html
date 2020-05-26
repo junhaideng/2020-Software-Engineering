@@ -7,8 +7,8 @@ author: ForDemain
 <head>
     <meta charset="UTF-8">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/course.css' %}">
     {% block forward_dependecies %}{# 用来加载依赖文件 #}
+        <link rel="stylesheet" href="{% static 'css/details.css' %}">
     {% endblock %}
     <title>{% block title %}详细信息{% endblock %}</title>
 </head>
@@ -89,7 +89,8 @@ author: ForDemain
         </script>
     {% endblock %}
 
-    <button class="layui-btn layui-btn-primary layui-btn-lg" type="button" onclick="jump2()" style="margin-left:45%;"><span>返回课程界面</span></button>
+    <button class="layui-btn layui-btn-primary layui-btn-lg" type="button" onclick="jump2()" style="margin-left:45%;">
+        <span>返回课程界面</span></button>
     <!--<div class="col-5 m-auto" >-->
     {% for i in list %}
         <div class="course" onclick="window.location.href= '/course/coursedes/{{ i.pk }}'">
@@ -121,24 +122,24 @@ author: ForDemain
 {% endblock %}
 </body>
 {% block back_dependencies %}
-<script>
-    layui.use(['laypage', 'layer'], function () {
-            var laypage = layui.laypage
-                , layer = layui.layer;
+    <script>
+        layui.use(['laypage', 'layer'], function () {
+                var laypage = layui.laypage
+                    , layer = layui.layer;
 
-            //总页数低于页码总数
-            laypage.render({
-                elem: 'page'
-                , count:{{ count }}//数据总数
-                , curr: {{ now_page }}
-                , jump: function (obj, first) {
-                    if (!first) {
-                        location.href = obj.curr;
+                //总页数低于页码总数
+                laypage.render({
+                    elem: 'page'
+                    , count:{{ count }}//数据总数
+                    , curr: {{ now_page }}
+                    , jump: function (obj, first) {
+                        if (!first) {
+                            location.href = obj.curr;
+                        }
                     }
-                }
-            })
-        }
-    );
-</script>
+                })
+            }
+        );
+    </script>
 {% endblock %}
 </html>

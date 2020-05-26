@@ -7,8 +7,8 @@ author: ForDemain
 <head>
     <meta charset="UTF-8">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/course.css' %}">
     {% block forward_dependecies %}{# 用来加载依赖文件 #}
+        <link rel="stylesheet" href="{% static 'css/course.css' %}">
     {% endblock %}
     <title>{% block title %}课程{% endblock %}</title>
 </head>
