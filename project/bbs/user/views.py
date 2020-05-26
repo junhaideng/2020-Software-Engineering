@@ -339,10 +339,10 @@ def setquestion(request):
         """
     username = request.session.get('username')
     U = User.objects.get(user__username=username)
-    if U.question is None:  # 原先有密保 则需要输入密码设置密保
-        flag = 1
-    else:  # 原先无密保 则需要验证原先密保更改密保
+    if U.question is None:  # 原先没有密保 则需要输入密码设置密保
         flag = 0
+    else:  # 原先无密保 则需要验证原先密保更改密保
+        flag = 1
     if request.method == "POST" and flag == 0:  # 原先无密保
         pwd = request.POST.get("pwd")  # pwd是前端post传来的密码
         res = authenticate(username=username, password=pwd)  # 进行账号密码验证

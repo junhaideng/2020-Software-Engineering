@@ -1,5 +1,6 @@
 from django.urls import reverse
-from .models import User, AuthUser  # AuthUser 是django提供的
+from .models import User, AuthUser, Files  # AuthUser 是django提供的
+from post.models import Post
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 
@@ -8,12 +9,19 @@ class Test(StaticLiveServerTestCase):
     """
     author: Edgar
     """
+
     def setUp(self) -> None:
         auth = AuthUser(username="test", email="test@qq.com")
         auth.set_password("123456")  # 设置密码，不能够直接设置
         auth.save()
         user = User(user=auth, sex=True, question="tests", answer="answer")  # 用户写入数据库，并设置密保
         user.save()
+        # 文件
+        Files.objects.create(name="test", path="/media/files/test.png", user_id=1, type="软件工程", download_times=0,
+                             desc="测试")
+        # 帖子记录
+        Post.objects.create(topic="test", counter=0, author_user_id=1, content="test content", course="软件工程")
+
         self.browser = webdriver.Firefox()
 
     def test_login_and_logout(self):
@@ -45,6 +53,7 @@ class Test(StaticLiveServerTestCase):
         result = self.browser.find_element_by_xpath("/html/body/div/nav/div/div/div/div")  # 注册之后会自动登录，登录之后会出现个人中心
         self.assertIsNotNone(result.get_attribute("innerHTML"))
 
+
     def test_forget(self):
         """密码忘记根据密保找回"""
         url = self.live_server_url + reverse("user:forget")
@@ -56,8 +65,18 @@ class Test(StaticLiveServerTestCase):
         message = self.browser.find_element_by_xpath('/html/body/div/div/div')  # 重置成功之后会有提示信息
         self.assertEqual(message.text, "您的密码已经重置为:123456 请返回主页重新登陆")
 
-    def test_reset_password(self):
-        pass
+    def test_set_pwdquestion(self):
+        """密保修改"""
+        self.login('test', '123456')
+        url = self.live_server_url + reverse("user:setquestion")
+        self.browser.get(url)
+        self.browser.find_element_by_xpath('//*[@id="oldAnswer"]').send_keys('answer')  # 输入旧答案
+        self.browser.find_element_by_xpath('//*[@id="newQuestion"]').send_keys('NewTest')  # 输入新问题
+        self.browser.find_element_by_xpath('//*[@id="newAnswer"]').send_keys('Answer')  # 输入新答案
+        self.browser.find_element_by_xpath('//*[@id="btn"]').click()  # 确定
+        user=User.objects.get(user__username='test')
+        answer=user.answer
+        self.assertEqual(answer, 'Answer')
 
     def tearDown(self) -> None:
         self.browser.close()

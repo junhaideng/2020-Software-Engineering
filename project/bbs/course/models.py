@@ -67,7 +67,7 @@ class TeacherOfCourse(models.Model):
 
 
 class CourseDes(models.Model):
-    """相应老师的课程描述"""
+    """相应课程描述"""
     user_id = models.IntegerField(null=True, blank=True)  # 哪一个用户写的
     course_id = models.ForeignKey('Course', on_delete=models.CASCADE)  # 对应Course中自动生成的id
     des = models.TextField(default="暂无描述")  # 描述的信息course
