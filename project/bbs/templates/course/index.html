@@ -1,3 +1,6 @@
+<!--
+author: ForDemain
+-->
 {% extends 'base.html' %} {# 课程的主界面 #}
 <!DOCTYPE html>
 <html lang="en">
@@ -5,65 +8,7 @@
     <meta charset="UTF-8">
     {% load static %}
     {% block forward_dependecies %}{# 用来加载依赖文件 #}
-        <style>
-            #box {
-                height: 200px;
-                background: rgba(255, 255, 255, 0.8);
-                box-shadow: 0 0 10px rgba(73, 66, 66, .1);
-                margin: 50px auto;
-                border: 1px solid #E5E5E5;
-            }
-
-            #box dl {
-                margin: 10px 20px;
-            }
-
-            #box dt {
-                float: left;
-                color: #8a8a8a;
-                font-size: 17px;
-            }
-
-            #box dd {
-                float: left;
-                color: rgba(129, 129, 126, 0.91);
-                margin: 0 10px;
-                font-size: 17px;
-                cursor: pointer;
-            }
-
-            #box dd.active {
-                color: #009688;
-                font-weight: bold;
-            }
-
-            #box dl.select {
-                margin: 10px 20px;
-            }
-
-            #box dl.select dd {
-                border: 1px solid #009688;
-                height: 25px;
-                margin-top: 6px;
-                padding: 0 2px 0 10px;
-                border-radius: 3px;
-                background-color: #fff;
-            }
-
-            #box dl.select dd span {
-                width: 20px;
-                height: 20px;
-                display: inline-block;
-                text-align: center;
-                line-height: 20px;
-                background: #009688;
-                color: #fff;
-                margin-left: 10px;
-                cursor: pointer;
-                border-radius: 5px;
-            }
-
-        </style>
+        <link rel="stylesheet" href="{% static 'css/course.css' %}">
     {% endblock %}
     <title>{% block title %}课程{% endblock %}</title>
 </head>

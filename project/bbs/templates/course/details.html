@@ -1,98 +1,16 @@
-{% extends 'base.html' %} {# 课程的主界面 #}
+<!--
+author: ForDemain
+-->
+{% extends 'base.html' %} {# 课程详细信息界面 #}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     {% load static %}
     {% block forward_dependecies %}{# 用来加载依赖文件 #}
-
-        <style>
-            #box {
-                height: 200px;
-                background: rgba(255, 255, 255, 0.8);
-                box-shadow: 0 0 10px rgba(73, 66, 66, .1);
-                margin: 50px auto;
-                border: 1px solid #E5E5E5;
-            }
-
-            #box dl {
-                margin: 10px 20px;
-            }
-
-            #box dt {
-                float: left;
-                color: #8a8a8a;
-                font-size: 17px;
-            }
-
-            #box dd {
-                float: left;
-                color: rgba(129, 129, 126, 0.91);
-                margin: 0 10px;
-                font-size: 17px;
-                cursor: pointer;
-            }
-
-            #box chosen {
-                color: #009688;
-                font-weight: bold;
-                margin: 2px 10px;
-                border: 1px solid #009688;
-                height: 25px;
-                padding: 0 2px 0 10px;
-                border-radius: 3px;
-                background-color: #fff;
-            }
-
-            .course {
-                margin-top: 25px;
-                height: 80px;
-                width: 1120px;
-                border-style: ridge;
-                border-color: #E5E5E5;
-                box-shadow: 10px 10px 20px rgba(73, 66, 66, .1);
-                border-radius: 10px;
-                font-size: 17px;
-                color: rgba(129, 129, 126, 0.91);
-                text-align: center;
-                cursor: pointer;
-            }
-
-            .course:hover {
-                background: rgba(73, 66, 66, .1);
-            }
-
-            ul.pagination {
-                display: inline-block;
-                padding: 0;
-                margin-top: 10%;
-                margin-left: 490px;
-
-            }
-
-            ul.pagination li {
-                display: inline;
-            }
-
-            ul.pagination li a {
-                color: black;
-                padding: 8px 16px;
-                text-decoration: none;
-                border-radius: 5px;
-            }
-
-            ul.pagination li a.active {
-                background-color: rgba(129, 129, 126, 0.91);
-                color: white;
-                border-radius: 5px;
-            }
-
-            ul.pagination li a:hover:not(.active) {
-                background-color: #ddd;
-            }
-        </style>
+        <link rel="stylesheet" href="{% static 'css/details.css' %}">
     {% endblock %}
-    <title>{% block title %}课程{% endblock %}</title>
+    <title>{% block title %}详细信息{% endblock %}</title>
 </head>
 <br>
 
@@ -171,7 +89,8 @@
         </script>
     {% endblock %}
 
-    <button class="layui-btn layui-btn-primary layui-btn-lg" type="button" onclick="jump2()" style="margin-left:45%;"><span>返回课程界面</span></button>
+    <button class="layui-btn layui-btn-primary layui-btn-lg" type="button" onclick="jump2()" style="margin-left:45%;">
+        <span>返回课程界面</span></button>
     <!--<div class="col-5 m-auto" >-->
     {% for i in list %}
         <div class="course" onclick="window.location.href= '/course/coursedes/{{ i.pk }}'">
@@ -203,24 +122,24 @@
 {% endblock %}
 </body>
 {% block back_dependencies %}
-<script>
-    layui.use(['laypage', 'layer'], function () {
-            var laypage = layui.laypage
-                , layer = layui.layer;
+    <script>
+        layui.use(['laypage', 'layer'], function () {
+                var laypage = layui.laypage
+                    , layer = layui.layer;
 
-            //总页数低于页码总数
-            laypage.render({
-                elem: 'page'
-                , count:{{ count }}//数据总数
-                , curr: {{ now_page }}
-                , jump: function (obj, first) {
-                    if (!first) {
-                        location.href = obj.curr;
+                //总页数低于页码总数
+                laypage.render({
+                    elem: 'page'
+                    , count:{{ count }}//数据总数
+                    , curr: {{ now_page }}
+                    , jump: function (obj, first) {
+                        if (!first) {
+                            location.href = obj.curr;
+                        }
                     }
-                }
-            })
-        }
-    );
-</script>
+                })
+            }
+        );
+    </script>
 {% endblock %}
 </html>

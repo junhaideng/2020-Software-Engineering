@@ -43,7 +43,6 @@ def search(request):
 def search_course(request):
     """搜索课程"""
     keyword = request.GET.get("keyword")
-    print(keyword)
     courses = Course.objects.filter(name__contains=keyword)  # 查询
     data = []
     per_page_num = 10  # 每一页的数量
@@ -52,7 +51,6 @@ def search_course(request):
     curr_page = 1 if not request.GET.get("page") else request.GET.get("page")  # 默认的时候指定的是第一页
 
     for course in p.page(curr_page):
-        print(course, course.id, course.school, )
         # 查询到所有对应的老师，这里只显示两个
         teacher_list = list(
             map(lambda x: x.get("name"), TeacherOfCourse.objects.filter(course_id=course.id).values("name")))

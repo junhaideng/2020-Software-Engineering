@@ -24,22 +24,26 @@ class Test(StaticLiveServerTestCase):
 
         self.browser = webdriver.Firefox()
 
-    def test_login_and_logout(self):
-        """用户的登录和登出"""
+    def login(self, username, password):
+        """用来登录，非测试函数"""
         url = self.live_server_url + reverse("user:login")
         self.browser.get(url)
-        username = self.browser.find_element_by_id("username")
-        username.send_keys("test")  # 输入账号
-        password = self.browser.find_element_by_id("password")
-        password.send_keys("123456")  # 输入密码
+        _username = self.browser.find_element_by_id("username")
+        _username.send_keys(username)  # 输入账号
+        _password = self.browser.find_element_by_id("password")
+        _password.send_keys(password)  # 输入密码
         btn = self.browser.find_element_by_xpath("/html/body/div/div/form/button")
         btn.click()  # 点击登录
+
+    def test_login_and_logout(self):
+        """用户的登录和登出"""
+        self.login('test', '123456')
         self.browser.implicitly_wait(1)  # 等待1s加载
         result = self.browser.find_element_by_xpath("/html/body/div/nav/div/div/div/div")  # 登录之后会出现个人中心
         self.assertIsNotNone(result.get_attribute("innerHTML"))  # 因为该元素需要触发然后才能获取到text内容，这里直接判断存在值
         self.browser.find_element_by_xpath('/html/body/div/nav/div/div/div/a').click()  # 点击头像，出现选项
         self.browser.find_element_by_xpath('/html/body/div/nav/div/div/div/div/a[3]').click()  # 登出
-        self.assertEqual(self.browser.find_element_by_xpath('/html/body/div/nav/div/a[1]').text, "登录")   # 登出之后，会出现登出二字
+        self.assertEqual(self.browser.find_element_by_xpath('/html/body/div/nav/div/a[1]').text, "登录")  # 登出之后，会出现登出二字
 
     def test_signup(self):
         """用户的注册"""
@@ -66,7 +70,9 @@ class Test(StaticLiveServerTestCase):
         self.assertEqual(message.text, "您的密码已经重置为:123456 请返回主页重新登陆")
 
     def test_set_pwdquestion(self):
-        """密保修改"""
+        """密保修改
+        author: qsq
+        """
         self.login('test', '123456')
         url = self.live_server_url + reverse("user:setquestion")
         self.browser.get(url)
@@ -78,6 +84,93 @@ class Test(StaticLiveServerTestCase):
         answer=user.answer
         self.assertEqual(answer, 'Answer')
 
+    def test_reset_password(self):
+        """密码重置"""
+        self.login('test', '123456')
+        url = self.live_server_url + reverse("user:resetpwd")
+        self.browser.get(url)
+        self.browser.find_element_by_xpath('//*[@id="oldpwd"]').send_keys('123456')  # 输入旧密码
+        self.browser.find_element_by_xpath('//*[@id="newpwd"]').send_keys('test')  # 输入新密码
+        self.browser.find_element_by_xpath('//*[@id="confirm"]').send_keys('test')  # 确认
+        self.browser.find_element_by_xpath('//*[@id="btn"]').click()  # 确定
+        self.login('test', 'test')
+        element = self.browser.find_element_by_xpath('/html/body/div/nav/div/div/div/div/a[1]')  # 个人中心
+        self.assertEqual(element.get_attribute('innerHTML'), "个人中心")
+
+    def test_post_history(self):
+        """发帖记录测试"""
+        self.login('test', '123456')
+        url = self.live_server_url + reverse("user:history")
+        self.browser.get(url)
+        topic = self.browser.find_element_by_xpath(
+            '/html/body/div/div/div/div[2]/div/table/tbody/tr/td[1]').text  # 帖子主题
+        content = self.browser.find_element_by_xpath(
+            '/html/body/div/div/div/div[2]/div/table/tbody/tr/td[3]').text  # 帖子内容
+        self.assertEqual(topic.strip(), "test")
+        self.assertEqual(content.strip(), 'test content'[0:8] + "...")
+
+    def test_my_files(self):
+        """我的文件测试"""
+        self.login('test', '123456')
+        url = self.live_server_url + reverse('user:file')
+        self.browser.get(url)
+        name = self.browser.find_element_by_xpath(
+            '/html/body/div/div/div/div[2]/div/table/tbody/tr[1]/td[1]').text  # 文件名
+        type = self.browser.find_element_by_xpath(
+            '/html/body/div/div/div/div[2]/div/table/tbody/tr[1]/td[2]').text  # 文件类型
+        download_times = self.browser.find_element_by_xpath(
+            '/html/body/div/div/div/div[2]/div/table/tbody/tr[1]/td[3]').text  # 文件下载次数
+        self.assertEqual(name, "test")
+        self.assertEqual(type, "软件工程")
+        self.assertEqual(download_times, '0')
+
     def tearDown(self) -> None:
         self.browser.close()
 
+    def test_profile(self):
+        """
+        用户资料显示
+        author: 吴嘉锐
+        """
+        self.login('test', '123456')  # 登录
+        url = self.live_server_url + reverse("user:profile")  # 再测试用户信息
+        self.browser.get(url)
+        # 获取显示的用户各项资料
+        name = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[2]').text  # 用户名
+        sex = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[3]').text  # 性别
+        academy = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[4]').text  # 学院
+        grade = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[5]').text  # 年级
+        self.assertEqual(name, "昵称： test")
+        self.assertEqual(sex, "性别： 男")
+        self.assertEqual(academy, '学院： 未知')
+        self.assertEqual(grade, "年级： 未知")
+
+    def test_modify(self):
+        """
+            用户资料修改
+            author: 吴嘉锐
+        """
+        self.login('test', '123456')
+        url = self.live_server_url + reverse("user:modify")  # 修改个人资料
+        self.browser.get(url)
+        name = self.browser.find_element_by_id("nick")  # 修改用户名“modify_test”
+        name.send_keys("modify_test")
+        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[2]/div").click()  # 修改性别为女
+        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[2]/div/select/option[3]").click()
+        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[3]/div").click()  # 修改学院船建
+        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[3]/div/select/option[2]").click()
+        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[4]/div").click()  # 修改年级大二
+        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[4]/div/select/option[3]").click()
+        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[6]/button").click()  # 确认修改
+
+        url = self.live_server_url + reverse("user:profile")  # 是否修改成功
+        self.browser.get(url)
+        # 获取显示的用户各项资料
+        name = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[2]/text()').text
+        sex = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[3]/text()').text
+        academy = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[4]/text()').text
+        grade = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[5]/text()').text
+        self.assertEqual(name, "modify_test")
+        self.assertEqual(sex, "女")
+        self.assertEqual(academy, "船舶海洋与建筑工程学院")
+        self.assertEqual(grade, "大二")

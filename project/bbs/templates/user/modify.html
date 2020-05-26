@@ -10,6 +10,13 @@
     <div>
         <form class="layui-form" action="{% url 'user:modify' %}" method="post"
               enctype="multipart/form-data">{% csrf_token %}
+
+            <div class="block" style="margin-top:30px;margin-left:120px;">
+                <label class="label-name" for="nick">修改头像（支持jpg、png格式）：</label>
+                <input type="file" name="profile_c" accept=".jpg, .png">
+                <p class="rlf-tip-wrap errorHint color-red"></p>
+            </div>
+
             <div class="layui-input-item" style="margin-top:30px;margin-left:120px;">
                 <label class="label-name" for="nick">昵称：</label>
                 <div class="layui-input-block layui-inline" style="margin-left:0px;">
@@ -18,6 +25,7 @@
                 </div>
                 <p class="rlf-tip-wrap errorHint color-red"></p>
             </div>
+
             <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:120px;">
                 <label class="label-name" for="sex">性别：</label>
                 <div class="btn-group open">
@@ -30,6 +38,7 @@
                 </div>
                 <p class="rlf-tip-wrap errorHint color-red"></p>
             </div>
+
             <div class="wlfg-wrap clearfix" style="margin-top:30px;margin-left:120px;">
                 <label class="label-name" for="college">学院：</label>
                 <div class="btn-group open">
@@ -80,12 +89,6 @@
                         <option>其他</option>
                     </select>
                 </div>
-                <p class="rlf-tip-wrap errorHint color-red"></p>
-            </div>
-
-            <div class="block" style="margin-top:30px;margin-left:120px;">
-                <label class="label-name" for="nick">修改头像（支持jpg、png格式）：</label>
-                <input type="file" name="profile_c" accept=".jpg, .png">
                 <p class="rlf-tip-wrap errorHint color-red"></p>
             </div>
 

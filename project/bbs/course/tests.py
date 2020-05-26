@@ -56,5 +56,3 @@ class Test(StaticLiveServerTestCase):
         self.browser.get(url)
         comment = self.browser.find_element_by_xpath('/html/body/div/div[1]/div[2]/div[2]')  # 找到对应评论
         self.assertEqual(comment.text, "Test")
-
-
