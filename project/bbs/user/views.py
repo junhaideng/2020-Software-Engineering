@@ -161,7 +161,7 @@ def profile(request):
         elif User.objects.get(user=user).sex is None:
             sex = '保密'
         if User.objects.get(user=user).academy is None:
-            academy = '您还没有设置学院哦！'
+            academy = '未知'
         else:
             academy = User.objects.get(user=user).academy
         grade_index = {'FR': '大一', 'SO': '大二', 'JR': '大三', 'SR': '大四', "OT": '其他', "UN": "未知"}
