@@ -17,16 +17,20 @@ class Test(StaticLiveServerTestCase):
         user.save()
         self.browser = webdriver.Firefox()
 
-    def test_login_and_logout(self):
-        """用户的登录和登出"""
+    def login(self, username, password):
+        """用来登录，非测试函数"""
         url = self.live_server_url + reverse("user:login")
         self.browser.get(url)
-        username = self.browser.find_element_by_id("username")
-        username.send_keys("test")  # 输入账号
-        password = self.browser.find_element_by_id("password")
-        password.send_keys("123456")  # 输入密码
+        _username = self.browser.find_element_by_id("username")
+        _username.send_keys(username)  # 输入账号
+        _password = self.browser.find_element_by_id("password")
+        _password.send_keys(password)  # 输入密码
         btn = self.browser.find_element_by_xpath("/html/body/div/div/form/button")
         btn.click()  # 点击登录
+
+    def test_login_and_logout(self):
+        """用户的登录和登出"""
+        self.login('test', '123456')
         self.browser.implicitly_wait(1)  # 等待1s加载
         result = self.browser.find_element_by_xpath("/html/body/div/nav/div/div/div/div")  # 登录之后会出现个人中心
         self.assertIsNotNone(result.get_attribute("innerHTML"))  # 因为该元素需要触发然后才能获取到text内容，这里直接判断存在值
@@ -58,7 +62,17 @@ class Test(StaticLiveServerTestCase):
         self.assertEqual(message.text, "您的密码已经重置为:123456 请返回主页重新登陆")
 
     def test_reset_password(self):
-        pass
+        """密码重置"""
+        self.login('test', '123456')
+        url = self.live_server_url + reverse("user:resetpwd")
+        self.browser.get(url)
+        self.browser.find_element_by_xpath('//*[@id="oldpwd"]').send_keys('123456')  # 输入旧密码
+        self.browser.find_element_by_xpath('//*[@id="newpwd"]').send_keys('test')  # 输入新密码
+        self.browser.find_element_by_xpath('//*[@id="confirm"]').send_keys('test')  # 确认
+        self.browser.find_element_by_xpath('//*[@id="btn"]').click()  # 确定
+        self.login('test', 'test')
+        element = self.browser.find_element_by_xpath('/html/body/div/nav/div/div/div/div/a[1]')  # 个人中心
+        self.assertEqual(element.get_attribute('innerHTML'), "个人中心")
 
     def tearDown(self) -> None:
         self.browser.close()
