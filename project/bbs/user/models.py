@@ -29,7 +29,7 @@ class User(models.Model):
     profile = models.CharField(max_length=100, null=True, blank=True)  # 头像路径  可以为空
     academy = models.CharField(max_length=40, null=True, blank=True)  # 学院名  可以为空
     grade = models.CharField(choices=GRADES, max_length=30, default="UN", blank=True, null=True)  # 年级
-    # 密保及对应答案  author 祁山青  ToDo:继续添加两个密保
+    # 密保及对应答案  author 祁山青
     question = models.CharField(max_length=200, null=True, blank=True)  # 密保问题
     answer = models.CharField(max_length=200,  null=True, blank=True)  # 答案
 
@@ -38,7 +38,7 @@ class User(models.Model):
 
 
 class Files(models.Model):
-    """实验数据"""
+    """文件"""
     user_id = models.IntegerField()  # 上传文件的用户
     type = models.CharField(choices=EXP_TYPE, max_length=40)  # 课程类型
     date = models.DateTimeField(default=timezone.now)  # 上传文件的时间
@@ -46,6 +46,9 @@ class Files(models.Model):
     path = models.CharField(max_length=100)  # 实验数据的路径, 路径下的文件名需要进行一下处理，以免冲突
     name = models.CharField(max_length=40)  # 实验数据的名称
     desc = models.TextField(default="暂无描述")  # 文件的描述信息
+
+    class Meta:
+        ordering = ("-date", )
 
     def __str__(self):
         return self.name

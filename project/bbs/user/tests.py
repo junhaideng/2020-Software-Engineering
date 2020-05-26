@@ -1,5 +1,6 @@
 from django.urls import reverse
-from .models import User, AuthUser  # AuthUser 是django提供的
+from .models import User, AuthUser, Files  # AuthUser 是django提供的
+from post.models import Post
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 
@@ -15,6 +16,12 @@ class Test(StaticLiveServerTestCase):
         auth.save()
         user = User(user=auth, sex=True, question="tests", answer="answer")  # 用户写入数据库，并设置密保
         user.save()
+        # 文件
+        Files.objects.create(name="test", path="/media/files/test.png", user_id=1, type="软件工程", download_times=0,
+                             desc="测试")
+        # 帖子记录
+        Post.objects.create(topic="test", counter=0, author_user_id=1, content="test content", course="软件工程")
+
         self.browser = webdriver.Firefox()
 
     def login(self, username, password):
@@ -73,6 +80,33 @@ class Test(StaticLiveServerTestCase):
         self.login('test', 'test')
         element = self.browser.find_element_by_xpath('/html/body/div/nav/div/div/div/div/a[1]')  # 个人中心
         self.assertEqual(element.get_attribute('innerHTML'), "个人中心")
+
+    def test_post_history(self):
+        """发帖记录测试"""
+        self.login('test', '123456')
+        url = self.live_server_url + reverse("user:history")
+        self.browser.get(url)
+        topic = self.browser.find_element_by_xpath(
+            '/html/body/div/div/div/div[2]/div/table/tbody/tr/td[1]').text  # 帖子主题
+        content = self.browser.find_element_by_xpath(
+            '/html/body/div/div/div/div[2]/div/table/tbody/tr/td[3]').text  # 帖子内容
+        self.assertEqual(topic.strip(), "test")
+        self.assertEqual(content.strip(), 'test content'[0:8] + "...")
+
+    def test_my_files(self):
+        """我的文件测试"""
+        self.login('test', '123456')
+        url = self.live_server_url + reverse('user:file')
+        self.browser.get(url)
+        name = self.browser.find_element_by_xpath(
+            '/html/body/div/div/div/div[2]/div/table/tbody/tr[1]/td[1]').text  # 文件名
+        type = self.browser.find_element_by_xpath(
+            '/html/body/div/div/div/div[2]/div/table/tbody/tr[1]/td[2]').text  # 文件类型
+        download_times = self.browser.find_element_by_xpath(
+            '/html/body/div/div/div/div[2]/div/table/tbody/tr[1]/td[3]').text  # 文件下载次数
+        self.assertEqual(name, "test")
+        self.assertEqual(type, "软件工程")
+        self.assertEqual(download_times, '0')
 
     def tearDown(self) -> None:
         self.browser.close()
