@@ -3,6 +3,8 @@ from .models import User, AuthUser, Files  # AuthUser 是django提供的
 from post.models import Post
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
+from selenium.webdriver.support.ui import Select
+from time import sleep
 
 
 class Test(StaticLiveServerTestCase):
@@ -154,23 +156,22 @@ class Test(StaticLiveServerTestCase):
         url = self.live_server_url + reverse("user:modify")  # 修改个人资料
         self.browser.get(url)
         name = self.browser.find_element_by_id("nick")  # 修改用户名“modify_test”
+        name.clear()
         name.send_keys("modify_test")
-        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[2]/div").click()  # 修改性别为女
-        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[2]/div/select/option[3]").click()
-        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[3]/div").click()  # 修改学院船建
-        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[3]/div/select/option[2]").click()
-        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[4]/div").click()  # 修改年级大二
-        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[4]/div/select/option[3]").click()
+        select = Select(self.browser.find_element_by_name("sex"))  # 修改性别为女
+        select.select_by_visible_text("女")
+        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[4]/div/select/option[2]").click()  # 修改学院船建
+        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[5]/div/select/option[3]").click()  # 修改年级大二
         self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[6]/button").click()  # 确认修改
 
         url = self.live_server_url + reverse("user:profile")  # 是否修改成功
         self.browser.get(url)
         # 获取显示的用户各项资料
-        name = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[2]/text()').text
-        sex = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[3]/text()').text
-        academy = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[4]/text()').text
-        grade = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[5]/text()').text
-        self.assertEqual(name, "modify_test")
-        self.assertEqual(sex, "女")
-        self.assertEqual(academy, "船舶海洋与建筑工程学院")
-        self.assertEqual(grade, "大二")
+        name = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[2]').text
+        sex = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[3]').text
+        academy = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[4]').text
+        grade = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[5]').text
+        self.assertEqual(name, "昵称： modify_test")
+        self.assertEqual(sex, "性别： 女")
+        self.assertEqual(academy, "学院： 船舶海洋与建筑工程学院")
+        self.assertEqual(grade, "年级： 大二")
