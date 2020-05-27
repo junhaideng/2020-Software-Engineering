@@ -8,7 +8,7 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
 from post.models import Post, PostComment, PostReply
-from user.models import User
+from user.models import User, Notice
 from django.core.paginator import Paginator
 from math import ceil
 from django.http.response import JsonResponse
@@ -57,6 +57,8 @@ def reply(request):
     content = request.POST.get("content")
     try:
         reply = PostReply(post_user_id=user_id, post_id=post_id, content=content)
+        Notice(content="%s 回答了你的帖子 %s" % (request.user.username, Post.objects.get(id=post_id).topic),
+               url=request.POST.get("url"), user_id=Post.objects.get(id=post_id).author_user_id).save()
         reply.save()
     except Exception as e:
         print(e)
@@ -72,6 +74,8 @@ def comment(request):
     id = request.POST.get("id")  # reply的id
     try:
         comment = PostComment(reply_id=id, commenter_id=request.user.id, content=content)  # 创建回复
+        Notice(content="%s 评论了你的回答" % request.user.username,
+               url=request.POST.get("url"), user_id=PostReply.objects.get(id=id).post_user_id).save()
         comment.save()
     except Exception as e:
         print(e)

@@ -194,7 +194,7 @@ author: Edgar
                             headers: {
                                 "X-CSRFToken": csrf
                             },
-                            data: {id: id, content: content},
+                            data: {id: id, content: content, url: window.location.pathname},
 
                             success: function (data) {
                                 if (data.status === 200) {
@@ -228,7 +228,7 @@ author: Edgar
                             headers: {
                                 "X-CSRFToken": csrf
                             },
-                            data: {id: id, content: content},
+                            data: {id: id, content: content, url: window.location.pathname},
 
                             success: function (data) {
                                 if (data.status === 200) {
