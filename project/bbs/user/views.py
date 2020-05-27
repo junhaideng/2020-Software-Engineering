@@ -353,9 +353,7 @@ def setquestion(request):
             U.answer = answer
             U.save()  # 存储用户
             message = "密保设置成功！"
-            return render(request, 'user/setquestion.html',
-                          {"message": message, "flag": flag})  # 返回给user/setquestion.html
-        # "message" 是html里面id 为message的对象 "flag"同理，这里的具体传递方法为{“html中的Id”,值}
+            return redirect(reverse("user:login"))
         else:
             message = "密码错误"
             request.session['user_setquestion_message'] = message
