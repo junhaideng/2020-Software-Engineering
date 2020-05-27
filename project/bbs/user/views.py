@@ -243,7 +243,7 @@ def history(request):
                 else:
                     content = post.content[0:8] + '...'
                 data.append(
-                    {"topic": post.topic, "created_time": post.created_time, "content": content}
+                    {"id": post.id, "topic": post.topic, "created_time": post.created_time, "content": content}
                 )
         else:
             data = None

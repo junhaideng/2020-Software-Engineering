@@ -17,27 +17,27 @@ author: 祁山青
             <form action="{% url 'user:setquestion' %}" method="post" style="margin-top: 40%">
                 {% csrf_token %}
                  <div class="form-group">
-                    <label for="oldquestion">oldQuestion：<br/>{{ oldQuestion }} </label>
+                    <label for="oldquestion">旧密保问题：<br/>{{ oldQuestion }} </label>
                 </div>
 
                 <div class="form-group">
-                    <label for="oldAnswer">oldAnswer</label>
+                    <label for="oldAnswer">答案</label>
                     <input type="text" class="form-control" id="oldAnswer" name="oldAnswer" autocomplete="off" autofocus
                            required>
                 </div>
 
                 <div class="form-group">
-                    <label for="newQuestion">newQuestion</label>
+                    <label for="newQuestion">新密保问题</label>
                     <input type="text" class="form-control" id="newQuestion" name="newQuestion"  autocomplete="off"
-                           autofocus required>
+                            required>
                 </div>
 
                 <div class="form-group">
-                    <label for="newAnswer">newAnswer</label>
+                    <label for="newAnswer">答案</label>
                     <input type="text" class="form-control" id="newAnswer" name="newAnswer"  autocomplete="off"
-                           autofocus required>
+                            required>
                 </div>
-                <button type="submit" id="btn" class="btn btn-outline-primary text-center">Submit
+                <button type="submit" id="btn" class="btn btn-outline-primary text-center">提交
             </button>
             </form>
 
@@ -51,7 +51,7 @@ author: 祁山青
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="pwd">密码</label>
-                    <input type="password" class="form-control" id="pwd" name="pwd" autocomplete="off" autofocus
+                    <input type="password" class="form-control" id="pwd" name="pwd" autocomplete="off"
                            required>
                 </div>
 
