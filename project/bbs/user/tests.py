@@ -1,6 +1,6 @@
 from django.urls import reverse
 from .models import User, AuthUser, Files  # AuthUser 是django提供的
-from post.models import Post
+from post.models import Post, PostReply, PostComment
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -16,13 +16,17 @@ class Test(StaticLiveServerTestCase):
         auth = AuthUser(username="test", email="test@qq.com")
         auth.set_password("123456")  # 设置密码，不能够直接设置
         auth.save()
-        user = User(user=auth, sex=True, question="tests", answer="answer")  # 用户写入数据库，并设置密保
+        user = User(user=auth, sex=True, question="tests", answer="answer", id=1)  # 用户写入数据库，并设置密保
         user.save()
         # 文件
         Files.objects.create(name="test", path="/media/files/test.png", user_id=1, type="软件工程", download_times=0,
                              desc="测试")
         # 帖子记录
-        Post.objects.create(topic="test", counter=0, author_user_id=1, content="test content", course="软件工程")
+        Post.objects.create(topic="test", counter=0, author_user_id=1, content="test content", course="软件工程", id=1)
+        # 消息通知
+        PostReply.objects.create(post_id=1, post_user_id=1, content="123", id=1)
+        sleep(1)  # 区分回复先后
+        PostComment.objects.create(reply_id=1, commenter_id=1, content="321")
 
         self.browser = webdriver.Firefox()
 
@@ -59,7 +63,6 @@ class Test(StaticLiveServerTestCase):
         result = self.browser.find_element_by_xpath("/html/body/div/nav/div/div/div/div")  # 注册之后会自动登录，登录之后会出现个人中心
         self.assertIsNotNone(result.get_attribute("innerHTML"))
 
-
     def test_forget(self):
         """密码忘记根据密保找回"""
         url = self.live_server_url + reverse("user:forget")
@@ -82,8 +85,8 @@ class Test(StaticLiveServerTestCase):
         self.browser.find_element_by_xpath('//*[@id="newQuestion"]').send_keys('NewTest')  # 输入新问题
         self.browser.find_element_by_xpath('//*[@id="newAnswer"]').send_keys('Answer')  # 输入新答案
         self.browser.find_element_by_xpath('//*[@id="btn"]').click()  # 确定
-        user=User.objects.get(user__username='test')
-        answer=user.answer
+        user = User.objects.get(user__username='test')
+        answer = user.answer
         self.assertEqual(answer, 'Answer')
 
     def test_reset_password(self):
@@ -160,8 +163,10 @@ class Test(StaticLiveServerTestCase):
         name.send_keys("modify_test")
         select = Select(self.browser.find_element_by_name("sex"))  # 修改性别为女
         select.select_by_visible_text("女")
-        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[4]/div/select/option[2]").click()  # 修改学院船建
-        self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[5]/div/select/option[3]").click()  # 修改年级大二
+        self.browser.find_element_by_xpath(
+            "/html/body/div/div/div/div[2]/div/form/div[4]/div/select/option[2]").click()  # 修改学院船建
+        self.browser.find_element_by_xpath(
+            "/html/body/div/div/div/div[2]/div/form/div[5]/div/select/option[3]").click()  # 修改年级大二
         self.browser.find_element_by_xpath("/html/body/div/div/div/div[2]/div/form/div[6]/button").click()  # 确认修改
 
         url = self.live_server_url + reverse("user:profile")  # 是否修改成功
@@ -175,3 +180,24 @@ class Test(StaticLiveServerTestCase):
         self.assertEqual(sex, "性别： 女")
         self.assertEqual(academy, "学院： 船舶海洋与建筑工程学院")
         self.assertEqual(grade, "年级： 大二")
+
+    def test_notice(self):
+        """
+             消息通知
+             author: 吴嘉锐
+         """
+        self.login('test', '123456')
+        url = self.live_server_url + reverse("user:notice")
+        self.browser.get(url)
+        notice_1 = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/table[1]/tbody/tr[1]/th[1]').text
+        notice_2 = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/table[1]/tbody/tr[2]/th[1]').text
+        self.assertEqual(notice_1, 'test 回复了我的内容 321 || 123')
+        self.assertEqual(notice_2, 'test 回复了我的内容 123 || test')
+
+        self.login('test', '123456')  # 再次打开时应放在历史消息一栏
+        url = self.live_server_url + reverse("user:notice")
+        self.browser.get(url)
+        notice_3 = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/table[2]/tbody/tr[1]/th[1]').text
+        notice_4 = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/table[2]/tbody/tr[2]/th[1]').text
+        self.assertEqual(notice_3, 'test 回复了我的内容 321 || 123')
+        self.assertEqual(notice_4, 'test 回复了我的内容 123 || test')

@@ -443,11 +443,11 @@ def notice(request):
 
     received_comment = []  # 获得用户收到的评论
     for reply in my_reply:
-        comment_to_reply = PostComment.objects.filter(reply=reply.id)
+        comment_to_reply = PostComment.objects.filter(reply_id=reply.id)
         for each_comment in comment_to_reply:
             received_comment.append(each_comment)
-            if User.objects.filter(id=each_comment.post_user_id) is not None:
-                username = User.objects.get(id=each_comment.post_user_id).user.username
+            if User.objects.filter(id=each_comment.commenter_id) is not None:
+                username = User.objects.get(id=each_comment.commenter_id).user.username
             else:
                 username = '该用户已注销'
             if not each_comment.if_read:
