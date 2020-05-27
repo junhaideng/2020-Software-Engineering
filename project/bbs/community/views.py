@@ -42,7 +42,7 @@ def detail(request, id):
             comment -> 回复的信息
             """
             data.append({"user": User.objects.get(user_id=i.post_user_id), "reply": i,
-                         "comments": PostComment.objects.filter(reply_id=i.id).order_by("created_date")})
+                         "comments": PostComment.objects.filter(reply_id=i.id).order_by("-created_date")})
         return render(request, 'community/detail.html',
                       context={"post": post, "data": data, "total": reply.count()})
     else:
