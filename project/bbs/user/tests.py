@@ -1,5 +1,5 @@
 from django.urls import reverse
-from .models import User, AuthUser, Files  # AuthUser 是django提供的
+from .models import User, AuthUser, Files, Notice  # AuthUser 是django提供的
 from post.models import Post, PostReply, PostComment
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
@@ -27,6 +27,8 @@ class Test(StaticLiveServerTestCase):
         PostReply.objects.create(post_id=1, post_user_id=1, content="123", id=1)
         sleep(1)  # 区分回复先后
         PostComment.objects.create(reply_id=1, commenter_id=1, content="321")
+
+        Notice.objects.create(user_id=1, content="test", url="/test")
 
         self.browser = webdriver.Firefox()
 
@@ -185,19 +187,10 @@ class Test(StaticLiveServerTestCase):
         """
              消息通知
              author: 吴嘉锐
+             修改: Edgar
          """
         self.login('test', '123456')
         url = self.live_server_url + reverse("user:notice")
         self.browser.get(url)
-        notice_1 = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/table[1]/tbody/tr[1]/th[1]').text
-        notice_2 = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/table[1]/tbody/tr[2]/th[1]').text
-        self.assertEqual(notice_1, 'test 回复了我的内容 321 || 123')
-        self.assertEqual(notice_2, 'test 回复了我的内容 123 || test')
-
-        self.login('test', '123456')  # 再次打开时应放在历史消息一栏
-        url = self.live_server_url + reverse("user:notice")
-        self.browser.get(url)
-        notice_3 = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/table[2]/tbody/tr[1]/th[1]').text
-        notice_4 = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/table[2]/tbody/tr[2]/th[1]').text
-        self.assertEqual(notice_3, 'test 回复了我的内容 321 || 123')
-        self.assertEqual(notice_4, 'test 回复了我的内容 123 || test')
+        element = self.browser.find_element_by_xpath('/html/body/div/div/div/div[2]/table/tbody/tr/th[1]/a')
+        self.assertEqual(element.text, "test")
