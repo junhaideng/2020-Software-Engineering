@@ -12,13 +12,11 @@ from django.views.decorators.http import require_http_methods
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import authenticate
-from .models import User, Files
+from .models import User, Files, Notice
 from django.contrib.auth.models import User as AuthUser
 from django.core.paginator import Paginator
 from django.conf import settings
-import time
 from post.models import Post, PostReply, PostComment
-import operator
 
 
 @require_http_methods(["GET", "POST"])
@@ -408,62 +406,31 @@ def upload(request):
 
 
 @login_required()
-@require_http_methods(["GET"])
+@require_http_methods(["GET", "POST"])
 def notice(request):
     """
         回复通知
         author 吴嘉锐
+        refactor  Edgar
     """
-    my_post = Post.objects.filter(author_user_id=request.user.id)  # 用户发的贴子
-    my_reply = PostReply.objects.filter(post_user_id=request.user.id)  # 用户的回复
-    notice_unread = []  # 未读消息
-    notice_read = []  # 已读消息
+    notices = Notice.objects.filter(user_id=request.user.id)
+    if request.method == "POST":
+        type = request.POST.get("type")
+        if type == "read":  # 标记所有未已读
+            for notice in notices:
+                notice.read = True
+                notice.save()
+                return JsonResponse({"status": "标记成功", "code": 200})
+        if type == "clear":  # 删除全部信息
+            notices.delete()
+            return JsonResponse({"status": "删除成功", "code": 200})
+        if type == "read_by_id":  # 根据id标记未已读
+            notice = Notice.objects.get(id=request.POST.get("id"))
+            notice.read = True
+            notice.save()
+            return JsonResponse({"status": "标记成功", "code": 200})
+        if type == "delete_by_id":  # 根据id 删除
+            Notice.objects.get(id=request.POST.get('id')).delete()
+            return JsonResponse({"status": "删除成功", "code": 200})
 
-    received_reply = []  # 获得用户收到的回复
-    for post in my_post:
-        reply_to_post = PostReply.objects.filter(post_id=post.id)
-        for each_reply in reply_to_post:
-            received_reply.append(each_reply)
-            if User.objects.filter(id=each_reply.post_user_id) is not None:
-                username = User.objects.get(id=each_reply.post_user_id).user.username
-            else:
-                username = '该用户已注销'
-            if not each_reply.if_read:
-                each_reply.if_read = True
-                each_reply.save()
-                notice_unread.append(
-                    {"user": username, "content": each_reply.content,
-                     "mytext": post.topic, "time": each_reply.created_date}
-                )
-            else:
-                notice_read.append(
-                    {"user": username, "content": each_reply.content,
-                     "mytext": post.topic, "time": each_reply.created_date}
-                )
-
-    received_comment = []  # 获得用户收到的评论
-    for reply in my_reply:
-        comment_to_reply = PostComment.objects.filter(reply_id=reply.id)
-        for each_comment in comment_to_reply:
-            received_comment.append(each_comment)
-            if User.objects.filter(id=each_comment.commenter_id) is not None:
-                username = User.objects.get(id=each_comment.commenter_id).user.username
-            else:
-                username = '该用户已注销'
-            if not each_comment.if_read:
-                each_comment.if_read = True
-                each_comment.save()
-                notice_unread.append(
-                    {"user": username,
-                     "content": each_comment.content, "mytext": reply.content, "time": each_comment.created_date}
-                )
-            else:
-                notice_read.append(
-                    {"user": username,
-                     "content": each_comment.content, "mytext": reply.content, "time": each_comment.created_date}
-                )
-
-    notice_unread = sorted(notice_unread, key=operator.itemgetter("time"), reverse=True)  # 对时间进行排序
-    notice_read = sorted(notice_read, key=operator.itemgetter("time"), reverse=True)
-
-    return render(request, 'user/notice.html', context={"notice_unread": notice_unread, "notice_read": notice_read})
+    return render(request, 'user/notice.html', context={"notices": notices})

@@ -31,7 +31,7 @@ class User(models.Model):
     grade = models.CharField(choices=GRADES, max_length=30, default="UN", blank=True, null=True)  # 年级
     # 密保及对应答案  author 祁山青
     question = models.CharField(max_length=200, null=True, blank=True)  # 密保问题
-    answer = models.CharField(max_length=200,  null=True, blank=True)  # 答案
+    answer = models.CharField(max_length=200, null=True, blank=True)  # 答案
 
     def __str__(self):
         return self.user.username
@@ -48,7 +48,16 @@ class Files(models.Model):
     desc = models.TextField(default="暂无描述")  # 文件的描述信息
 
     class Meta:
-        ordering = ("-date", )
+        ordering = ("-date",)
 
     def __str__(self):
         return self.name
+
+
+class Notice(models.Model):
+    """消息通知"""
+    content = models.CharField(max_length=100)  # 通知内容
+    date = models.DateTimeField(default=timezone.now)
+    url = models.CharField(max_length=200)  # 产生通知的url
+    read = models.BooleanField(default=False)  # 是否已读
+    user_id = models.IntegerField()  # 用户id
