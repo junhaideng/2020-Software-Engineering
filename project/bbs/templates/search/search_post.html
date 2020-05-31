@@ -9,31 +9,40 @@
 <body>
 {% block content %}
     <div style="margin-top: 20px">
-    {% for data in data %}
-            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top:5px;">
-                标题：{{ data.topic }}
-                <a href="/course/coursedes/{{ data.id }}" target="_blank">
-                    <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
-                            style="float:right;background-color: #f0f6ff">详情>>
-                    </button>
-                </a>
+        {% if data %}
+            {% for data in data %}
+                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top:5px;">
+                    标题：{{ data.topic }}
+                    <a href="/course/coursedes/{{ data.id }}" target="_blank">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                                style="float:right;background-color: #f0f6ff">详情>>
+                        </button>
+                    </a>
                     <hr>
-                所属课程：{{data.course}}<!--发帖时选择的所属课程-->
+                    所属课程：{{data.course}}<!--发帖时选择的所属课程-->
                     <hr>
-                帖子内容：{{ data.content }}  <!--帖子内容-->
+                    帖子内容：{{ data.content }}  <!--帖子内容-->
                     <hr>
-                发布时间：{{data.time|date:"Y-m-d"}} <!--帖子发布时间-->
-                    
-            </blockquote>
+                    发布时间：{{ data.time|date:"Y-m-d"}} <!--帖子发布时间-->
 
-    {% endfor %}
+                </blockquote>
 
-    </div>
+            {% endfor %}
+            <div id="page" class="grid-demo grid-demo-bg1" style="float:right">
 
-    <div id="page" class="grid-demo grid-demo-bg1" style="float:right">
+        {% else %}
+            <div class="layui-row">
+                <div class="layui-col-md8 layui-col-md-offset2 text-center">
+                    <span class="layui-icon layui-icon-tips">没有搜索到相应的内容</span>
+                </div>
+            </div>
+        {% endif %}
 
-               <script>
-                   // 获取url中参数
+        </div>
+
+
+        <script>
+            // 获取url中参数
             function getQueryVariable(variable) {
                 let query = window.location.search.substring(1);
                 let vars = query.split("&");

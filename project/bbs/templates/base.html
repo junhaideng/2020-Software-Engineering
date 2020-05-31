@@ -76,7 +76,7 @@ author: Edgar
                            aria-expanded="false">
                             {% load user_related %}
                             {% if request.user.id|getProfileFromAuthId %}  {# 如果有自定义的头像 #}
-                                <img class="rounded-circle " style="width: 30px;height:30px"
+                                <img class="rounded-circle " style="width: 40px;height:40px"
                                      src="{{ request.user.id|getProfileFromAuthId }}" alt="profile"
                                      title="{{ request.user.username }}"/>
                             {% else %}  {# 否则使用默认的头像svg #}

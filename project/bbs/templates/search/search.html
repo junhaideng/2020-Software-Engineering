@@ -8,23 +8,33 @@
 <body>
 {% block content %}
     <div style="margin-top: 20px">
-        {% for data in data %}
-            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top:5px;">
-                <!--课程名-->课程：{{ data.name }}
-                <a href="/course/coursedes/{{ data.id }}" target="_blank">
-                    <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
-                            style="float:right;background-color: #f0f6ff">详情>>
-                    </button>
-                </a>
-                <hr>
-                <!--开设学院名-->开设学院：{{ data.school }}
-                <hr>
-                <!--教师名-->授课教师：{{ data.teacher }}
-            </blockquote>
-        {% endfor %}
-    </div>
+        {% if data %}
+            {% for data in data %}
+                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top:5px;">
+                    <!--课程名-->课程：{{ data.name }}
+                    <a href="/course/coursedes/{{ data.id }}" target="_blank">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary"
+                                style="float:right;background-color: #f0f6ff">详情>>
+                        </button>
+                    </a>
+                    <hr>
+                    <!--开设学院名-->开设学院：{{ data.school }}
+                    <hr>
+                    <!--教师名-->授课教师：{{ data.teacher }}
+                </blockquote>
 
-    <div id="page" class="grid-demo grid-demo-bg1" style="float:right">
+            {% endfor %}
+            <div id="page" class="grid-demo grid-demo-bg1" style="float:right">
+
+        {% else %}
+            <div class="layui-row">
+                <div class="layui-col-md8 layui-col-md-offset2 text-center">
+                    <span class="layui-icon layui-icon-tips">没有搜索到相应的内容</span>
+                </div>
+            </div>
+        {% endif %}
+        </div>
+
 
         <script>
             function getQueryVariable(variable) {
